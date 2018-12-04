@@ -12,7 +12,7 @@ Please feel free to add issue for your wanted funktionality or problems you see 
 ## To-Do
 
 Core-Functionality
-* Multiple Meter support, currently only the Master met is handled
+* Multiple Meter support, currently only one Meter is handled
 * Translations 
 
 Backend
