@@ -1,3 +1,5 @@
+![alt text](https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/blob/master/admin/Discovergy_logo.png)
+
 # ioBroker.discovergy
 
 This is an ioBroker adapter for your Discovergy Power meassurement meter.
