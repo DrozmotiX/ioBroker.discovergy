@@ -1,0 +1,14 @@
+.git
+.idea
+node_modules
+nbproject
+
+package-lock.json
+
+# npm package files
+iobroker.*.tgz
+
+Thumbs.db
+
+# i18n intermediate files
+admin/i18n

@@ -1,0 +1,72 @@
+{
+	"common": {
+		"name": "discovergy",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie"
+			}
+		},
+		"title": "discovergy",
+		"titleLang": {
+			"en": "discovergy",
+			"de": "discovergy",
+			"ru": "discovergy",
+			"pt": "discovergy",
+			"nl": "discovergy",
+			"fr": "discovergy",
+			"it": "discovergy",
+			"es": "discovergy",
+			"pl": "discovergy"
+		},
+		"desc": {
+			"en": "discovergy",
+			"de": "discovergy",
+			"ru": "discovergy",
+			"pt": "discovergy",
+			"nl": "discovergy",
+			"fr": "discovergy",
+			"it": "discovergy",
+			"es": "discovergy",
+			"pl": "discovergy"
+		},
+		"authors": [
+			"Dutchman <rdrozda86@gmail.com>"
+		],
+		"keywords": [
+			"ioBroker",
+			"template",
+			"Smart Home",
+			"home automation"
+		],
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "discovergy.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/master/admin/discovergy.png",
+		"readme": "https://github.com/DutchmanNL/ioBroker.discovergy/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "general",
+		"materialize": true,
+		"dependencies": [
+			{
+				"admin": ">=3.0.0"
+			}
+		]
+	},
+	"native": {
+		"Username": "",
+		"Password": ""
+	},
+	"objects": [],
+	"instanceObjects": []
+}
