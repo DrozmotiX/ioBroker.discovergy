@@ -120,6 +120,22 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 						
 						break;
 
+					case "power1":
+
+						doStateCreate(urlencoded_parameters + ".Power_1","Momentanwert jetziger Bezug T1","number","W")
+						adapter.setState(urlencoded_parameters + ".Power_1", { val: data.values[x] / 1000, ack: true });
+						
+						break;
+
+					case "power2":
+
+						doStateCreate(urlencoded_parameters + ".Power_2","Momentanwert jetziger Bezug T2","number","W")
+						adapter.setState(urlencoded_parameters + ".Power_2", { val: data.values[x] / 1000, ack: true });
+						
+						
+						break;
+
+
 					case "energy":
 
 						doStateCreate(urlencoded_parameters + ".Power_Total","Zählerstand Bezug Gesamt","number","kWh")

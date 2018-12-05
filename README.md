@@ -27,7 +27,9 @@ Backend
 
 ## Changelog
 
-* (Dutchman) add support for values voltage1, voltage1 & voltage1
+0.2.2
+* (Dutchman) add support for values voltage1, voltage1 & voltage3
+* (Dutchman) add support for values power1, power2
 
 ### 0.2.0
 * (Dutchman) reduced logging from every 3 seconds to only error if values are received which cannot be handled
