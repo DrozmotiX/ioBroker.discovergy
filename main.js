@@ -158,7 +158,25 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 						adapter.setState(urlencoded_parameters + ".Power_Out_T2", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
-						
+
+					case "voltage1":
+						doStateCreate(urlencoded_parameters + ".voltage_1","Voltage","number","V")
+						adapter.setState(urlencoded_parameters + ".voltage_1", { val: data.values[x] / 1000, ack: true });
+
+						break;						
+
+					case "voltage2":
+						doStateCreate(urlencoded_parameters + ".voltage_2","Voltage","number","V")
+						adapter.setState(urlencoded_parameters + ".voltage_2", { val: data.values[x] / 1000, ack: true });
+
+						break;	
+
+					case "voltage3":
+						doStateCreate(urlencoded_parameters + ".voltage_3","Voltage","number","V")
+						adapter.setState(urlencoded_parameters + ".voltage_3", { val: data.values[x] / 1000, ack: true });
+
+						break;	
+
 					default:
 			
 						adapter.log.error("Information received from Discovergy which is not yet part of this adapter")
