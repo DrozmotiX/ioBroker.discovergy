@@ -3,7 +3,7 @@
 # ioBroker.discovergy
 
 This is an ioBroker adapter for your Discovergy Power meassurement meter.
-It uses the Discovergy API to read data of your meters and syncronise it's current values to iObroker.
+It uses the Discovergy API to read data of your meters and syncronise it's current values to ioBroker.
 
 https://api.discovergy.com/docs/
 
