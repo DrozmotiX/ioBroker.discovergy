@@ -27,6 +27,12 @@ Backend
 
 ## Changelog
 
+### 0.2.0
+* (Dutchman) reduced logging from every 3 seconds to only error if values are received which cannot be handled
+
+### 0.1.0
+* (Dutchman) first working release, data is received every 3 seconds
+
 ### 0.0.3
 * (Dutchman) initial release
 
