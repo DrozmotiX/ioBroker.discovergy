@@ -29,6 +29,7 @@ Backend
 
 ### 0.2.0
 * (Dutchman) reduced logging from every 3 seconds to only error if values are received which cannot be handled
+* (Dutchman) last time step of syncronisation added, currenlty unix time needs to be converted in next release
 
 ### 0.1.0
 * (Dutchman) first working release, data is received every 3 seconds
