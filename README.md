@@ -1,4 +1,4 @@
-![alt text](https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/master/admin/discovergy_logo.png)
+![alt text](https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/master/admin/Discovergy_logo.png)
 
 # ioBroker.discovergy
 
