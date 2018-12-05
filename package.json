@@ -6,6 +6,11 @@
     "name": "Dutchman",
     "email": "rdrozda86@gmail.com"
   },
+  "contributors": [
+    {
+      "name": "AlCalzone",
+	  "name": "zoernert"
+    }  
   "homepage": "https://github.com/DutchmanNL/ioBroker.discovergy",
   "license": "MIT",
   "keywords": [
