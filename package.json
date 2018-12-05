@@ -1,6 +1,6 @@
 {
   "name": "iobroker.discovergy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discovergy",
   "author": {
     "name": "Dutchman",
@@ -10,7 +10,7 @@
     {
       "name": "AlCalzone",
 	  "name": "zoernert"
-    }  
+    }], 
   "homepage": "https://github.com/DutchmanNL/ioBroker.discovergy",
   "license": "MIT",
   "keywords": [
