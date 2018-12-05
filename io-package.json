@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.3.1",
+		"version": "0.2.0",
 		"news": {
 			"0.3.1": {
 				"en": "initial release",

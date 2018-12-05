@@ -14,7 +14,7 @@ const adapter = utils.adapter({
 	// is called when adapter shuts down - callback has to be called under any circumstances!
 	unload: (callback) => {
 		try {
-			adapter.log.info("cleaned everything up...");
+			adapter.log.info("Discovergy adapter stopped, cleaning everything up :-) ");
 			callback();
 		} catch (e) {
 			callback();
@@ -32,9 +32,9 @@ function main() {
 	// We will call the API every 3 sekonds to receive data
 	interval = setInterval(function () {
 
-	doDiscovergyCall(user,pass,"meters","").then(function(meters) {
+		doDiscovergyCall(user,pass,"meters","").then(function(meters) {
 
-	})
+		})
 
 	}, 3000);
 
@@ -46,45 +46,44 @@ function main() {
 
 // Function to retrieve basic data
 function doDiscovergyCall(username, password,endpoint,urlencoded_parameters) {
-    return new Promise(function (resolve, reject)  {
-        http_request("https://"+username+":"+password+"@api.discovergy.com/public/v1/"+endpoint+"?"+urlencoded_parameters,function(r,e,b) {
-        result = (b.slice(1, b.length - 1))
-        data = JSON.parse(result);
+	return new Promise(function (resolve, reject)  {
+		http_request("https://" + username + ":" + password + "@api.discovergy.com/public/v1/" + endpoint+"?" + urlencoded_parameters,function(r,e,b) {
+			result = (b.slice(1, b.length - 1))
+			data = JSON.parse(result);
 
-		adapter.setObject("info", {
-			type: "channel",
-			common: {
-				name: "info",
-			},
-			native: {},
-		});	
+			adapter.setObject("info", {
+				type: "channel",
+				common: {
+					name: "info",
+				},
+				native: {},
+			});	
 
-        for (x in data) {
+			for (x in data) {
     
-			adapter.log.info(x + " : " + data[x])
+//				adapter.log.info(x + " : " + data[x])
 			
-			// State Seperation
-			switch(x) {
-				case "meterId":
+				// State Seperation
+				switch(x) {
+					case "meterId":
 
-				adapter.log.error("MeterId_Found")
-					// Load username and password from adapter configuration
-				var user = adapter.config.Username;
-				var pass = adapter.config.Password;
-				var meterID = data[x]
+						// Load username and password from adapter configuration
+						var user = adapter.config.Username;
+						var pass = adapter.config.Password;
+						var meterID = data[x]
 				
-				doDiscovergyMeter(user,pass,"last_reading",meterID).then(function(last_reading) {
+						doDiscovergyMeter(user,pass,"last_reading",meterID).then(function(last_reading) {
  
-				})
+						})
 
-				break;                                                                        
+						break;                                                                        
+				}
+
 			}
-
-        }
     
-    });
+		});
 
-  });
+	});
 
 }
 
@@ -92,72 +91,82 @@ function doDiscovergyCall(username, password,endpoint,urlencoded_parameters) {
 // Function to receive values specific from meter, meter ID must be provided in function call
 function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 	return new Promise(function (resolve, reject)  {
-		  http_request("https://"+username+":"+password+"@api.discovergy.com/public/v1/"+endpoint+"?"+"meterId="+urlencoded_parameters,function(r,e,b) {
-		  result = b
-//            log(result)
-		  data = JSON.parse(result);
-		  adapter.setObject(urlencoded_parameters, {
-			type: "device",
-			common: {
-				name: urlencoded_parameters,
-			},
-			native: {},
-		});			
+		http_request("https://" + username + ":" + password + "@api.discovergy.com/public/v1/" + endpoint + "?" + "meterId=" + urlencoded_parameters,function(r,e,b) {
+			result = b
+			adapter.log.info("query result of meter : " + result)
+			data = JSON.parse(result);
+			
+			adapter.setObject(urlencoded_parameters, {
+				type: "device",
+				common: {
+					name: urlencoded_parameters,
+				},
+				native: {},
+			});			
 
-		  for (x in data.values) {
-//			adapter.log.info(x + " : " + data.values[x])
+			// State to store last syncronisation time
+			doStateCreate(urlencoded_parameters + ".Last_Timestamp","Letzte aktualisierung","number","")
+			adapter.setState(urlencoded_parameters + ".Last_Timestamp", { val: data.time, ack: true });
 
-			  // State Seperation
-			  switch(x) {
-				  
-				  case "power":
+			for (x in data.values) {
 
-							doStateCreate(urlencoded_parameters + ".Power","Momentanwert jetziger Bezug","number","W")
-							adapter.setState(urlencoded_parameters + ".Power", { val: data.values[x] / 1000, ack: true });
-							break;
+				// State Seperation
+				switch(x) {
+					case "power":
 
-				  case "energy":
+						doStateCreate(urlencoded_parameters + ".Power","Momentanwert jetziger Bezug","number","W")
+						adapter.setState(urlencoded_parameters + ".Power", { val: data.values[x] / 1000, ack: true });
+						
+						
+						break;
 
-							doStateCreate(urlencoded_parameters + ".Power_Total","Zählerstand Bezug Gesamt","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_Total", { val: data.values[x] / 10000000000, ack: true });
-							break;
+					case "energy":
 
-				  case "energy1":
+						doStateCreate(urlencoded_parameters + ".Power_Total","Zählerstand Bezug Gesamt","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_Total", { val: data.values[x] / 10000000000, ack: true });
+						break;
 
-							doStateCreate(urlencoded_parameters + ".Power_T1","Zählerstand Bezug T1","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_T1", { val: data.values[x] / 10000000000, ack: true });
-							break;
+					case "energy1":
 
-				  case "energy2":
+						doStateCreate(urlencoded_parameters + ".Power_T1","Zählerstand Bezug T1","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_T1", { val: data.values[x] / 10000000000, ack: true });
+						break;
 
-							doStateCreate(urlencoded_parameters + ".Power_T2","Zählerstand Bezug T2","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_T2", { val: data.values[x] / 10000000000, ack: true });
+					case "energy2":
 
-							break;
+						doStateCreate(urlencoded_parameters + ".Power_T2","Zählerstand Bezug T2","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_T2", { val: data.values[x] / 10000000000, ack: true });
 
-				  case "energyOut":
+						break;
 
-							doStateCreate(urlencoded_parameters + ".Power_Out_Total","Zählerstand Abgabe Gesammt","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_Out_Total", { val: data.values[x] / 10000000000, ack: true });
+					case "energyOut":
 
-							break;
+						doStateCreate(urlencoded_parameters + ".Power_Out_Total","Zählerstand Abgabe Gesammt","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_Out_Total", { val: data.values[x] / 10000000000, ack: true });
 
-				  case "energyOut1":
+						break;
 
-							doStateCreate(urlencoded_parameters + ".Power_Out_T1","Zählerstand Abgabe T1","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_Out_T1", { val: data.values[x] / 10000000000, ack: true });
+					case "energyOut1":
 
-							break;
+						doStateCreate(urlencoded_parameters + ".Power_Out_T1","Zählerstand Abgabe T1","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_Out_T1", { val: data.values[x] / 10000000000, ack: true });
 
-				  case "energyOut2":
-							doStateCreate(urlencoded_parameters + ".Power_Out_T2","Zählerstand Abgabe T2","number","kWh")
-							adapter.setState(urlencoded_parameters + ".Power_Out_T2", { val: data.values[x] / 10000000000, ack: true });
+						break;
 
-							break;                                                                        
-			  }
-		   }
-	  });
-  });
+					case "energyOut2":
+						doStateCreate(urlencoded_parameters + ".Power_Out_T2","Zählerstand Abgabe T2","number","kWh")
+						adapter.setState(urlencoded_parameters + ".Power_Out_T2", { val: data.values[x] / 10000000000, ack: true });
+
+						break;
+						
+					default:
+			
+						adapter.log.error("Information received from Discovergy which is not yet part of this adapter")
+						adapter.log.error("Send this information to developer : " + x + data.values[x])
+				}
+			}
+		});
+	});
 }
 
 //Function to handle state creation
