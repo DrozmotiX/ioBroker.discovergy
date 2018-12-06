@@ -12,11 +12,15 @@ Please feel free to add issue for your wanted funktionality or problems you see 
 Remark : I dont have all possbile devices and also the demo-account does not provide all existing values devices can provide.
 If you receive the following error :
 
-						Information received from Discovergy which is not yet part of this adapter"
-						"Send this information to developer : xxxxx
+				Information received from Discovergy which is not yet part of this adapter"
+				"Send this information to developer : xxxxx
 
 Please go to your logfile and download it, create an issue here on github with the provided values.
 Do not copy-paste from Admin webinterface, information is missing here which i need !
+
+You can test this adapter by using the demo credentials of discovergy (or with your own :-)):
+username = demo@discovergy.com
+pass = demo
 
 ## To-Do
 
