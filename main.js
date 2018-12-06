@@ -203,7 +203,7 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 					default:
 			
 						adapter.log.error("Information received from Discovergy which is not yet part of this adapter")
-						adapter.log.error("Send this information to developer : " + x + " : "data.values[x])
+						adapter.log.error("Send this information to developer : " + x + " : " + data.values[x])
 				}
 			}
 		});
