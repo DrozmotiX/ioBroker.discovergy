@@ -135,6 +135,13 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 						
 						break;
 
+					case "power3":
+
+						doStateCreate(urlencoded_parameters + ".Power_3","Momentanwert jetziger Bezug T3","number","W")
+						adapter.setState(urlencoded_parameters + ".Power_3", { val: data.values[x] / 1000, ack: true });
+						
+						
+						break;
 
 					case "energy":
 
@@ -196,7 +203,7 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters) {
 					default:
 			
 						adapter.log.error("Information received from Discovergy which is not yet part of this adapter")
-						adapter.log.error("Send this information to developer : " + x + data.values[x])
+						adapter.log.error("Send this information to developer : " + x + " : "data.values[x])
 				}
 			}
 		});
