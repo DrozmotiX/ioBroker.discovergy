@@ -7,27 +7,40 @@ It uses the Discovergy API to read data of your meters and syncronise it's curre
 
 https://api.discovergy.com/docs/
 
-Please note : This is my first adapter and currenlty (04-12-2018) is Alpha state !
-
 Please feel free to add issue for your wanted funktionality or problems you see so i can take a look at it !
+
+Remark : I dont have all possbile devices and also the demo-account does not provide all existing values devices can provide.
+If you receive the following error :
+
+						Information received from Discovergy which is not yet part of this adapter"
+						"Send this information to developer : xxxxx
+
+Please go to your logfile and download it, create an issue here on github with the provided values.
+Do not copy-paste from Admin webinterface, information is missing here which i need !
 
 ## To-Do
 
 Core-Functionality
-* Multiple Meter support, currently only one Meter is handled
+* Adjustable polling invervall
+* Better interface for adapter configuration
 * Translations 
 
 Backend
-* Implement better error handling
-* handle more code in functions
-* code cleanup
 * store password encrypted
-* Log more data into states
 * better handling of state creation and updates
 
 ## Changelog
 
-0.2.2
+### 0.2.5
+* (Dutchman) Please remove all current objects within tree discoververgy.x, version 0.2.5 introduce device creation by serial number !
+* (Dutchman) Changed object tree of device from meterId to sererialnumber, please not this means all vallue are now in a different tree
+* (Dutchman) Implemented multiple meter support
+* (Dutchman) implemented "info" object which provides basic information of the device
+* (Dutchman) Implemented all values which are available by demo-account of discovergy
+* (Dutchman) Remark : not all possbile devices are in the demo, if a device cannot be handled you will get an error message i need that information to implement !
+* (Dutchman) Reduced logging
+
+### 0.2.2
 * (Dutchman) add support for values voltage1, voltage1 & voltage3
 * (Dutchman) add support for values power1, power2
 
