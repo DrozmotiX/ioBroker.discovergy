@@ -233,7 +233,7 @@ function doDiscovergyMeter(username, password,endpoint,urlencoded_parameters,ser
 	return new Promise(function (resolve, reject)  {
 		http_request("https://" + username + ":" + password + "@api.discovergy.com/public/v1/" + endpoint + "?" + "meterId=" + urlencoded_parameters,function(r,e,b) {
 			result = b
-			adapter.log.info("query result of meter : " + result)
+//			adapter.log.info("query result of meter : " + result)
 			data = JSON.parse(result);
 
 			lastsync = data.time
