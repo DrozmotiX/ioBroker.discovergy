@@ -1,14 +1,14 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.2.5",
+		"version": "0.2.6",
 		"news": {
 			"0.3.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
+				"en": "Beta",
+				"de": "Beta",
 				"ru": "Начальная версия",
 				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
+				"nl": "Beta",
 				"fr": "Première version",
 				"it": "Versione iniziale",
 				"es": "Versión inicial",
