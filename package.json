@@ -7,10 +7,9 @@
     "email": "rdrozda86@gmail.com"
   },
   "contributors": [
-    {
-      "name": "AlCalzone",
-	  "name": "zoernert"
-    }], 
+    "AlCalzone",
+    "zoernert"
+  ],
   "homepage": "https://github.com/DutchmanNL/ioBroker.discovergy",
   "license": "MIT",
   "keywords": [
@@ -24,23 +23,25 @@
     "url": "https://github.com/DutchmanNL/ioBroker.discovergy"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^1.0.1"
+    "@iobroker/adapter-core": "^1.0.1",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
-    "chai": "^4.2.0",
     "@types/chai-as-promised": "^7.1.0",
-    "chai-as-promised": "^7.1.1",
     "@types/mocha": "^5.2.5",
-    "mocha": "^5.2.0",
-    "@types/sinon": "^5.0.7",
-    "sinon": "^7.1.1",
-    "@types/sinon-chai": "^3.2.1",
-    "sinon-chai": "^3.3.0",
-    "@types/proxyquire": "^1.3.28",
-    "proxyquire": "^2.1.0",
     "@types/node": "^10.12.12",
-    "eslint": "^5.9.0"
+    "@types/proxyquire": "^1.3.28",
+    "@types/request": "^2.48.1",
+    "@types/sinon": "^5.0.7",
+    "@types/sinon-chai": "^3.2.1",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^5.9.0",
+    "mocha": "^5.2.0",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.1.1",
+    "sinon-chai": "^3.3.0"
   },
   "main": "main.js",
   "scripts": {
