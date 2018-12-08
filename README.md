@@ -35,6 +35,12 @@ Backend
 
 ## Changelog
 
+### 0.2.6
+* (Dutchman) new version published on NPM
+* (Dutchman) installation now possible by ioBroker Admin
+* (AlCalzone) good reviewd, several fixes
+* (AlCalzone) fixed dependency with package request
+
 ### 0.2.5
 * (Dutchman) Please remove all current objects within tree discoververgy.x, version 0.2.5 introduce device creation by serial number !
 * (Dutchman) Changed object tree of device from meterId to sererialnumber, please not this means all vallue are now in a different tree
