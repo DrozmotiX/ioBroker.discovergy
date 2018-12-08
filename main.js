@@ -58,14 +58,13 @@ function doDiscovergyCall(username, password,endpoint,urlencoded_parameters) {
 			try {
 
 				// Retrieve all meter objects from Discovergy API
-				let allobjects, len;
-				const myStringArray = JSON.parse(b);
+				/** @type {Record<string, any>[]} */
+				const objArray = JSON.parse(b);
 				//				adapter.log.info(myStringArray[allobjects])
-				for (len = myStringArray.length, allobjects=0; allobjects<len; ++allobjects) {
+				for (const meterobjects of objArray) {
 
 					//					adapter.log.info(allobjects + " : " + myStringArray[allobjects])
 
-					const meterobjects = myStringArray[allobjects];
 					const administrationNumber = meterobjects.administrationNumber;
 					const currentScalingFactor = meterobjects.currentScalingFactor;
 					const firstMeasurementTime = meterobjects.firstMeasurementTime;
