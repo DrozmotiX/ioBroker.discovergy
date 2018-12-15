@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.2.6",
+		"version": "0.2.9",
 		"news": {
 			"0.3.1": {
 				"en": "Beta",
@@ -55,7 +55,7 @@
 		"readme": "https://github.com/DutchmanNL/ioBroker.discovergy/blob/master/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
-		"type": "general",
+		"type": "energy",
 		"materialize": true,
 		"dependencies": [
 			{
@@ -65,7 +65,9 @@
 	},
 	"native": {
 		"Username": "",
-		"Password": ""
+		"Password": "",
+		"pull_Short": "3",
+		"pull_Long": "1"
 	},
 	"objects": [],
 	"instanceObjects": []

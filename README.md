@@ -35,6 +35,12 @@ Backend
 
 ## Changelog
 
+### 0.2.9
+* implemented intervall short and long, only relevant information (current consumption) is pulled short alle other (totals) on interval Long
+* Implemented additional datapoints for Power, Power_x_Consumption and Power_x_Delivery, the power value can have a positive and negative number depending of if u consumer or produce for the network. Seperate - and + values to seperated datapoints.
+* Pull intervall can be configured in Adapter settings
+* Small code fixes
+
 ### 0.2.6
 * (Dutchman) new version published on NPM
 * (Dutchman) installation now possible by ioBroker Admin
