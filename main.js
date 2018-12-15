@@ -20,37 +20,39 @@ const adapter = utils.adapter({
 			callback();
 		}
 	},
-});
+});	
 
 function main() {
 	// Load configuration
 	user = adapter.config.Username;
 	pass = adapter.config.Password;
+	//	adapter.log.info(user)
+	//	adapter.log.info(pass)
 	//@ts-ignoreTS-ignore
 	pull_Long = (adapter.config.pull_Long * 60000);
 	//@ts-ignoreTS-ignore
 	pull_Short = (adapter.config.pull_Short * 1000);
 
-	if (user == undefined || pass == undefined){
+	//	if (user === null || pass === null){
 	
-		// Lets first ensure all data is read 1 time and all channels, devices etc are created.
-		// After initialisation is finished the timers will start for short and long pulling
-		doDiscovergyCall(user, pass, "meters", "","initialize");
+	// Lets first ensure all data is read 1 time and all channels, devices etc are created.
+	// After initialisation is finished the timers will start for short and long pulling
+	doDiscovergyCall(user, pass, "meters", "","initialize");
 
-		checkInterval_short = setInterval(function () {
-			doDiscovergyCall(user, pass, "meters", "","short");
-		}, pull_Short);
+	checkInterval_short = setInterval(function () {
+		doDiscovergyCall(user, pass, "meters", "","short");
+	}, pull_Short);
 
-		checkInterval_long = setInterval(function () {
-			doDiscovergyCall(user, pass, "meters", "","long");
-		}, pull_Long);
-	} else {
+	checkInterval_long = setInterval(function () {
+		doDiscovergyCall(user, pass, "meters", "","long");
+	}, pull_Long);
+/*	} else {
 		adapter.log.error("*** Please enter Discovergy credentials in adapter settings ***");
 		clearTimeout(checkRestart_adapter);
 		checkRestart_adapter = setTimeout(function () {
 			main();
 		}, 30000);
-	}
+	}*/
 }
 
 // Call Discovergy API en get an oerview of all meters present in your account and create objects with basic information
