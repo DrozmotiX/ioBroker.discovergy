@@ -29,16 +29,12 @@
 		
 	},
 	"include": [
-		
 		"**/*.js",
 		"**/*.d.ts"
-		
 	],
 	"exclude": [
-		
 		"node_modules/**",
 		"admin/**/*.d.ts",
 		"admin/**/*.js",
-	
 	]
 }
