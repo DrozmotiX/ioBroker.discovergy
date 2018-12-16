@@ -1,9 +1,9 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.2.9",
+		"version": "0.3.0",
 		"news": {
-			"0.3.1": {
+			"0.3.0": {
 				"en": "Beta",
 				"de": "Beta",
 				"ru": "Начальная версия",
@@ -70,5 +70,17 @@
 		"pull_Long": "1"
 	},
 	"objects": [],
-	"instanceObjects": []
+	"instanceObjects": [{
+        "_id": "info.connection",
+        "type": "state",
+        "common": {
+            "role": "indicator.connected",
+            "name": "If communication with Discovergy works",
+            "type": "boolean",
+            "read": true,
+            "write": false,
+            "def": false
+        },
+        "native": {}
+    }]
 }

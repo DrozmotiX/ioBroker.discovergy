@@ -24,16 +24,14 @@ pass = demo
 
 ## To-Do
 
-Core-Functionality
-* Adjustable polling invervall
-* Better interface for adapter configuration
 * Translations 
 
-Backend
-* store password encrypted
-* better handling of state creation and updates
-
 ## Changelog
+
+### 0.3.0
+* Implemented encrypted password storage
+* Fixed issue with polling of states (this should fix "connection failed" of version 0.2.9)
+* Correct error message in LOG when credentials are missing
 
 ### 0.2.9
 * implemented intervall short and long, only relevant information (current consumption) is pulled short alle other (totals) on interval Long

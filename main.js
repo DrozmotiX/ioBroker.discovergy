@@ -1,13 +1,13 @@
 const utils = require("@iobroker/adapter-core");
 const http_request = require("request");
 let checkRestart_adapter ,checkInterval_short, checkInterval_long, user, pass, pull_Long, pull_Short;
-let running = false;
 
 // Create the adapter and define its methods
 const adapter = utils.adapter({
 	name: "discovergy",
 	// start here!
-	ready: main, // Main method defined below for readability
+	//ready: main, // Main method defined below for readability
+	ready: onReady,
 	// is called when adapter shuts down - callback has to be called under any circumstances!
 	unload: (callback) => {
 		if (checkInterval_short != undefined) clearTimeout(checkInterval_short);
@@ -22,170 +22,184 @@ const adapter = utils.adapter({
 	},
 });	
 
+// Decrypt stored password when adapter is ready
+function onReady() {
+//	adapter.setState("info.connection", false, true);
+//	adapter.log.debug("ready - Adapter: databases are connected and adapter received configuration");
+//	adapter.log.silly("config.client_secret verschlüsselt: " + adapter.config.Password);
+   
+	adapter.getForeignObject("system.config", (err, obj) => {
+		if (obj && obj.native && obj.native.secret) {
+		//noinspection JSUnresolvedVariable
+			pass = decrypt(obj.native.secret, adapter.config.Password);
+		} else {
+		//noinspection JSUnresolvedVariable
+			pass = decrypt("Zgfr56gFe87jJOM", adapter.config.Password);
+		}
+		main();
+	});
+}
+
+// Main funtion to handle intervalls for polling
 function main() {
 	// Load configuration
 	user = adapter.config.Username;
-	pass = adapter.config.Password;
 	//	adapter.log.info(user)
-	//	adapter.log.info(pass)
+	//  adapter.log.info("Password : " + pass);
 	//@ts-ignoreTS-ignore
 	pull_Long = (adapter.config.pull_Long * 60000);
 	//@ts-ignoreTS-ignore
 	pull_Short = (adapter.config.pull_Short * 1000);
 
-	//	if (user === null || pass === null){
+	// Check if credentials are not empty
+	if (user !== "" && pass !== ""){
 	
-	// Lets first ensure all data is read 1 time and all channels, devices etc are created.
-	// After initialisation is finished the timers will start for short and long pulling
-	doDiscovergyCall(user, pass, "meters", "","initialize");
+		// Lets first ensure all data is read 1 time and all channels, devices etc are created.
+		// After initialisation is finished the timers will start for short and long pulling
+		doDiscovergyCall(user, pass, "meters", "","initialize");
 
-	checkInterval_short = setInterval(function () {
-		doDiscovergyCall(user, pass, "meters", "","short");
-	}, pull_Short);
+		checkInterval_short = setInterval(function () {
+			doDiscovergyCall(user, pass, "meters", "","short");
+		}, pull_Short);
 
-	checkInterval_long = setInterval(function () {
-		doDiscovergyCall(user, pass, "meters", "","long");
-	}, pull_Long);
-/*	} else {
-		adapter.log.error("*** Please enter Discovergy credentials in adapter settings ***");
-		clearTimeout(checkRestart_adapter);
-		checkRestart_adapter = setTimeout(function () {
-			main();
-		}, 30000);
-	}*/
+		checkInterval_long = setInterval(function () {
+			doDiscovergyCall(user, pass, "meters", "","long");
+		}, pull_Long);
+	} else {
+		adapter.log.error("*** Adapter deactivated, credentials are missing in Adaptper Settings  ***");
+		adapter.setState("info.connection", false, true);
+		adapter.stop;
+	}
 }
 
 // Call Discovergy API en get an oerview of all meters present in your account and create objects with basic information
 function doDiscovergyCall(username, password, endpoint, urlencoded_parameters, pulltype) {
 
-	if (!running) {
-		running = true;
-	
-		const requestUrl = `https://${username}:${password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
-		http_request(requestUrl, (error, response, body) => {
+	const requestUrl = `https://${username}:${password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
+	http_request(requestUrl, (error, response, body) => {
 
-			if (!error && response.statusCode === 200) {
-				// we got a response
+		if (!error && response.statusCode === 200) {
+			adapter.setState("info.connection", true, true);
+			// we got a response
 
-				// Retrieve all meter objects from Discovergy API
-				/** @type {Record<string, any>[]} */
-				const objArray = JSON.parse(body);
-				//				adapter.log.info(myStringArray[allobjects])
-				for (const meterobjects of objArray) {
+			// Retrieve all meter objects from Discovergy API
+			/** @type {Record<string, any>[]} */
+			const objArray = JSON.parse(body);
+			//				adapter.log.info(myStringArray[allobjects])
+			for (const meterobjects of objArray) {
 
-					//					adapter.log.info(allobjects + " : " + myStringArray[allobjects])
+				// adapter.log.info(allobjects + " : " + myStringArray[allobjects])
 
-					// We dont use all values currenlty, some of them are not needed (if yes please create a pull request or issue)
-					// const administrationNumber = meterobjects.administrationNumber;
-					// const currentScalingFactor = meterobjects.currentScalingFactor;
-					const firstMeasurementTime = meterobjects.firstMeasurementTime;
-					// const internalMeters = meterobjects.internalMeters;
-					// const lastMeasurementTime = meterobjects.lastMeasurementTime;
-					const location = meterobjects.location;
-					const measurementType = meterobjects.measurementType;
-					// const scalingFactor = meterobjects.scalingFactor;
-					const serialNumber = meterobjects.serialNumber;
-					const meterId = meterobjects.meterId;
-					const type = meterobjects.type;
-					// const voltageScalingFactor = meterobjects.voltageScalingFactor;
+				// We dont use all values currenlty, some of them are not needed (if yes please create a pull request or issue)
+				// const administrationNumber = meterobjects.administrationNumber;
+				// const currentScalingFactor = meterobjects.currentScalingFactor;
+				const firstMeasurementTime = meterobjects.firstMeasurementTime;
+				// const internalMeters = meterobjects.internalMeters;
+				// const lastMeasurementTime = meterobjects.lastMeasurementTime;
+				const location = meterobjects.location;
+				const measurementType = meterobjects.measurementType;
+				// const scalingFactor = meterobjects.scalingFactor;
+				const serialNumber = meterobjects.serialNumber;
+				const meterId = meterobjects.meterId;
+				const type = meterobjects.type;
+				// const voltageScalingFactor = meterobjects.voltageScalingFactor;
 
-					//	Only handle routine below wen adapter runs its first initalisation
-					if (pulltype == "initialize"){
-						// Create Device Channel for Each found serialnumber
-						adapter.setObjectNotExists(serialNumber, {
-							type: "device",
-							common: {
-								name: serialNumber,
-							},
-							native: {},
-						});
+				//	Only handle routine below wen adapter runs its first initalisation
+				if (pulltype == "initialize"){
+					// Create Device Channel for Each found serialnumber
+					adapter.setObjectNotExists(serialNumber, {
+						type: "device",
+						common: {
+							name: serialNumber,
+						},
+						native: {},
+					});
 
-						// Create all objects for basic information seperated by serialnumber of device
-						doStateCreate(serialNumber + ".info" + ".administrationNumber", "Administrationsnummer", "number", "");
-						adapter.setState(serialNumber + ".info" + ".administrationNumber", { val: "123456789", ack: true });
+					// Create all objects for basic information seperated by serialnumber of device
+					doStateCreate(serialNumber + ".info" + ".administrationNumber", "Administrationsnummer", "number", "");
+					adapter.setState(serialNumber + ".info" + ".administrationNumber", { val: "123456789", ack: true });
 
-						//doStateCreate(serialNumber + ".info" + ".currentScalingFactor","Jetziger skalierungsfactor","number","")
-						//adapter.setState(serialNumber + ".info" + ".currentScalingFactor", { val: currentScalingFactor, ack: true });
+					//doStateCreate(serialNumber + ".info" + ".currentScalingFactor","Jetziger skalierungsfactor","number","")
+					//adapter.setState(serialNumber + ".info" + ".currentScalingFactor", { val: currentScalingFactor, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".firstMeasurementTime", "Erste Messung", "number", "");
-						adapter.setState(serialNumber + ".info" + ".firstMeasurementTime", { val: firstMeasurementTime, ack: true });
+					doStateCreate(serialNumber + ".info" + ".firstMeasurementTime", "Erste Messung", "number", "");
+					adapter.setState(serialNumber + ".info" + ".firstMeasurementTime", { val: firstMeasurementTime, ack: true });
 
-						//doStateCreate(serialNumber + ".info" + ".internalMeters","Anzahl interner Messgeraete","number","")
-						//adapter.setState(serialNumber + ".info" + ".internalMeters", { val: internalMeters, ack: true });
-						//doStateCreate(serialNumber + ".info" + ".Last_Timestamp","Letzte aktualisierung","number","")
-						//adapter.setState(serialNumber + ".info" + ".Last_Timestamp", { val: lastMeasurementTime, ack: true });
+					//doStateCreate(serialNumber + ".info" + ".internalMeters","Anzahl interner Messgeraete","number","")
+					//adapter.setState(serialNumber + ".info" + ".internalMeters", { val: internalMeters, ack: true });
+					//doStateCreate(serialNumber + ".info" + ".Last_Timestamp","Letzte aktualisierung","number","")
+					//adapter.setState(serialNumber + ".info" + ".Last_Timestamp", { val: lastMeasurementTime, ack: true });
 
-						// Locations are multiple values in an object and must be threated diffferently
-						doStateCreate(serialNumber + ".info" + ".location.street", "Strasse", "string", "");
-						adapter.setState(serialNumber + ".info" + ".location.street", { val: location.street, ack: true });
+					// Locations are multiple values in an object and must be threated diffferently
+					doStateCreate(serialNumber + ".info" + ".location.street", "Strasse", "string", "");
+					adapter.setState(serialNumber + ".info" + ".location.street", { val: location.street, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".location.streetNumber", "Hausnummer", "number", "");
-						adapter.setState(serialNumber + ".info" + ".location.streetNumber", { val: location.streetNumber, ack: true });
+					doStateCreate(serialNumber + ".info" + ".location.streetNumber", "Hausnummer", "number", "");
+					adapter.setState(serialNumber + ".info" + ".location.streetNumber", { val: location.streetNumber, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".location.zip", "Ort", "Postleitzahl", "");
-						adapter.setState(serialNumber + ".info" + ".location.zip", { val: location.zip, ack: true });
+					doStateCreate(serialNumber + ".info" + ".location.zip", "Ort", "Postleitzahl", "");
+					adapter.setState(serialNumber + ".info" + ".location.zip", { val: location.zip, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".location.city", "Ort", "string", "");
-						adapter.setState(serialNumber + ".info" + ".location.city", { val: location.city, ack: true });
+					doStateCreate(serialNumber + ".info" + ".location.city", "Ort", "string", "");
+					adapter.setState(serialNumber + ".info" + ".location.city", { val: location.city, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".location.country", "Land", "string", "");
-						adapter.setState(serialNumber + ".info" + ".location.country", { val: location.country, ack: true });
+					doStateCreate(serialNumber + ".info" + ".location.country", "Land", "string", "");
+					adapter.setState(serialNumber + ".info" + ".location.country", { val: location.country, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".measurementType", "Energy Type", "string", "");
-						adapter.setState(serialNumber + ".info" + ".measurementType", { val: measurementType, ack: true });
+					doStateCreate(serialNumber + ".info" + ".measurementType", "Energy Type", "string", "");
+					adapter.setState(serialNumber + ".info" + ".measurementType", { val: measurementType, ack: true });
 
-						//doStateCreate(serialNumber + ".info" + ".scalingFactor","Skalierungsfactor","number","")
-						//adapter.setState(serialNumber + ".info" + ".scalingFactor", { val: scalingFactor, ack: true });
+					//doStateCreate(serialNumber + ".info" + ".scalingFactor","Skalierungsfactor","number","")
+					//adapter.setState(serialNumber + ".info" + ".scalingFactor", { val: scalingFactor, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".serialNumber", "Seriennummer", "number", "");
-						adapter.setState(serialNumber + ".info" + ".serialNumber", { val: serialNumber, ack: true });
+					doStateCreate(serialNumber + ".info" + ".serialNumber", "Seriennummer", "number", "");
+					adapter.setState(serialNumber + ".info" + ".serialNumber", { val: serialNumber, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".meterId", "Id des Messgeraetes", "number", "");
-						adapter.setState(serialNumber + ".info" + ".meterId", { val: meterId, ack: true });
+					doStateCreate(serialNumber + ".info" + ".meterId", "Id des Messgeraetes", "number", "");
+					adapter.setState(serialNumber + ".info" + ".meterId", { val: meterId, ack: true });
 
-						doStateCreate(serialNumber + ".info" + ".type", "Device Type", "number", "");
-						adapter.setState(serialNumber + ".info" + ".type", { val: type, ack: true });
+					doStateCreate(serialNumber + ".info" + ".type", "Device Type", "number", "");
+					adapter.setState(serialNumber + ".info" + ".type", { val: type, ack: true });
 
-						//doStateCreate(serialNumber + ".info" + ".voltageScalingFactor","Voltage Skalierungsfactor","number","")
-						//adapter.setState(serialNumber + ".info" + ".voltageScalingFactor", { val: voltageScalingFactor, ack: true });
-					}
+					//doStateCreate(serialNumber + ".info" + ".voltageScalingFactor","Voltage Skalierungsfactor","number","")
+					//adapter.setState(serialNumber + ".info" + ".voltageScalingFactor", { val: voltageScalingFactor, ack: true });
+				}
 
-					// Loop on all objects to Verify if JSON contains values which are not yet implemented in Adapter, if implemented do nothing if not return error message
-					for (const x in meterobjects) {
-						//						adapter.log.info(x + " : " + meterobjects[x])
-						switch (x) {
-							case "administrationNumber":
-							case "currentScalingFactor":
-							case "firstMeasurementTime":
-							case "internalMeters":
-							case "lastMeasurementTime":
-							case "location":
-							case "measurementType":
-							case "meterId":
-							case "scalingFactor":
-							case "serialNumber":
-							case "type":
-							case "voltageScalingFactor":
-								break;
+				// Loop on all objects to Verify if JSON contains values which are not yet implemented in Adapter, if implemented do nothing if not return error message
+				for (const x in meterobjects) {
+					//						adapter.log.info(x + " : " + meterobjects[x])
+					switch (x) {
+						case "administrationNumber":
+						case "currentScalingFactor":
+						case "firstMeasurementTime":
+						case "internalMeters":
+						case "lastMeasurementTime":
+						case "location":
+						case "measurementType":
+						case "meterId":
+						case "scalingFactor":
+						case "serialNumber":
+						case "type":
+						case "voltageScalingFactor":
+							break;
 
-							default:
+						default:
 
-								adapter.log.error("Information received from Discovergy which is not yet part of this adapter");
-								adapter.log.error("Send this information to developer : " + x + " : " + meterobjects[x]);
-						}
-
-						// Do not handle meter type RLM yet, unclear what kind of device this is and values provided
-						if (type != "RLM") {
-							doDiscovergyMeter(user, pass, "last_reading", meterId, serialNumber,pulltype);
-						}
+							adapter.log.error("Information received from Discovergy which is not yet part of this adapter");
+							adapter.log.error("Send this information to developer : " + x + " : " + meterobjects[x]);
 					}
 				}
-			} else { // error or non-200 status code
-				adapter.log.error("Connection_Failed : " + error);
+			
+				// Do not handle meter type RLM yet, unclear what kind of device this is and values provided
+				if (type != "RLM") {
+					doDiscovergyMeter(user, pass, "last_reading", meterId, serialNumber,pulltype);
+				}				
 			}
-		});
-		running = false;
-	}
+		} else { // error or non-200 status code
+			adapter.log.error("Connection_Failed, check your credentials !");
+			adapter.setState("info.connection", false, true);
+		}
+	});
 }
 
 // Function to receive values from specific meter
@@ -367,4 +381,14 @@ function doStateCreate(id, name, type, unit) {
 		},
 		native: {},
 	});
+}
+
+// Function to decrypt passwords
+function decrypt(key, value) {
+	let result = "";
+	for (let i = 0; i < value.length; ++i) {
+		result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+	}
+	adapter.log.debug("client_secret decrypt ready");
+	return result;
 }
