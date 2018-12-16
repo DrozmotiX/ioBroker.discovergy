@@ -28,6 +28,14 @@ pass = demo
 
 ## Changelog
 
+### 0.3.2
+* Improved logging
+* Seperate supported object definitions from hard code main.js to configuration file "/lib/supported_objects.js"
+
+### 0.3.1
+* Stop adapter when username/password is empty and write error message
+* Fixed incorrectly created states, time-stamps are also correctly shown now
+
 ### 0.3.0
 * Implemented encrypted password storage
 * Fixed issue with polling of states (this should fix "connection failed" of version 0.2.9)
@@ -42,7 +50,7 @@ pass = demo
 ### 0.2.6
 * (Dutchman) new version published on NPM
 * (Dutchman) installation now possible by ioBroker Admin
-* (AlCalzone) good reviewd, several fixes
+* (AlCalzone) code reviewd, several fixes
 * (AlCalzone) fixed dependency with package request
 
 ### 0.2.5

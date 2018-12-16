@@ -22,54 +22,51 @@ const adapter = utils.adapter({
 	},
 });	
 
-// Decrypt stored password when adapter is ready
+// Load values from Adapter configuration and check preconditions
 function onReady() {
-//	adapter.setState("info.connection", false, true);
-//	adapter.log.debug("ready - Adapter: databases are connected and adapter received configuration");
-//	adapter.log.silly("config.client_secret verschlüsselt: " + adapter.config.Password);
+	adapter.setState("info.connection", false, true);
+	adapter.log.debug("ready - Adapter: databases are connected and adapter received configuration");
    
-	adapter.getForeignObject("system.config", (err, obj) => {
-		if (obj && obj.native && obj.native.secret) {
-		//noinspection JSUnresolvedVariable
-			pass = decrypt(obj.native.secret, adapter.config.Password);
-		} else {
-		//noinspection JSUnresolvedVariable
-			pass = decrypt("Zgfr56gFe87jJOM", adapter.config.Password);
-		}
-		main();
-	});
-}
-
-// Main funtion to handle intervalls for polling
-function main() {
-	// Load configuration
 	user = adapter.config.Username;
-	//	adapter.log.info(user)
-	//  adapter.log.info("Password : " + pass);
 	//@ts-ignoreTS-ignore
 	pull_Long = (adapter.config.pull_Long * 60000);
 	//@ts-ignoreTS-ignore
 	pull_Short = (adapter.config.pull_Short * 1000);
-
+	
 	// Check if credentials are not empty
 	if (user !== "" && pass !== ""){
+		adapter.getForeignObject("system.config", (err, obj) => {
+			if (obj && obj.native && obj.native.secret) {
+			//noinspection JSUnresolvedVariable
+				pass = decrypt(obj.native.secret, adapter.config.Password);
+			} else {
+			//noinspection JSUnresolvedVariable
+				pass = decrypt("Zgfr56gFe87jJOM", adapter.config.Password);
+			}
+			
+			// Lets first ensure all data is read 1 time and all channels, devices etc are created.
+			// After initialisation is finished the timers will start for short and long pulling
+			doDiscovergyCall(user, pass, "meters", "","initialize");
+			
+			// start intervalls
+			PullIntervall();	
 	
-		// Lets first ensure all data is read 1 time and all channels, devices etc are created.
-		// After initialisation is finished the timers will start for short and long pulling
-		doDiscovergyCall(user, pass, "meters", "","initialize");
-
-		checkInterval_short = setInterval(function () {
-			doDiscovergyCall(user, pass, "meters", "","short");
-		}, pull_Short);
-
-		checkInterval_long = setInterval(function () {
-			doDiscovergyCall(user, pass, "meters", "","long");
-		}, pull_Long);
+		});
 	} else {
-		adapter.log.error("*** Adapter deactivated, credentials are missing in Adaptper Settings  ***");
-		adapter.setState("info.connection", false, true);
-		adapter.stop;
+		adapter.log.error("*** Adapter deactivated, credentials missing in Adaptper Settings !!!  ***");
+		adapter.setForeignState("system.adapter." + adapter.namespace + ".alive", false);
 	}
+}
+
+// Main funtion to handle intervalls for polling
+function PullIntervall() {
+	checkInterval_short = setInterval(function () {
+		doDiscovergyCall(user, pass, "meters", "","short");
+	}, pull_Short);
+
+	checkInterval_long = setInterval(function () {
+		doDiscovergyCall(user, pass, "meters", "","long");
+	}, pull_Long);
 }
 
 // Call Discovergy API en get an oerview of all meters present in your account and create objects with basic information
@@ -116,13 +113,13 @@ function doDiscovergyCall(username, password, endpoint, urlencoded_parameters, p
 					});
 
 					// Create all objects for basic information seperated by serialnumber of device
-					doStateCreate(serialNumber + ".info" + ".administrationNumber", "Administrationsnummer", "number", "");
+					doStateCreate(serialNumber + ".info" + ".administrationNumber", "Administrationsnummer", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".administrationNumber", { val: "123456789", ack: true });
 
 					//doStateCreate(serialNumber + ".info" + ".currentScalingFactor","Jetziger skalierungsfactor","number","")
 					//adapter.setState(serialNumber + ".info" + ".currentScalingFactor", { val: currentScalingFactor, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".firstMeasurementTime", "Erste Messung", "number", "");
+					doStateCreate(serialNumber + ".info" + ".firstMeasurementTime", "Erste Messung", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".firstMeasurementTime", { val: firstMeasurementTime, ack: true });
 
 					//doStateCreate(serialNumber + ".info" + ".internalMeters","Anzahl interner Messgeraete","number","")
@@ -131,34 +128,34 @@ function doDiscovergyCall(username, password, endpoint, urlencoded_parameters, p
 					//adapter.setState(serialNumber + ".info" + ".Last_Timestamp", { val: lastMeasurementTime, ack: true });
 
 					// Locations are multiple values in an object and must be threated diffferently
-					doStateCreate(serialNumber + ".info" + ".location.street", "Strasse", "string", "");
+					doStateCreate(serialNumber + ".info" + ".location.street", "Strasse", "string", "value", "");
 					adapter.setState(serialNumber + ".info" + ".location.street", { val: location.street, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".location.streetNumber", "Hausnummer", "number", "");
+					doStateCreate(serialNumber + ".info" + ".location.streetNumber", "Hausnummer", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".location.streetNumber", { val: location.streetNumber, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".location.zip", "Ort", "Postleitzahl", "");
+					doStateCreate(serialNumber + ".info" + ".location.zip", "Ort", "Postleitzahl", "value", "");
 					adapter.setState(serialNumber + ".info" + ".location.zip", { val: location.zip, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".location.city", "Ort", "string", "");
+					doStateCreate(serialNumber + ".info" + ".location.city", "Ort", "string", "value","");
 					adapter.setState(serialNumber + ".info" + ".location.city", { val: location.city, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".location.country", "Land", "string", "");
+					doStateCreate(serialNumber + ".info" + ".location.country", "Land", "string", "value", "");
 					adapter.setState(serialNumber + ".info" + ".location.country", { val: location.country, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".measurementType", "Energy Type", "string", "");
+					doStateCreate(serialNumber + ".info" + ".measurementType", "Energy Type", "string", "value", "");
 					adapter.setState(serialNumber + ".info" + ".measurementType", { val: measurementType, ack: true });
 
 					//doStateCreate(serialNumber + ".info" + ".scalingFactor","Skalierungsfactor","number","")
 					//adapter.setState(serialNumber + ".info" + ".scalingFactor", { val: scalingFactor, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".serialNumber", "Seriennummer", "number", "");
+					doStateCreate(serialNumber + ".info" + ".serialNumber", "Seriennummer", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".serialNumber", { val: serialNumber, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".meterId", "Id des Messgeraetes", "number", "");
+					doStateCreate(serialNumber + ".info" + ".meterId", "Id des Messgeraetes", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".meterId", { val: meterId, ack: true });
 
-					doStateCreate(serialNumber + ".info" + ".type", "Device Type", "number", "");
+					doStateCreate(serialNumber + ".info" + ".type", "Device Type", "number",  "value", "");
 					adapter.setState(serialNumber + ".info" + ".type", { val: type, ack: true });
 
 					//doStateCreate(serialNumber + ".info" + ".voltageScalingFactor","Voltage Skalierungsfactor","number","")
@@ -213,7 +210,7 @@ function doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, 
 			//			adapter.log.info("query result of meter : " + result)
 			const data = JSON.parse(result);
 
-			doStateCreate(serial + "._Last_Sync", "Zeitpunkt Letzte Syncronisierung", "number", "");
+			doStateCreate(serial + "._Last_Sync", "Zeitpunkt Letzte Syncronisierung", "number","value.time", "");
 			adapter.setState(serial + "._Last_Sync", { val: data.time, ack: true });
 
 			for (const x in data.values) {
@@ -225,131 +222,131 @@ function doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, 
 				switch (x) {
 					case "power":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power", "Momentanwert jetziger Bezug", "number", "W");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power", "Momentanwert jetziger Bezug", "number", "value", "W");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power", { val: data.values[x] / 1000, ack: true });
 
 						// Seperate states for usage and delivery
-						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_Usage", "Momentanwert jetzige Abnahme", "number", "W");
+						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_Usage", "Momentanwert jetzige Abnahme", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_Usage", { val: data.values[x] / 1000, ack: true });
-						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_Delivery", "Momentanwert jetzige Abgabe", "number", "W");
+						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_Delivery", "Momentanwert jetzige Abgabe", "number", "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_Delivery", { val: data.values[x] / 1000, ack: true });
 
 						break;
 
 					case "power1":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_1", "Momentanwert jetziger Bezug T1", "number", "W");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_1", "Momentanwert jetziger Bezug T1", "number",  "value", "W");
 						if (pulltype == "initialize" || pulltype == "short")adapter.setState(serial + ".Power_1", { val: data.values[x] / 1000, ack: true });
 						// Seperate states for usage and delivery
-						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_1_Usage", "Momentanwert jetzige Abnahme T1", "number", "W");
+						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_1_Usage", "Momentanwert jetzige Abnahme T1", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_1_Usage", { val: data.values[x] / 1000, ack: true });
-						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_1_Delivery", "Momentanwert jetzige Abgabe T1", "number", "W");
+						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_1_Delivery", "Momentanwert jetzige Abgabe T1", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_1_Delivery", { val: data.values[x] / 1000, ack: true });
 
 						break;
 
 					case "power2":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_2", "Momentanwert jetziger Bezug T2", "number", "W");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_2", "Momentanwert jetziger Bezug T2", "number",  "value", "W");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power_2", { val: data.values[x] / 1000, ack: true });
 						// Seperate states for usage and delivery						
-						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_2_Usage", "Momentanwert jetzige Abnahme T2", "number", "W");
+						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_2_Usage", "Momentanwert jetzige Abnahme T2", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_2_Usage", { val: data.values[x] / 1000, ack: true });
-						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_2_Delivery", "Momentanwert jetzige Abgabe T2", "number", "W");
+						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_2_Delivery", "Momentanwert jetzige Abgabe T2", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_2_Delivery", { val: data.values[x] / 1000, ack: true });
 						
 						break;
 
 					case "power3":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_3", "Momentanwert jetziger Bezug T3", "number", "W");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_3", "Momentanwert jetziger Bezug T3", "number",  "value", "W");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power_3", { val: data.values[x] / 1000, ack: true });
 						// Seperate states for usage and delivery						
-						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_3_Usage", "Momentanwert jetzige Abnahme T3", "number", "W");
+						if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_3_Usage", "Momentanwert jetzige Abnahme T3", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_3_Usage", { val: data.values[x] / 1000, ack: true });
-						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_3_Delivery", "Momentanwert jetzige Abgabe T3", "number", "W");
+						if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_3_Delivery", "Momentanwert jetzige Abgabe T3", "number",  "value", "W");
 						if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_3_Delivery", { val: data.values[x] / 1000, ack: true });
 						break;
 
 					case "energy":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_Total", "Zählerstand Bezug Gesamt", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_Total", "Zählerstand Bezug Gesamt", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_Total", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energy1":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_T1", "Zählerstand Bezug T1", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_T1", "Zählerstand Bezug T1", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_T1", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energy2":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_T2", "Zählerstand Bezug T2", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_T2", "Zählerstand Bezug T2", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_T2", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyOut":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_Total", "Zählerstand Abgabe Gesammt", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_Total", "Zählerstand Abgabe Gesammt", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_Out_Total", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyOut1":
 
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_T1", "Zählerstand Abgabe T1", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_T1", "Zählerstand Abgabe T1", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_Out_T1", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyOut2":
-						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_T2", "Zählerstand Abgabe T2", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".Power_Out_T2", "Zählerstand Abgabe T2", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".Power_Out_T2", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyProducer8":
-						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_8", "energyProducer_8", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_8", "energyProducer_8", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".energyProducer_8", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyProducer9":
-						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_9", "energyProducer_9", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_9", "energyProducer_9", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".energyProducer_9", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "energyProducer10":
-						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_10", "energyProducer_9", "number", "kWh");
+						if (pulltype == "initialize") doStateCreate(serial + ".energyProducer_10", "energyProducer_9", "number",  "value", "kWh");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".energyProducer_10", { val: data.values[x] / 10000000000, ack: true });
 
 						break;
 
 					case "voltage1":
-						if (pulltype == "initialize") doStateCreate(serial + ".voltage_1", "Voltage", "number", "V");
+						if (pulltype == "initialize") doStateCreate(serial + ".voltage_1", "Voltage", "number",  "value", "V");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".voltage_1", { val: data.values[x] / 1000, ack: true });
 
 						break;
 
 					case "voltage2":
-						if (pulltype == "initialize") doStateCreate(serial + ".voltage_2", "Voltage", "number", "V");
+						if (pulltype == "initialize") doStateCreate(serial + ".voltage_2", "Voltage", "number",  "value", "V");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".voltage_2", { val: data.values[x] / 1000, ack: true });
 
 						break;
 
 					case "voltage3":
-						if (pulltype == "initialize") doStateCreate(serial + ".voltage_3", "Voltage", "number", "V");
+						if (pulltype == "initialize") doStateCreate(serial + ".voltage_3", "Voltage", "number",  "value", "V");
 						if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".voltage_3", { val: data.values[x] / 1000, ack: true });
 
 						break;
 
 					case "volume":
-						if (pulltype == "initialize") doStateCreate(serial + ".volume ", "Volume", "number", "m3");
+						if (pulltype == "initialize") doStateCreate(serial + ".volume ", "Volume", "number",  "value", "m3");
 						if (pulltype == "initialize" || pulltype == "long") adapter.setState(serial + ".volume ", { val: data.values[x] / 1000, ack: true });
 
 						break;
@@ -367,14 +364,14 @@ function doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, 
 }
 
 //Function to handle state creation
-function doStateCreate(id, name, type, unit) {
+function doStateCreate(id, name, type,role, unit) {
 
 	adapter.setObjectNotExists(id, {
 		type: "state",
 		common: {
 			name: name,
 			type: type,
-			role: "value.state",
+			role: role,
 			read: true,
 			unit: unit,
 			write: false,

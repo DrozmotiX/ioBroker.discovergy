@@ -1,42 +1,42 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.3.0",
+		"version": "0.3.1",
 		"news": {
-			"0.3.0": {
-				"en": "Beta",
-				"de": "Beta",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Beta",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie"
+			"0.3.1": {
+				"en": "Stable Beta release of ioBroker Discovergy",
+				"de": "Stabile Beta-Version von ioBroker Discovergy",
+				"ru": "Стабильная бета-версия ioBroker Discovergy",
+				"pt": "Versão beta estável do ioBroker Discovergy",
+				"nl": "Stabiele bètaversie van ioBroker Discovergy",
+				"fr": "Version bêta stable d'ioBroker Discovergy",
+				"it": "Rilascio beta stabile di ioBroker Discovergy",
+				"es": "Lanzamiento estable Beta de ioBroker Discovergy",
+				"pl": "Stabilne wydanie beta produktu ioBroker Discovergy"
 			}
 		},
-		"title": "discovergy",
+		"title": "Discovergy",
 		"titleLang": {
-			"en": "discovergy",
-			"de": "discovergy",
-			"ru": "discovergy",
-			"pt": "discovergy",
-			"nl": "discovergy",
-			"fr": "discovergy",
-			"it": "discovergy",
-			"es": "discovergy",
-			"pl": "discovergy"
+			"en": "Discovergy",
+			"de": "Discovergy",
+			"ru": "Discovergy",
+			"pt": "Discovergy",
+			"nl": "Discovergy",
+			"fr": "Discovergy",
+			"it": "Discovergy",
+			"es": "Discovergy",
+			"pl": "Discovergy"
 		},
 		"desc": {
-			"en": "discovergy",
-			"de": "discovergy",
-			"ru": "discovergy",
-			"pt": "discovergy",
-			"nl": "discovergy",
-			"fr": "discovergy",
-			"it": "discovergy",
-			"es": "discovergy",
-			"pl": "discovergy"
+			"en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
+			"de": "Mit diesem Adapter können Discovergy-Benutzer alle ihre Messungen mit dem ioBroker synchronisieren",
+			"ru": "Этот адаптер позволяет пользователям Discovergy синхронизировать все свои измерения с ioBroker",
+			"pt": "Este adaptador permite que os usuários da Discovergy sincronizem todas as suas medições com o ioBroker",
+			"nl": "Met deze adapter kunnen Discovergy-gebruikers al hun metingen synchroniseren met ioBroker",
+			"fr": "Cet adaptateur permet aux utilisateurs de Discovergy de synchroniser toutes leurs mesures avec ioBroker.",
+			"it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
+			"es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
+			"pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker"
 		},
 		"authors": [
 			"Dutchman <rdrozda86@gmail.com>"
