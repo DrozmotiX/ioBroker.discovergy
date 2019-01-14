@@ -1,8 +1,20 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.3.1",
+		"version": "0.4.0",
 		"news": {
+			"0.4.0": {
+				"en": "Release stable version 0.4.0",
+				"de": "Stable Version 0.4.0 freigeben",
+				"ru": "Выпуск стабильной версии 0.4.0",
+				"pt": "Versão estável de lançamento 0.4.0",
+				"nl": "Release stabiele versie 0.4.0",
+				"fr": "Publication de la version stable 0.4.0",
+				"it": "Rilascia la versione stabile 0.4.0",
+				"es": "Versión estable 0.4.0",
+				"pl": "Wydanie stabilnej wersji 0.4.0",
+				"zh-cn": "发布稳定版本0.4.0"
+			},
 			"0.3.1": {
 				"en": "Stable Beta release of ioBroker Discovergy",
 				"de": "Stabile Beta-Version von ioBroker Discovergy",

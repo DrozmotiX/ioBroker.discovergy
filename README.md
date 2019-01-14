@@ -28,6 +28,11 @@ pass = demo
 
 ## Changelog
 
+### 0.4.0
+* small code fixes
+* updated dependecys
+* release for stable repository
+
 ### 0.3.2
 * Improved logging
 * Seperate supported object definitions from hard code main.js to configuration file "/lib/supported_objects.js"
@@ -83,7 +88,7 @@ pass = demo
 ## License
 MIT License
 
-Copyright (c) 2018 Dutchman
+Copyright (c) 2019 Dutchman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
