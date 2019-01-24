@@ -1,4 +1,5 @@
 ![alt text](https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/master/admin/Discovergy_logo.png)
+[![Greenkeeper badge](https://badges.greenkeeper.io/iobroker-community-adapters/ioBroker.discovergy.svg)](https://greenkeeper.io/)
 
 # ioBroker.discovergy
 
