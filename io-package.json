@@ -68,6 +68,7 @@
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "energy",
+		"license": "MIT",
 		"materialize": true,
 		"dependencies": [
 			{
