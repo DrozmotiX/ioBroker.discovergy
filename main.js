@@ -178,6 +178,9 @@ function doDiscovergyCall(username, password, endpoint, urlencoded_parameters, p
 						case "serialNumber":
 						case "type":
 						case "voltageScalingFactor":
+						case "loadProfileType":
+						case "fullSerialNumber":
+						case "manufacturerId":								
 							break;
 
 						default:
