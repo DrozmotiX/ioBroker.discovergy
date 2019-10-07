@@ -86,20 +86,7 @@ class Discovergy extends utils.Adapter {
 						if (state_attr[x] === undefined){
 							this.log.error("State type : " + x + " unknown, send this information to the developer ==> " + x + " : " + JSON.stringify(objArray[i][x]));
 						} else {
-							this.doStateCreate(objArray[i]["serialNumber"] + ".info." + x,state_attr[x].type,state_attr[x].role,state_attr[x].read,state_attr[x].unit,state_attr[x].write)
-
-							this.setObjectNotExists(objArray[i]["serialNumber"] + ".info." + x, {
-								type: "state",
-								common: {
-									name: x,
-									type: state_attr[x].type,
-									role: state_attr[x].role,
-									read: state_attr[x].read,
-									unit: state_attr[x].unit,
-									write: state_attr[x].write,
-								},
-								native: {},
-							});
+							this.doStateCreate(objArray[i]["serialNumber"] + ".info." + x,state_attr[x].name,state_attr[x].type,state_attr[x].role,state_attr[x].read,state_attr[x].unit,state_attr[x].write);
 							this.setState(objArray[i]["serialNumber"] + ".info." + x, objArray[i][x], true);
 						}
 					}
@@ -125,7 +112,6 @@ class Discovergy extends utils.Adapter {
 					// this.log.info("Test alle meter run");
 					this.doDiscovergyMeter(user, pass, "last_reading", all_meters[z].meterId, all_meters[z].serialNumber);
 					this.log.info("Discovergy meter found at your account with serial  : " + all_meters[z].serialNumber);
-
 				}
 
 			} else { // error or non-200 status code
@@ -136,7 +122,6 @@ class Discovergy extends utils.Adapter {
 	}
 
 	async doStateCreate(state, name, type, role, read, unit, write){
-
 
 		this.setObjectNotExists(state, {
 			type: "state",
@@ -158,9 +143,10 @@ class Discovergy extends utils.Adapter {
 		http_request(requestUrl, (error, response, body) => {
 
 			// Run this routine again in 10 seconds (update intervall for meters)
+			const intervall = (this.config.pull_Short * 1000);
 			setTimeout( () => {
 				this.doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, serial);
-			}, 10000);
+			}, intervall);
 
 			if (!error && response.statusCode === 200) {
 				// we got a response
@@ -181,135 +167,58 @@ class Discovergy extends utils.Adapter {
 								switch (x) {
 									case "power":
 										if (data[i][x] > 0) {
-											this.doStateCreate(serial + ".Power_Usage", 'Momentanwert jetzige Abnahme', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_Usage", data[i][x], x);
+											this.doStateCreate(serial + ".Power_Consumption", "Momentanwert jetzige Abnahme", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_Consumption", data[i][x], x);
 										} else {
-											this.doStateCreate(serial + ".Power_Delivery", 'Momentanwert jetziger Abgabe', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.doStateCreate(serial + ".Power_Delivery", "Momentanwert jetziger Abgabe", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_Delivery", data[i][x], x);										
 										}
 	
 										break;
 
 									case "power1":
-											if (data[i][x] > 0) {
-												this.doStateCreate(serial + ".Power_T1_Usage", 'Momentanwert jetzige Abnahme T1', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T1_Usage", data[i][x], x);
-											} else {
-												this.doStateCreate(serial + ".Power_T1_Delivery", 'Momentanwert jetziger Abgabe T1', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T1_Delivery", data[i][x], x);										
-											}
+										if (data[i][x] > 0) {
+											this.doStateCreate(serial + ".Power_T1_Consumption", "Momentanwert jetzige Abnahme T1", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T1_Consumption", data[i][x], x);
+										} else {
+											this.doStateCreate(serial + ".Power_T1_Delivery", "Momentanwert jetziger Abgabe T1", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T1_Delivery", data[i][x], x);										
+										}
+
+										break;
 	
 									case "power2":
-											if (data[i][x] > 0) {
-												this.doStateCreate(serial + ".Power_T2_Usage", 'Momentanwert jetzige Abnahme T2', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T2_Usage", data[i][x], x);
-											} else {
-												this.doStateCreate(serial + ".Power_T2_Delivery", 'Momentanwert jetziger Abgabe T2', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T2_Delivery", data[i][x], x);										
-											}
+										if (data[i][x] > 0) {
+											this.doStateCreate(serial + ".Power_T2_Consumption", "Momentanwert jetzige Abnahme T2", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T2_Consumption", data[i][x], x);
+										} else {
+											this.doStateCreate(serial + ".Power_T2_Delivery", "Momentanwert jetziger Abgabe T2", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T2_Delivery", data[i][x], x);										
+										}
 
 										break;
 	
 									case "power3":
-											if (data[i][x] > 0) {
-												this.doStateCreate(serial + ".Power_T3_Usage", 'Momentanwert jetzige Abnahme T3', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T3_Usage", data[i][x], x);
-											} else {
-												this.doStateCreate(serial + ".Power_T3_Delivery", 'Momentanwert jetziger Abgabe T3', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-												this.calc_factor(serial + ".Power_T3_Delivery", data[i][x], x);										
-											}
+										if (data[i][x] > 0) {
+											this.doStateCreate(serial + ".Power_T3_Consumption", "Momentanwert jetzige Abnahme T3", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T3_Consumption", data[i][x], x);
+										} else {
+											this.doStateCreate(serial + ".Power_T3_Delivery", "Momentanwert jetziger Abgabe T3", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+											this.calc_factor(serial + ".Power_T3_Delivery", data[i][x], x);										
+										}
 
 										break;
 	
 									default:
 	
-											this.doStateCreate(serial + "." + x, x, state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + "." + x, data[i][x], x);
+										this.doStateCreate(serial + "." + x, state_attr[x].name, state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
+										this.calc_factor(serial + "." + x, data[i][x], x);
 	
 								}
-
-
-								// this.setObjectNotExists(serial + "." + x, {
-								// 	type: "state",
-								// 	common: {
-								// 		name: state_attr[x].name,
-								// 		type: state_attr[x].type,
-								// 		role: state_attr[x].role,
-								// 		unit: state_attr[x].unit,
-								// 		write: false
-								// 	},
-								// 	native: {},
-								// });
-
-								// this.calc_factor(serial + "." + x, data[i][x], x);
-							
 							}
 						}
 					}
 				}
-/*	
-				doStateCreate(serial + "._Last_Sync", "Zeitpunkt Letzte Syncronisierung", "number","value.time", "");
-				adapter.setState(serial + "._Last_Sync", { val: data.time, ack: true });
-	
-				for (const x in data.values) {
-	
-					// Verify if JSON contains values which are implemented in Adapter, if yes proces values if not return error message
-					// This must be improve in later version to handle outside of hard-coded and move to configuration file
-					// Only power and voltage states will be run in "short" interval, all others less frequent (not needed and better)
-					// Creation of new objects is limited to adapter start
-					switch (x) {
-						case "power":
-	
-							if (pulltype == "initialize") doStateCreate(serial + ".Power", "Momentanwert jetziger Bezug", "number", "value", "W");
-							if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power", { val: data.values[x] / 1000, ack: true });
-	
-							// Seperate states for usage and delivery
-							if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_Usage", "Momentanwert jetzige Abnahme", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_Usage", { val: data.values[x] / 1000, ack: true });
-							if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_Delivery", "Momentanwert jetzige Abgabe", "number", "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_Delivery", { val: data.values[x] / 1000, ack: true });
-	
-							break;
-	
-						case "power1":
-	
-							if (pulltype == "initialize") doStateCreate(serial + ".Power_1", "Momentanwert jetziger Bezug T1", "number",  "value", "W");
-							if (pulltype == "initialize" || pulltype == "short")adapter.setState(serial + ".Power_1", { val: data.values[x] / 1000, ack: true });
-							
-							// Seperate states for usage and delivery
-							if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_1_Usage", "Momentanwert jetzige Abnahme T1", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_1_Usage", { val: data.values[x] / 1000, ack: true });
-							if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_1_Delivery", "Momentanwert jetzige Abgabe T1", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_1_Delivery", { val: data.values[x] / 1000, ack: true });
-	
-							break;
-	
-						case "power2":
-	
-							if (pulltype == "initialize") doStateCreate(serial + ".Power_2", "Momentanwert jetziger Bezug T2", "number",  "value", "W");
-							if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power_2", { val: data.values[x] / 1000, ack: true });
-							// Seperate states for usage and delivery						
-							if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_2_Usage", "Momentanwert jetzige Abnahme T2", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_2_Usage", { val: data.values[x] / 1000, ack: true });
-							if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_2_Delivery", "Momentanwert jetzige Abgabe T2", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_2_Delivery", { val: data.values[x] / 1000, ack: true });
-							
-							break;
-	
-						case "power3":
-	
-							if (pulltype == "initialize") doStateCreate(serial + ".Power_3", "Momentanwert jetziger Bezug T3", "number",  "value", "W");
-							if (pulltype == "initialize" || pulltype == "short") adapter.setState(serial + ".Power_3", { val: data.values[x] / 1000, ack: true });
-							// Seperate states for usage and delivery						
-							if (pulltype == "initialize" && data.values[x] > 0) doStateCreate(serial + ".Power_3_Usage", "Momentanwert jetzige Abnahme T3", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] > 0) adapter.setState(serial + ".Power_3_Usage", { val: data.values[x] / 1000, ack: true });
-							if (pulltype == "initialize" && data.values[x] < 0) doStateCreate(serial + ".Power_3_Delivery", "Momentanwert jetzige Abgabe T3", "number",  "value", "W");
-							if ((pulltype == "initialize" || pulltype == "short") && data.values[x] < 0) adapter.setState(serial + ".Power_3_Delivery", { val: data.values[x] / 1000, ack: true });
-							break;
-					}
-				}
-
-				*/
 
 			} else { // error or non-200 status code
 				this.log.error("Error retrieving information for : " + serial);
@@ -442,54 +351,6 @@ class Discovergy extends utils.Adapter {
 			callback();
 		}
 	}
-
-	/**
-	 * Is called if a subscribed object changes
-	 * @param {string} id
-	 * @param {ioBroker.Object | null | undefined} obj
-	 */
-	onObjectChange(id, obj) {
-		if (obj) {
-			// The object was changed
-			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-		} else {
-			// The object was deleted
-			this.log.info(`object ${id} deleted`);
-		}
-	}
-
-	/**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.info(`state ${id} deleted`);
-		}
-	}
-
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.message" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
-
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
-
 }
 
 // @ts-ignore parent is a valid property on module

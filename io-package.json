@@ -1,10 +1,31 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.4.4",
+		"version": "0.4.5",
 		"news": {
+			"0.4.5": {
+				"en": "Several fixes & code optimalisation",
+				"de": "Mehrere Fehlerbehebungen und Code-Optimierung",
+				"ru": "Несколько исправлений и оптимизация кода",
+				"pt": "Várias correções e otimização de código",
+				"nl": "Verschillende fixes en code-optimalisatie",
+				"fr": "Plusieurs correctifs et optimisation du code",
+				"it": "Diverse correzioni e ottimizzazione del codice",
+				"es": "Varias correcciones y optimización de código",
+				"pl": "Kilka poprawek i optymalizacja kodu",
+				"zh-cn": "多项修复和代码优化"
+			},
 			"0.4.4": {
-				"en": "ALPHA version of rebuilded adapter"
+				"en": "ALPHA version of rebuilded adapter",
+				"de": "ALPHA-Version des überarbeiteten Adapters",
+				"ru": "АЛЬФА версия восстановленного адаптера",
+				"pt": "Versão ALPHA do adaptador reconstruído",
+				"nl": "ALPHA-versie van opnieuw opgebouwde adapter",
+				"fr": "Version ALPHA de l'adaptateur reconstruit",
+				"it": "Versione ALPHA dell'adattatore ricostruito",
+				"es": "Versión ALFA del adaptador reconstruido",
+				"pl": "Wersja ALPHA przebudowanego adaptera",
+				"zh-cn": "重建适配器的ALPHA版本"
 			},
 			"0.4.0": {
 				"en": "Release stable version 0.4.0",
