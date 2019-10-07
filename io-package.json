@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.4.0",
+		"version": "0.4.4",
 		"news": {
+			"0.4.4": {
+				"en": "ALPHA version of rebuilded adapter"
+			},
 			"0.4.0": {
 				"en": "Release stable version 0.4.0",
 				"de": "Stable Version 0.4.0 freigeben",
@@ -83,17 +86,27 @@
 		"pull_Long": "1"
 	},
 	"objects": [],
-	"instanceObjects": [{
-        "_id": "info.connection",
-        "type": "state",
-        "common": {
-            "role": "indicator.connected",
-            "name": "If communication with Discovergy works",
-            "type": "boolean",
-            "read": true,
-            "write": false,
-            "def": false
-        },
-        "native": {}
-    }]
+	"instanceObjects": [
+		{
+			"_id": "info",
+			"type": "channel",
+			"common": {
+				"name": "Information"
+			},
+			"native": {}
+		},
+		{
+			"_id": "info.connection",
+			"type": "state",
+			"common": {
+				"role": "indicator.connected",
+				"name": "Device or service connected",
+				"type": "boolean",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		}
+	]
 }
