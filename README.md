@@ -38,6 +38,9 @@ pass = demo
 * (Dutchman) Variable JSON-Array scan for attributes, if Discovergy adds new devices they will be visible immidiatly
 * (Dutchman) For new Devices : Write error for unknwon states but create device with basic information
 
+### 0.4.6 Ensure propper reset to 0 of power values
+* (Dutchman) 0.4.6 Ensure propper reset to 0 of power values
+
 ### 0.4.5 several fixes & code optimalisation
 * (Dutchman) implement adjustable timing intervall
 * (Dutchman) make state names configurable
@@ -51,7 +54,7 @@ pass = demo
 * (Dutchman) For new Devices : Write error for unknwon states but create device with basic information
 * (Dutchman) implement data pulling (needs improvement to avoid block by provider)
 * (Dutchman) ensure split values for consumption and delivery
-
+* (Dutchman) make state attributes configurable in library
 
 ### 0.4.0
 * small code fixes

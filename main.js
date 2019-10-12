@@ -169,9 +169,11 @@ class Discovergy extends utils.Adapter {
 										if (data[i][x] > 0) {
 											this.doStateCreate(serial + ".Power_Consumption", "Momentanwert jetzige Abnahme", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_Consumption", data[i][x], x);
+											this.calc_factor(serial + ".Power_Delivery", data[i][x], 0);
 										} else {
 											this.doStateCreate(serial + ".Power_Delivery", "Momentanwert jetziger Abgabe", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_Delivery", data[i][x], x);										
+											this.calc_factor(serial + ".Power_Delivery", data[i][x], x);
+											this.calc_factor(serial + ".Power_Consumption", data[i][x], 0);										
 										}
 	
 										break;

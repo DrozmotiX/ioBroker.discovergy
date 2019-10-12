@@ -1,8 +1,20 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.4.5",
+		"version": "0.4.6",
 		"news": {
+			"0.4.6": {
+				"en": "Ensured proper reset to 0 of power values",
+				"de": "Sichergestellt, dass die Leistungswerte ordnungsgemäß auf 0 zurückgesetzt wurden",
+				"ru": "Обеспечен правильный сброс до 0 значений мощности",
+				"pt": "Redefinição adequada garantida para 0 dos valores de potência",
+				"nl": "Verzekerde juiste reset naar 0 van vermogenswaarden",
+				"fr": "Garanti une réinitialisation appropriée à 0 des valeurs de puissance",
+				"it": "Garantito il corretto ripristino su 0 dei valori di potenza",
+				"es": "Aseguró el restablecimiento adecuado a 0 de los valores de potencia",
+				"pl": "Zapewniono prawidłowe zresetowanie do 0 wartości mocy",
+				"zh-cn": "确保将功率值正确重置为0"
+			},
 			"0.4.5": {
 				"en": "Several fixes & code optimalisation",
 				"de": "Mehrere Fehlerbehebungen und Code-Optimierung",
