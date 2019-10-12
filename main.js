@@ -9,7 +9,7 @@
 const utils = require("@iobroker/adapter-core");
 const http_request = require("request");
 const state_attr = require(__dirname + "/lib/state_attr.js"), all_meters = [];
-let user, pass;
+let user, pass, polling = {};
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -142,11 +142,14 @@ class Discovergy extends utils.Adapter {
 		const requestUrl = `https://${username}:${password}@api.discovergy.com/public/v1/${endpoint}?meterId=${urlencoded_parameters}`;
 		http_request(requestUrl, (error, response, body) => {
 
-			// Run this routine again in 10 seconds (update intervall for meters)
-			const intervall = (this.config.pull_Short * 1000);
-			setTimeout( () => {
+			// Run this routine again with iintervall defined in settings
+			const intervall = (this.config.intervall * 1000);
+			// timer
+			polling[serial] = setTimeout( () => {
+				this.log.debug("Timer for meter : " + serial + " with data : " +   ' intervall ');
 				this.doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, serial);
 			}, intervall);
+
 
 			if (!error && response.statusCode === 200) {
 				// we got a response
@@ -169,11 +172,11 @@ class Discovergy extends utils.Adapter {
 										if (data[i][x] > 0) {
 											this.doStateCreate(serial + ".Power_Consumption", "Momentanwert jetzige Abnahme", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_Consumption", data[i][x], x);
-											this.calc_factor(serial + ".Power_Delivery", data[i][x], 0);
+											this.calc_factor(serial + ".Power_Delivery", 0, x);
 										} else {
 											this.doStateCreate(serial + ".Power_Delivery", "Momentanwert jetziger Abgabe", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_Delivery", data[i][x], x);
-											this.calc_factor(serial + ".Power_Consumption", data[i][x], 0);										
+											this.calc_factor(serial + ".Power_Delivery", Math.abs(data[i][x]), x);
+											this.calc_factor(serial + ".Power_Consumption", 0, x);										
 										}
 	
 										break;
@@ -182,9 +185,11 @@ class Discovergy extends utils.Adapter {
 										if (data[i][x] > 0) {
 											this.doStateCreate(serial + ".Power_T1_Consumption", "Momentanwert jetzige Abnahme T1", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_T1_Consumption", data[i][x], x);
+											this.calc_factor(serial + ".Power_T1_Delivery", 0, x);
 										} else {
 											this.doStateCreate(serial + ".Power_T1_Delivery", "Momentanwert jetziger Abgabe T1", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_T1_Delivery", data[i][x], x);										
+											this.calc_factor(serial + ".Power_T1_Delivery", Math.abs(data[i][x]), x);
+											this.calc_factor(serial + ".Power_T1_Consumption", 0, x);										
 										}
 
 										break;
@@ -193,9 +198,11 @@ class Discovergy extends utils.Adapter {
 										if (data[i][x] > 0) {
 											this.doStateCreate(serial + ".Power_T2_Consumption", "Momentanwert jetzige Abnahme T2", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_T2_Consumption", data[i][x], x);
+											this.calc_factor(serial + ".Power_T2_Delivery", 0, x);	
 										} else {
 											this.doStateCreate(serial + ".Power_T2_Delivery", "Momentanwert jetziger Abgabe T2", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_T2_Delivery", data[i][x], x);										
+											this.calc_factor(serial + ".Power_T2_Delivery", Math.abs(data[i][x]), x);
+											this.calc_factor(serial + ".Power_T2_Consumption", 0, x);										
 										}
 
 										break;
@@ -204,9 +211,11 @@ class Discovergy extends utils.Adapter {
 										if (data[i][x] > 0) {
 											this.doStateCreate(serial + ".Power_T3_Consumption", "Momentanwert jetzige Abnahme T3", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
 											this.calc_factor(serial + ".Power_T3_Consumption", data[i][x], x);
+											this.calc_factor(serial + ".Power_T3_Delivery", 0, x);
 										} else {
 											this.doStateCreate(serial + ".Power_T3_Delivery", "Momentanwert jetziger Abgabe T3", state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + ".Power_T3_Delivery", data[i][x], x);										
+											this.calc_factor(serial + ".Power_T3_Delivery", Math.abs(data[i][x]), x);
+											this.calc_factor(serial + ".Power_T3_Consumption", 0, x);										
 										}
 
 										break;

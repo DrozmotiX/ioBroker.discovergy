@@ -5,6 +5,7 @@ nbproject
 
 # npm package files
 iobroker.*.tgz
+.code-workspace
 
 Thumbs.db
 

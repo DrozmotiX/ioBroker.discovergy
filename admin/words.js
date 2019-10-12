@@ -35,26 +35,16 @@ systemDictionary = {
 		"es": "La opción 2 no es",
 		"pl": "Opcja 2 nie jest"
 	},
-	"pull_Short": {
-		"en": "Intervall for current consumption data in secondes",
-		"de": "Intervall für aktuelle Verbrauchsdaten in Sekunden",
-		"ru": "Интервал для текущих данных потребления в секундах",
-		"pt": "Intervalo para dados de consumo atual em segundos",
-		"nl": "Interval voor actuele verbruiksgegevens in seconden",
-		"fr": "Intervalle pour les données de consommation actuelles en secondes",
-		"it": "Intervallo per i dati di consumo corrente in secondi",
-		"es": "Intervalo para los datos de consumo actual en segundos",
-		"pl": "Interwał dla danych o zużyciu prądu w sekundach"
-	},
-	"pull_Long": {
-		"en": "Intervall for all data in minutes",
-		"de": "Intervall für alle Daten in Minuten",
-		"ru": "Интервал для всех данных в минутах",
-		"pt": "Intervalo para todos os dados em minutos",
-		"nl": "Interval voor alle gegevens in minuten",
-		"fr": "Intervall pour toutes les données en minutes",
-		"it": "Intervall per tutti i dati in minuti",
-		"es": "Intervalo para todos los datos en minutos",
-		"pl": "Intervall dla wszystkich danych w minutach"
+	'intervall': {
+		'en': 'Refresh intervall in second',
+		'de': 'Aktualisierungsintervall in Sekunde',
+		'ru': 'Обновить интервал в секунду',
+		'pt': 'Atualizar intervalo em segundo',
+		'nl': 'Vernieuw intervall in seconde',
+		'fr': "Rafraîchir l'intervalle en seconde",
+		'it': 'Intervallo di aggiornamento al secondo',
+		'es': 'Actualizar intervalo en segundo',
+		'pl': 'Odśwież interwał w sekundę',
+		'zh-cn': '刷新间隔秒'
 	}
 };

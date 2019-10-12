@@ -1,10 +1,22 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.4.6",
-		"news": {
+		"version": "0.4.9",
+		"news": {			
+			"0.4.8": {
+				"en": "Fixed wrong readings and made intervall adjustable",
+				"de": "Fehler behoben und Intervall einstellbar gemacht",
+				"ru": "Исправлены неправильные показания и сделана настройка интервала",
+				"pt": "Corrigidas leituras erradas e ajustadas em intervalos",
+				"nl": "Verkeerde meetwaarden verholpen en intervallen instelbaar gemaakt",
+				"fr": "Correction des erreurs de lecture et réglage de l'intervalle",
+				"it": "Risolte letture errate e intervalli regolabili regolabili",
+				"es": "Se corrigieron las lecturas incorrectas y se hizo el intervalo ajustable",
+				"pl": "Naprawiono błędne odczyty i ustawiono interwał",
+				"zh-cn": "修正错误的读数并使间隔可调"
+			},
 			"0.4.6": {
-				"en": "Ensured proper reset to 0 of power values",
+				"en": "Ensured proper reset to 0 of power values and implemented adjustable inet",
 				"de": "Sichergestellt, dass die Leistungswerte ordnungsgemäß auf 0 zurückgesetzt wurden",
 				"ru": "Обеспечен правильный сброс до 0 значений мощности",
 				"pt": "Redefinição adequada garantida para 0 dos valores de potência",
@@ -87,7 +99,7 @@
 			"pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker"
 		},
 		"authors": [
-			"Dutchman <rdrozda86@gmail.com>"
+			"DutchmanNL <rdrozda86@gmail.com>"
 		],
 		"keywords": [
 			"ioBroker",
@@ -99,8 +111,8 @@
 		"main": "main.js",
 		"icon": "discovergy.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/DutchmanNL/ioBroker.discovergy/master/admin/discovergy.png",
-		"readme": "https://github.com/DutchmanNL/ioBroker.discovergy/blob/master/README.md",
+		"extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.discovergy/master/admin/discovergy.png",
+		"readme": "https://github.com/iobroker-community-adapters/ioBroker.discovergy/blob/master/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "energy",
@@ -115,8 +127,7 @@
 	"native": {
 		"Username": "",
 		"Password": "",
-		"pull_Short": "3",
-		"pull_Long": "1"
+		"intervall": "5"
 	},
 	"objects": [],
 	"instanceObjects": [
