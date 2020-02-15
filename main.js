@@ -131,9 +131,16 @@ class Discovergy extends utils.Adapter {
 				role: role,
 				read: read,
 				unit: unit,
-				write: write,
+				write: false,
 			},
 			native: {},
+		});
+
+		this.extendObject(state, {
+			type: "state",
+			common: {
+				write: false,
+			},
 		});
 
 	}

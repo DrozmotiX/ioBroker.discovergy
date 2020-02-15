@@ -1,9 +1,21 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.4.9",
-		"news": {			
-			"0.4.8": {
+		"version": "0.5.0",
+		"news": {	
+			"0.5.0": {
+				"en": "Adapter logic reengineered.",
+				"de": "Adapterlogik überarbeitet.",
+				"ru": "Адаптер логики реинжиниринг.",
+				"pt": "Lógica do adaptador reengenharia.",
+				"nl": "Adapterlogica opnieuw ontworpen.",
+				"fr": "La logique de l'adaptateur a été repensée.",
+				"it": "Logica dell'adattatore riprogettata.",
+				"es": "Adaptador lógico rediseñado.",
+				"pl": "Przeprojektowano logikę adaptera.",
+				"zh-cn": "重新设计了适配器逻辑。"
+			},		
+			"0.4.9": {
 				"en": "Fixed wrong readings and made intervall adjustable",
 				"de": "Fehler behoben und Intervall einstellbar gemacht",
 				"ru": "Исправлены неправильные показания и сделана настройка интервала",
