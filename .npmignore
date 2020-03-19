@@ -3,10 +3,16 @@
 node_modules/
 nbproject/
 .vs*/
+*.code-workspace
 Thumbs.db
 gulpfile.js
-ioBroker_Discovergy.code-workspace
+.github
+.gitignore
+.npmignore
+iob_npm.done
+main.test.js
 
+# CI test files
 test/
 travis/
 .travis.yml
@@ -14,9 +20,13 @@ appveyor.yml
 .travis.yaml
 appveyor.yaml
 
+# Type checking configuration
+tsconfig.json
+tsconfig.*.json
+
+# ESLint configuration
 .eslintrc.json
 .eslintrc.js
-*.code-workspace
 
 # npm package files
 iobroker.*.tgz
