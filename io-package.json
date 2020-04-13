@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "discovergy",
-		"version": "0.5.0",
+		"version": "0.5.1",
 		"news": {	
 			"0.5.0": {
 				"en": "Adapter logic reengineered.",
@@ -131,6 +131,11 @@
 		"compact": false,
 		"license": "MIT",
 		"materialize": true,
+		"plugins": {
+			"sentry": {
+				"dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
+			}
+		},
 		"dependencies": [
 			{
 				"admin": ">=3.0.0"

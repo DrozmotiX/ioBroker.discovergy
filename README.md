@@ -33,6 +33,9 @@ If you like my work, please feel free to provide a personal donation
 
 ## Changelog
 
+### 0.5.1
+* (Dutchman) implement Sentry
+
 ### 0.5.0 
 * (Dutchman) Rebuild complete logic of data pulling
 * (Dutchman) Rewrite adapter to class and support JS-Controller 2.0 with compact mode
