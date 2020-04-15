@@ -2,7 +2,7 @@
 ![alt text](https://travis-ci.org/iobroker-community-adapters/ioBroker.discovergy.svg?branch=master)
 ![Number of Installations](http://iobroker.live/badges/discovergy-installed.svg) ![Number of Installations](http://iobroker.live/badges/discovergy-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.discovergy.svg)](https://www.npmjs.com/package/iobroker.discovergy)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.discovergy.svg)](https://www.npmjs.com/package/iobroker.discovergy)
-[![Greenkeeper badge](https://badges.greenkeeper.io/iobroker-community-adapters/ioBroker.discovergy.svg)](https://greenkeeper.io/)
+
 
 # ioBroker.discovergy
 
