@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 'use strict';
 
 /*
@@ -7,11 +8,10 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-const http_request = require('request');
-const state_attr = require(__dirname + '/lib/state_attr.js'), all_meters = [], polling = {};
-let user, pass;
-// Load your modules here, e.g.:
-// const fs = require('fs');
+const request = require('request-promise-native');
+const stateAttr = require(__dirname + '/lib/stateAttr.js');
+const settings = { Username: "", Password: "", intervall: 30000 }, warnMessages = {};
+let timer = null;
 
 class Discovergy extends utils.Adapter {
 
@@ -19,10 +19,13 @@ class Discovergy extends utils.Adapter {
 	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
 	 */
 	constructor(options) {
+		// @ts-ignore
 		super({
 			...options,
 			name: 'discovergy',
 		});
+		this.allMeters = {};
+		this.createdStatesDetails = {};
 		this.on('ready', this.onReady.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 	}
@@ -31,25 +34,27 @@ class Discovergy extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-
-		this.setState('info.connection', false, true);
+		settings.Username = this.config.Username;
+		settings.Password = this.config.Password;
+		settings.intervall = (1000 * this.config.intervall);
+		await this.setState('info.connection', false, true);
 		this.log.info('Discovergy Adapter startet, trying to discover meters associated with your account');
-		user = this.config.Username;
-		
 		// Check if credentials are not empty and decrypt stored password
-		if (user !== '' && pass !== ''){
-			this.getForeignObject('system.config', (err, obj) => {
+		if (settings.user !== '' && settings.Password !== '') {
+			this.getForeignObject('system.config', async (err, obj) => {
 				if (obj && obj.native && obj.native.secret) {
-				//noinspection JSUnresolvedVariable
-					pass = this.decrypt(obj.native.secret, this.config.Password);
+					//noinspection JSUnresolvedVariable
+					settings.Password = await this.decrypt(obj.native.secret, this.config.Password);
 				} else {
-				//noinspection JSUnresolvedVariable
-					pass = this.decrypt('Zgfr56gFe87jJOM', this.config.Password);
+					//noinspection JSUnresolvedVariable
+					settings.Password = await this.decrypt('Zgfr56gFe87jJOM', this.config.Password);
 				}
-				
+				// Adapter is alive, make API call
+				await this.setForeignState('system.this.' + this.namespace + '.alive', false);
+
 				// Make a call to discovergai API and get a list of all meters
-				this.doDiscovergyCall(user, pass, 'meters', '');
-		
+				await this.doDiscovergyCall('meters', '');
+
 			});
 		} else {
 			this.log.error('*** Adapter deactivated, credentials missing in Adaptper Settings !!!  ***');
@@ -57,61 +62,55 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	doDiscovergyCall(username, password, endpoint, urlencoded_parameters) {
+	// Get all meters connected to Discovergy account
+	async doDiscovergyCall(endpoint, urlencoded_parameters) {
 
-		const requestUrl = `https://${username}:${password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
-		http_request(requestUrl, (error, response, body) => {
-	
+		const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
+		await request(requestUrl, async (error, response, body) => {
+
 			if (!error && response.statusCode === 200) {
-				this.setState('info.connection', true, true);
-				// we got a response
-	
+				// We got a response API is 
+				await this.setState('info.connection', true, true);
+
 				// Retrieve all meter objects from Discovergy API
 				/** @type {Record<string, any>[]} */
-				const objArray = JSON.parse(body);	
+				const objArray = JSON.parse(body);
 				this.log.debug(JSON.stringify(objArray));
 
 				// Run truth array off all meter
-				for (const i in objArray){
+
+				for (const meters of Object.keys(objArray)) {
 
 					// Create device and info channel
-					this.log.debug(JSON.stringify(objArray[i]));
-					this.createDevice(objArray[i]['serialNumber']);
-					this.createChannel(objArray[i]['serialNumber'],'info');
+					this.log.debug(JSON.stringify(objArray[meters]));
+					await this.createDevice(objArray[meters]['meterId']);
+					await this.createChannel(objArray[meters]['meterId'], 'info');
 
 					// Create info channel for alle meter devices
-					for (const x in objArray[i]){
+					for (const infoState in objArray[meters]) {
 
-						if (state_attr[x] === undefined){
-							this.log.error('State type : ' + x + ' unknown, send this information to the developer ==> ' + x + ' : ' + JSON.stringify(objArray[i][x]));
+						if (!stateAttr[infoState]) {
+							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
 						} else {
-							this.doStateCreate(objArray[i]['serialNumber'] + '.info.' + x,state_attr[x].name,state_attr[x].type,state_attr[x].role,state_attr[x].read,state_attr[x].unit,state_attr[x].write);
-							this.setState(objArray[i]['serialNumber'] + '.info.' + x, objArray[i][x], true);
+							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, stateAttr[infoState].name, stateAttr[infoState].type, stateAttr[infoState].role, stateAttr[infoState].read, stateAttr[infoState].unit, stateAttr[infoState].write);
+							await this.setState(objArray[meters]['meterId'] + '.info.' + infoState, objArray[meters][infoState], true);
 						}
 					}
 
-					if (objArray[i]['type'] !== 'RLM') {
-						const serialNumber = objArray[i]['serialNumber'];
-						const meterId = objArray[i]['meterId'];
-						const test = {
-							'meterId': meterId,
-							'serialNumber':  serialNumber
-						};
-					
-						// Build array with all meter (used later for data polling)
-						all_meters.push(test);
-						// this.doDiscovergyMeter(user, pass, 'last_reading', meterId, serialNumber,pulltype);
+					// Exclude RLM meters, no values to receive
+					if (objArray[meters]['type'] !== 'RLM') {
+
+						this.allMeters[objArray[meters]['serialNumber']] = objArray[meters];
 					}
+
 				}
 
-				this.log.debug('All meters : ' + JSON.stringify(all_meters));
-				
-				for (const z in all_meters) {
-					this.log.debug(JSON.stringify(all_meters[z]));
-					// this.log.info('Test alle meter run');
-					this.doDiscovergyMeter(user, pass, 'last_reading', all_meters[z].meterId, all_meters[z].serialNumber);
-					this.log.info('Discovergy meter found at your account with serial  : ' + all_meters[z].serialNumber);
-				}
+				this.log.info('All meters associated to your account discovered, initialise meters');
+				this.log.debug('All meters : ' + JSON.stringify(this.allMeters));
+
+				await this.dataPolling();
+
+				this.log.info(`All meters initialized, polling data every ${this.config.intervall} seconds`);
 
 			} else { // error or non-200 status code
 				this.log.error('Connection_Failed at meter indication run, check your credentials !');
@@ -120,226 +119,256 @@ class Discovergy extends utils.Adapter {
 		});
 	}
 
-	async doStateCreate(state, name, type, role, read, unit, write){
+	// Data polling timer, get read values for every meter (Last reading)
+	async dataPolling() {
 
-		this.setObjectNotExists(state, {
-			type: 'state',
-			common: {
-				name: name,
-				type: type,
-				role: role,
-				read: read,
-				unit: unit,
-				write: write,
-			},
-			native: {},
-		});
+		// Loop on all meter and get data
+		for (const serial in this.allMeters) {
 
-		this.extendObject(state, {
-			type: 'state',
-			common: {
-				write: false,
-			},
-		});
+			await this.doDiscovergyMeter(`last_reading`, serial, this.allMeters[serial].meterId);
+
+		}
+
+		// New data polling at intervall time
+		if (timer) timer = null;
+		timer = setTimeout(() => {
+			this.dataPolling();
+		}, settings.intervall);
 
 	}
 
-	doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, serial) {
-		const requestUrl = `https://${username}:${password}@api.discovergy.com/public/v1/${endpoint}?meterId=${urlencoded_parameters}`;
-		http_request(requestUrl, (error, response, body) => {
+	async doDiscovergyMeter(endpoint, urlencoded_parameters, serial) {
+		try {
 
-			// Run this routine again with iintervall defined in settings
-			const intervall = (1000 * this.config.intervall);
-			// timer
-			polling[serial] = setTimeout( () => {
-				this.log.debug('Timer for meter : ' + serial + ' with data : ' +   ' intervall ');
-				this.doDiscovergyMeter(username, password, endpoint, urlencoded_parameters, serial);
-			}, intervall);
+			const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?meterId=${serial}`;
+			await request(requestUrl, async (error, response, body) => {
 
-			if (!error && response.statusCode === 200) {
-				// we got a response
-	
-				const result = body;
-				const data = JSON.parse(result);
+				if (!error && response.statusCode === 200) {
+					// we got a response
 
-				for (const i in data) {
+					const result = body;
+					const data = JSON.parse(result);
 
-					for (const x in data[i]) {
+					for (const i in data) {
 
-						if (state_attr[x] === undefined){
-							this.log.error('State type : ' + x + ' unknown, send this information to the developer ==> ' + x + ' : ' + JSON.stringify(data[i][x]));
-						} else {
+						for (const x in data[i]) {
 
-							if (state_attr[x].type !== undefined) {
+							if (stateAttr[x] === undefined) {
+								this.log.error('State type : ' + x + ' unknown, send this information to the developer ==> ' + x + ' : ' + JSON.stringify(data[i][x]));
+							} else {
 
-								switch (x) {
-									case 'power':
-										if (data[i][x] > 0) {
-											this.doStateCreate(serial + '.Power_Consumption', 'Momentanwert jetzige Abnahme', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_Consumption', data[i][x], x);
-											this.calc_factor(serial + '.Power_Delivery', 0, x);
-										} else {
-											this.doStateCreate(serial + '.Power_Delivery', 'Momentanwert jetziger Abgabe', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_Delivery', Math.abs(data[i][x]), x);
-											this.calc_factor(serial + '.Power_Consumption', 0, x);										
-										}
-	
-										break;
+								if (stateAttr[x].type !== undefined) {
 
-									case 'power1':
-										if (data[i][x] > 0) {
-											this.doStateCreate(serial + '.Power_T1_Consumption', 'Momentanwert jetzige Abnahme T1', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T1_Consumption', data[i][x], x);
-											this.calc_factor(serial + '.Power_T1_Delivery', 0, x);
-										} else {
-											this.doStateCreate(serial + '.Power_T1_Delivery', 'Momentanwert jetziger Abgabe T1', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T1_Delivery', Math.abs(data[i][x]), x);
-											this.calc_factor(serial + '.Power_T1_Consumption', 0, x);										
-										}
+									switch (x) {
+										case 'power':
+											if (data[i][x] > 0) {
+												await this.doStateCreate(serial + '.Power_Consumption', 'Momentanwert jetzige Abnahme', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_Consumption', data[i][x], x);
+												this.calc_factor(serial + '.Power_Delivery', 0, x);
+											} else {
+												this.doStateCreate(serial + '.Power_Delivery', 'Momentanwert jetziger Abgabe', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_Delivery', Math.abs(data[i][x]), x);
+												this.calc_factor(serial + '.Power_Consumption', 0, x);
+											}
 
-										break;
-	
-									case 'power2':
-										if (data[i][x] > 0) {
-											this.doStateCreate(serial + '.Power_T2_Consumption', 'Momentanwert jetzige Abnahme T2', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T2_Consumption', data[i][x], x);
-											this.calc_factor(serial + '.Power_T2_Delivery', 0, x);	
-										} else {
-											this.doStateCreate(serial + '.Power_T2_Delivery', 'Momentanwert jetziger Abgabe T2', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T2_Delivery', Math.abs(data[i][x]), x);
-											this.calc_factor(serial + '.Power_T2_Consumption', 0, x);										
-										}
+											break;
 
-										break;
-	
-									case 'power3':
-										if (data[i][x] > 0) {
-											this.doStateCreate(serial + '.Power_T3_Consumption', 'Momentanwert jetzige Abnahme T3', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T3_Consumption', data[i][x], x);
-											this.calc_factor(serial + '.Power_T3_Delivery', 0, x);
-										} else {
-											this.doStateCreate(serial + '.Power_T3_Delivery', 'Momentanwert jetziger Abgabe T3', state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-											this.calc_factor(serial + '.Power_T3_Delivery', Math.abs(data[i][x]), x);
-											this.calc_factor(serial + '.Power_T3_Consumption', 0, x);										
-										}
+										case 'power1':
+											if (data[i][x] > 0) {
+												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Momentanwert jetzige Abnahme T1', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T1_Consumption', data[i][x], x);
+												this.calc_factor(serial + '.Power_T1_Delivery', 0, x);
+											} else {
+												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Momentanwert jetziger Abgabe T1', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T1_Delivery', Math.abs(data[i][x]), x);
+												this.calc_factor(serial + '.Power_T1_Consumption', 0, x);
+											}
 
-										break;
-	
-									default:
-	
-										this.doStateCreate(serial + '.' + x, state_attr[x].name, state_attr[x].type, state_attr[x].role, state_attr[x].read, state_attr[x].unit, state_attr[x].write);
-										this.calc_factor(serial + '.' + x, data[i][x], x);
-	
+											break;
+
+										case 'power2':
+											if (data[i][x] > 0) {
+												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Momentanwert jetzige Abnahme T2', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T2_Consumption', data[i][x], x);
+												this.calc_factor(serial + '.Power_T2_Delivery', 0, x);
+											} else {
+												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Momentanwert jetziger Abgabe T2', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T2_Delivery', Math.abs(data[i][x]), x);
+												this.calc_factor(serial + '.Power_T2_Consumption', 0, x);
+											}
+
+											break;
+
+										case 'power3':
+											if (data[i][x] > 0) {
+												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Momentanwert jetzige Abnahme T3', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T3_Consumption', data[i][x], x);
+												this.calc_factor(serial + '.Power_T3_Delivery', 0, x);
+											} else {
+												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Momentanwert jetziger Abgabe T3', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.calc_factor(serial + '.Power_T3_Delivery', Math.abs(data[i][x]), x);
+												this.calc_factor(serial + '.Power_T3_Consumption', 0, x);
+											}
+
+											break;
+
+										default:
+
+											await this.doStateCreate(serial + '.' + x, stateAttr[x].name, stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+											this.calc_factor(serial + '.' + x, data[i][x], x);
+
+									}
 								}
 							}
 						}
 					}
-				}
 
-			} else { // error or non-200 status code
-				this.log.error('Error retrieving information for : ' + serial);
-			}
-		});
+				} else { // error or non-200 status code
+					this.log.error('Error retrieving information for : ' + serial);
+				}
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
-	calc_factor (state, value, type){
+	async doStateCreate(state, name, type, role, read, unit, write) {
+
+		const common = {
+			name: name,
+			type: type,
+			role: role,
+			read: true,
+			unit: unit,
+			write: write,
+		};
+
+		if ((!this.createdStatesDetails[state])
+			|| (this.createdStatesDetails[state]
+				&& (
+					common.name !== this.createdStatesDetails[state].name
+					|| common.name !== this.createdStatesDetails[state].name
+					|| common.type !== this.createdStatesDetails[state].type
+					|| common.role !== this.createdStatesDetails[state].role
+					|| common.read !== this.createdStatesDetails[state].read
+					|| common.unit !== this.createdStatesDetails[state].unit
+					|| common.write !== this.createdStatesDetails[state].write
+				)
+			)) {
+
+			console.log(`An attribute has changed : ${state}`);
+
+			await this.extendObjectAsync(state, {
+				type: 'state',
+				common
+			});
+		} else {
+			console.log(`Nothing changed do not update object`);
+		}
+
+		// Store current object definition to memory
+		this.createdStatesDetails[state] = common;
+		
+	}
+
+	calc_factor(state, value, type) {
 
 		switch (type) {
 
 			case 'energy':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energy1':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energy2':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energy3':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyOut':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyOut1':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyOut2':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyOut3':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
-				break;	
-			
+				this.setState(state, { val: (value / 10000000000), ack: true });
+				break;
+
 			case 'energyProducer8':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyProducer9':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'energyProducer10':
 
-				this.setState(state, {val: (value / 10000000000), ack: true});
+				this.setState(state, { val: (value / 10000000000), ack: true });
 				break;
 
 			case 'power':
 
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'power1':
 
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'power2':
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'power3':
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
-		
+
 			case 'voltage':
 
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'voltage1':
 
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'voltage2':
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			case 'voltage3':
-				this.setState(state, {val: (value / 1000), ack: true});
+				this.setState(state, { val: (value / 1000), ack: true });
 				break;
 
 			default:
 				// this.log.error('Error in case handling of type identificaton : ' + state);
-				this.setState(state, {val: value, ack: true});
+				this.setState(state, { val: value, ack: true });
 				return;
 		}
 
@@ -362,6 +391,7 @@ class Discovergy extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			this.log.info('cleaned everything up...');
+			if (timer) timer = null;
 			callback();
 		} catch (e) {
 			callback();

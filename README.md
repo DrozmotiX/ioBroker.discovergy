@@ -33,8 +33,10 @@ If you like my work, please feel free to provide a personal donation
 
 ## Changelog
 
-### 0.5.1
-* (Dutchman) implement Sentry
+### 0.5.1 (17-04-2020) Avoid writing objects unnecessarily
+* (Dutchman) Implement Sentry
+* (Dutchman) Bugfix : Avoid writing objects unnecessarily
+* (Dutchman) Ensure propper handling of await instead of fire and forget
 
 ### 0.5.0 
 * (Dutchman) Rebuild complete logic of data pulling

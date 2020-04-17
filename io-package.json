@@ -1,174 +1,189 @@
 {
-	"common": {
-		"name": "discovergy",
-		"version": "0.5.1",
-		"news": {	
-			"0.5.0": {
-				"en": "Adapter logic reengineered.",
-				"de": "Adapterlogik überarbeitet.",
-				"ru": "Адаптер логики реинжиниринг.",
-				"pt": "Lógica do adaptador reengenharia.",
-				"nl": "Adapterlogica opnieuw ontworpen.",
-				"fr": "La logique de l'adaptateur a été repensée.",
-				"it": "Logica dell'adattatore riprogettata.",
-				"es": "Adaptador lógico rediseñado.",
-				"pl": "Przeprojektowano logikę adaptera.",
-				"zh-cn": "重新设计了适配器逻辑。"
-			},		
-			"0.4.9": {
-				"en": "Fixed wrong readings and made intervall adjustable",
-				"de": "Fehler behoben und Intervall einstellbar gemacht",
-				"ru": "Исправлены неправильные показания и сделана настройка интервала",
-				"pt": "Corrigidas leituras erradas e ajustadas em intervalos",
-				"nl": "Verkeerde meetwaarden verholpen en intervallen instelbaar gemaakt",
-				"fr": "Correction des erreurs de lecture et réglage de l'intervalle",
-				"it": "Risolte letture errate e intervalli regolabili regolabili",
-				"es": "Se corrigieron las lecturas incorrectas y se hizo el intervalo ajustable",
-				"pl": "Naprawiono błędne odczyty i ustawiono interwał",
-				"zh-cn": "修正错误的读数并使间隔可调"
-			},
-			"0.4.6": {
-				"en": "Ensured proper reset to 0 of power values and implemented adjustable inet",
-				"de": "Sichergestellt, dass die Leistungswerte ordnungsgemäß auf 0 zurückgesetzt wurden",
-				"ru": "Обеспечен правильный сброс до 0 значений мощности",
-				"pt": "Redefinição adequada garantida para 0 dos valores de potência",
-				"nl": "Verzekerde juiste reset naar 0 van vermogenswaarden",
-				"fr": "Garanti une réinitialisation appropriée à 0 des valeurs de puissance",
-				"it": "Garantito il corretto ripristino su 0 dei valori di potenza",
-				"es": "Aseguró el restablecimiento adecuado a 0 de los valores de potencia",
-				"pl": "Zapewniono prawidłowe zresetowanie do 0 wartości mocy",
-				"zh-cn": "确保将功率值正确重置为0"
-			},
-			"0.4.5": {
-				"en": "Several fixes & code optimalisation",
-				"de": "Mehrere Fehlerbehebungen und Code-Optimierung",
-				"ru": "Несколько исправлений и оптимизация кода",
-				"pt": "Várias correções e otimização de código",
-				"nl": "Verschillende fixes en code-optimalisatie",
-				"fr": "Plusieurs correctifs et optimisation du code",
-				"it": "Diverse correzioni e ottimizzazione del codice",
-				"es": "Varias correcciones y optimización de código",
-				"pl": "Kilka poprawek i optymalizacja kodu",
-				"zh-cn": "多项修复和代码优化"
-			},
-			"0.4.4": {
-				"en": "ALPHA version of rebuilded adapter",
-				"de": "ALPHA-Version des überarbeiteten Adapters",
-				"ru": "АЛЬФА версия восстановленного адаптера",
-				"pt": "Versão ALPHA do adaptador reconstruído",
-				"nl": "ALPHA-versie van opnieuw opgebouwde adapter",
-				"fr": "Version ALPHA de l'adaptateur reconstruit",
-				"it": "Versione ALPHA dell'adattatore ricostruito",
-				"es": "Versión ALFA del adaptador reconstruido",
-				"pl": "Wersja ALPHA przebudowanego adaptera",
-				"zh-cn": "重建适配器的ALPHA版本"
-			},
-			"0.4.0": {
-				"en": "Release stable version 0.4.0",
-				"de": "Stable Version 0.4.0 freigeben",
-				"ru": "Выпуск стабильной версии 0.4.0",
-				"pt": "Versão estável de lançamento 0.4.0",
-				"nl": "Release stabiele versie 0.4.0",
-				"fr": "Publication de la version stable 0.4.0",
-				"it": "Rilascia la versione stabile 0.4.0",
-				"es": "Versión estable 0.4.0",
-				"pl": "Wydanie stabilnej wersji 0.4.0",
-				"zh-cn": "发布稳定版本0.4.0"
-			},
-			"0.3.1": {
-				"en": "Stable Beta release of ioBroker Discovergy",
-				"de": "Stabile Beta-Version von ioBroker Discovergy",
-				"ru": "Стабильная бета-версия ioBroker Discovergy",
-				"pt": "Versão beta estável do ioBroker Discovergy",
-				"nl": "Stabiele bètaversie van ioBroker Discovergy",
-				"fr": "Version bêta stable d'ioBroker Discovergy",
-				"it": "Rilascio beta stabile di ioBroker Discovergy",
-				"es": "Lanzamiento estable Beta de ioBroker Discovergy",
-				"pl": "Stabilne wydanie beta produktu ioBroker Discovergy"
-			}
-		},
-		"title": "Discovergy",
-		"titleLang": {
-			"en": "Discovergy",
-			"de": "Discovergy",
-			"ru": "Discovergy",
-			"pt": "Discovergy",
-			"nl": "Discovergy",
-			"fr": "Discovergy",
-			"it": "Discovergy",
-			"es": "Discovergy",
-			"pl": "Discovergy"
-		},
-		"desc": {
-			"en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
-			"de": "Mit diesem Adapter können Discovergy-Benutzer alle ihre Messungen mit dem ioBroker synchronisieren",
-			"ru": "Этот адаптер позволяет пользователям Discovergy синхронизировать все свои измерения с ioBroker",
-			"pt": "Este adaptador permite que os usuários da Discovergy sincronizem todas as suas medições com o ioBroker",
-			"nl": "Met deze adapter kunnen Discovergy-gebruikers al hun metingen synchroniseren met ioBroker",
-			"fr": "Cet adaptateur permet aux utilisateurs de Discovergy de synchroniser toutes leurs mesures avec ioBroker.",
-			"it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
-			"es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
-			"pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker"
-		},
-		"authors": [
-			"DutchmanNL <rdrozda86@gmail.com>"
-		],
-		"keywords": [
-			"ioBroker",
-			"template",
-			"Smart Home",
-			"home automation"
-		],
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "discovergy.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.discovergy/master/admin/discovergy.png",
-		"readme": "https://github.com/iobroker-community-adapters/ioBroker.discovergy/blob/master/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "energy",
-		"compact": false,
-		"license": "MIT",
-		"materialize": true,
-		"plugins": {
-			"sentry": {
-				"dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
-			}
-		},
-		"dependencies": [
-			{
-				"admin": ">=3.0.0"
-			}
-		]
-	},
-	"native": {
-		"Username": "",
-		"Password": "",
-		"intervall": 5
-	},
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "info",
-			"type": "channel",
-			"common": {
-				"name": "Information"
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.connection",
-			"type": "state",
-			"common": {
-				"role": "indicator.connected",
-				"name": "Device or service connected",
-				"type": "boolean",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+    "common": {
+        "name": "discovergy",
+        "version": "0.5.1",
+        "news": {
+            "0.5.1": {
+                "en": "Avoid writing objects unnecessarily",
+                "de": "Vermeiden Sie unnötiges Schreiben von Objekten",
+                "ru": "Избегайте писать объекты без необходимости",
+                "pt": "Evite escrever objetos desnecessariamente",
+                "nl": "Vermijd onnodig schrijven van objecten",
+                "fr": "Évitez d'écrire des objets inutilement",
+                "it": "Evita di scrivere oggetti inutilmente",
+                "es": "Evite escribir objetos innecesariamente",
+                "pl": "Unikaj niepotrzebnego pisania przedmiotów",
+                "zh-cn": "避免不必要地写对象"
+            },
+            "0.5.0": {
+                "en": "Adapter logic reengineered.",
+                "de": "Adapterlogik überarbeitet.",
+                "ru": "Адаптер логики реинжиниринг.",
+                "pt": "Lógica do adaptador reengenharia.",
+                "nl": "Adapterlogica opnieuw ontworpen.",
+                "fr": "La logique de l'adaptateur a été repensée.",
+                "it": "Logica dell'adattatore riprogettata.",
+                "es": "Adaptador lógico rediseñado.",
+                "pl": "Przeprojektowano logikę adaptera.",
+                "zh-cn": "重新设计了适配器逻辑。"
+            },
+            "0.4.9": {
+                "en": "Fixed wrong readings and made intervall adjustable",
+                "de": "Fehler behoben und Intervall einstellbar gemacht",
+                "ru": "Исправлены неправильные показания и сделана настройка интервала",
+                "pt": "Corrigidas leituras erradas e ajustadas em intervalos",
+                "nl": "Verkeerde meetwaarden verholpen en intervallen instelbaar gemaakt",
+                "fr": "Correction des erreurs de lecture et réglage de l'intervalle",
+                "it": "Risolte letture errate e intervalli regolabili regolabili",
+                "es": "Se corrigieron las lecturas incorrectas y se hizo el intervalo ajustable",
+                "pl": "Naprawiono błędne odczyty i ustawiono interwał",
+                "zh-cn": "修正错误的读数并使间隔可调"
+            },
+            "0.4.6": {
+                "en": "Ensured proper reset to 0 of power values and implemented adjustable inet",
+                "de": "Sichergestellt, dass die Leistungswerte ordnungsgemäß auf 0 zurückgesetzt wurden",
+                "ru": "Обеспечен правильный сброс до 0 значений мощности",
+                "pt": "Redefinição adequada garantida para 0 dos valores de potência",
+                "nl": "Verzekerde juiste reset naar 0 van vermogenswaarden",
+                "fr": "Garanti une réinitialisation appropriée à 0 des valeurs de puissance",
+                "it": "Garantito il corretto ripristino su 0 dei valori di potenza",
+                "es": "Aseguró el restablecimiento adecuado a 0 de los valores de potencia",
+                "pl": "Zapewniono prawidłowe zresetowanie do 0 wartości mocy",
+                "zh-cn": "确保将功率值正确重置为0"
+            },
+            "0.4.5": {
+                "en": "Several fixes & code optimalisation",
+                "de": "Mehrere Fehlerbehebungen und Code-Optimierung",
+                "ru": "Несколько исправлений и оптимизация кода",
+                "pt": "Várias correções e otimização de código",
+                "nl": "Verschillende fixes en code-optimalisatie",
+                "fr": "Plusieurs correctifs et optimisation du code",
+                "it": "Diverse correzioni e ottimizzazione del codice",
+                "es": "Varias correcciones y optimización de código",
+                "pl": "Kilka poprawek i optymalizacja kodu",
+                "zh-cn": "多项修复和代码优化"
+            },
+            "0.4.4": {
+                "en": "ALPHA version of rebuilded adapter",
+                "de": "ALPHA-Version des überarbeiteten Adapters",
+                "ru": "АЛЬФА версия восстановленного адаптера",
+                "pt": "Versão ALPHA do adaptador reconstruído",
+                "nl": "ALPHA-versie van opnieuw opgebouwde adapter",
+                "fr": "Version ALPHA de l'adaptateur reconstruit",
+                "it": "Versione ALPHA dell'adattatore ricostruito",
+                "es": "Versión ALFA del adaptador reconstruido",
+                "pl": "Wersja ALPHA przebudowanego adaptera",
+                "zh-cn": "重建适配器的ALPHA版本"
+            },
+            "0.4.0": {
+                "en": "Release stable version 0.4.0",
+                "de": "Stable Version 0.4.0 freigeben",
+                "ru": "Выпуск стабильной версии 0.4.0",
+                "pt": "Versão estável de lançamento 0.4.0",
+                "nl": "Release stabiele versie 0.4.0",
+                "fr": "Publication de la version stable 0.4.0",
+                "it": "Rilascia la versione stabile 0.4.0",
+                "es": "Versión estable 0.4.0",
+                "pl": "Wydanie stabilnej wersji 0.4.0",
+                "zh-cn": "发布稳定版本0.4.0"
+            },
+            "0.3.1": {
+                "en": "Stable Beta release of ioBroker Discovergy",
+                "de": "Stabile Beta-Version von ioBroker Discovergy",
+                "ru": "Стабильная бета-версия ioBroker Discovergy",
+                "pt": "Versão beta estável do ioBroker Discovergy",
+                "nl": "Stabiele bètaversie van ioBroker Discovergy",
+                "fr": "Version bêta stable d'ioBroker Discovergy",
+                "it": "Rilascio beta stabile di ioBroker Discovergy",
+                "es": "Lanzamiento estable Beta de ioBroker Discovergy",
+                "pl": "Stabilne wydanie beta produktu ioBroker Discovergy",
+                "zh-cn": "稳定的ioBroker Discovergy Beta版本"
+            }
+        },
+        "title": "Discovergy",
+        "titleLang": {
+            "en": "Discovergy",
+            "de": "Discovergy",
+            "ru": "Discovergy",
+            "pt": "Discovergy",
+            "nl": "Discovergy",
+            "fr": "Discovergy",
+            "it": "Discovergy",
+            "es": "Discovergy",
+            "pl": "Discovergy",
+            "zh-cn": "发现"
+        },
+        "desc": {
+            "en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
+            "de": "Mit diesem Adapter können Discovergy-Benutzer alle ihre Messungen mit dem ioBroker synchronisieren",
+            "ru": "Этот адаптер позволяет пользователям Discovergy синхронизировать все свои измерения с ioBroker",
+            "pt": "Este adaptador permite que os usuários da Discovergy sincronizem todas as suas medições com o ioBroker",
+            "nl": "Met deze adapter kunnen Discovergy-gebruikers al hun metingen synchroniseren met ioBroker",
+            "fr": "Cet adaptateur permet aux utilisateurs de Discovergy de synchroniser toutes leurs mesures avec ioBroker.",
+            "it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
+            "es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
+            "pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker",
+            "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker"
+        },
+        "authors": [
+            "DutchmanNL <rdrozda86@gmail.com>"
+        ],
+        "keywords": [
+            "ioBroker",
+            "template",
+            "Smart Home",
+            "home automation"
+        ],
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "discovergy.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.discovergy/master/admin/discovergy.png",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.discovergy/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "energy",
+        "compact": false,
+        "license": "MIT",
+        "materialize": true,
+        "plugins": {
+            "sentry": {
+                "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
+            }
+        },
+        "dependencies": [
+            {
+                "admin": ">=3.0.0"
+            }
+        ]
+    },
+    "native": {
+        "Username": "",
+        "Password": "",
+        "intervall": 30
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
