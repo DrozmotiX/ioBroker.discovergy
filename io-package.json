@@ -145,7 +145,7 @@
 	"native": {
 		"Username": "",
 		"Password": "",
-		"intervall": "5"
+		"intervall": 5
 	},
 	"objects": [],
 	"instanceObjects": [
