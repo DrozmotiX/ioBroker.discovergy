@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.5.1",
+        "version": "0.5.2",
         "news": {
+            "0.5.2": {
+                "en": "Optimisations",
+                "de": "Optimierungen",
+                "ru": "Оптимизации",
+                "pt": "Otimizações",
+                "nl": "Optimalisaties",
+                "fr": "Optimisations",
+                "it": "ottimizzazioni",
+                "es": "Optimizaciones",
+                "pl": "Optymalizacje",
+                "zh-cn": "最佳化"
+            },
             "0.5.1": {
                 "en": "Avoid writing objects unnecessarily",
                 "de": "Vermeiden Sie unnötiges Schreiben von Objekten",

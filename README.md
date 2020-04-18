@@ -33,6 +33,11 @@ If you like my work, please feel free to provide a personal donation
 
 ## Changelog
 
+### 0.5.2 (18-04-2020) Code improvements
+* (Dutchman) Optimize and simplify code
+* (Dutchman) Set calculation factors in attribute definition
+* (Dutchman) Send information about missing state attribute definitions to sentry
+
 ### 0.5.1 (17-04-2020) Avoid writing objects unnecessarily
 * (Dutchman) Implement Sentry
 * (Dutchman) Bugfix : Avoid writing objects unnecessarily
