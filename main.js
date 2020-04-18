@@ -34,11 +34,16 @@ class Discovergy extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
+
+		// Load user settings
 		settings.Username = this.config.Username;
 		settings.Password = this.config.Password;
 		settings.intervall = (1000 * this.config.intervall);
+
 		await this.setState('info.connection', false, true);
+
 		this.log.info('Discovergy Adapter startet, trying to discover meters associated with your account');
+
 		// Check if credentials are not empty and decrypt stored password
 		if (settings.user !== '' && settings.Password !== '') {
 			this.getForeignObject('system.config', async (err, obj) => {
@@ -69,6 +74,7 @@ class Discovergy extends utils.Adapter {
 		await request(requestUrl, async (error, response, body) => {
 
 			if (!error && response.statusCode === 200) {
+				
 				// We got a response API is 
 				await this.setState('info.connection', true, true);
 
@@ -92,7 +98,7 @@ class Discovergy extends utils.Adapter {
 						if (!stateAttr[infoState]) {
 							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
 						} else {
-							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, infoState);
+							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
 							await this.setState(objArray[meters]['meterId'] + '.info.' + infoState, objArray[meters][infoState], true);
 						}
 					}
@@ -149,73 +155,64 @@ class Discovergy extends utils.Adapter {
 					const result = body;
 					const data = JSON.parse(result);
 
-					for (const i in data) {
+					for (const attributes in data) {
 
-						for (const x in data[i]) {
+						for (const values in data[attributes]) {
 
-							if (stateAttr[x] === undefined) {
-								this.log.error('State type : ' + x + ' unknown, send this information to the developer ==> ' + x + ' : ' + JSON.stringify(data[i][x]));
+							if (stateAttr[values] === undefined) {
+								this.log.error(`State type : ${values} unknown, send this information to the developer ==> ${values} : ${JSON.stringify(data[attributes][values])}`);
 							} else {
 
-								if (stateAttr[x].type !== undefined) {
+								if (stateAttr[values].type !== undefined) {
 
-									switch (x) {
+									switch (values) {
 										case 'power':
-											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption');
-												this.calc_factor(serial + '.Power_Consumption', data[i][x], x);
-												this.calc_factor(serial + '.Power_Delivery', 0, x);
+											if (data[attributes][values] > 0) {
+												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
+												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery', 0);
 											} else {
-												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery');
-												this.calc_factor(serial + '.Power_Delivery', Math.abs(data[i][x]), x);
-												this.calc_factor(serial + '.Power_Consumption', 0, x);
+												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption', 0);
 											}
 
 											break;
 
 										case 'power1':
-											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption');
-												this.calc_factor(serial + '.Power_T1_Consumption', data[i][x], x);
-												this.calc_factor(serial + '.Power_T1_Delivery', 0, x);
+											if (data[attributes][values] > 0) {
+												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption', data[attributes][values]);
+												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery');
-												this.calc_factor(serial + '.Power_T1_Delivery', Math.abs(data[i][x]), x);
-												this.calc_factor(serial + '.Power_T1_Consumption', 0, x);
+												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption', 0);
 											}
 
 											break;
 
 										case 'power2':
-											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption');
-												this.calc_factor(serial + '.Power_T2_Consumption', data[i][x], x);
-												this.calc_factor(serial + '.Power_T2_Delivery', 0, x);
+											if (data[attributes][values] > 0) {
+												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption', data[attributes][values]);
+												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery');
-												this.calc_factor(serial + '.Power_T2_Delivery', Math.abs(data[i][x]), x);
-												this.calc_factor(serial + '.Power_T2_Consumption', 0, x);
+												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption', 0);
 											}
 
 											break;
 
 										case 'power3':
-											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption');
-												this.calc_factor(serial + '.Power_T3_Consumption', data[i][x], x);
-												this.calc_factor(serial + '.Power_T3_Delivery', 0, x);
+											if (data[attributes][values] > 0) {
+												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption', data[attributes][values]);
+												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery');
-												this.calc_factor(serial + '.Power_T3_Delivery', Math.abs(data[i][x]), x);
-												this.calc_factor(serial + '.Power_T3_Consumption', 0, x);
+												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption', 0);
 											}
 
 											break;
 
 										default:
 
-											await this.doStateCreate(serial + '.' + x, x);
-											this.calc_factor(serial + '.' + x, data[i][x], x);
+											await this.doStateCreate(serial + '.' + values, values, data[attributes][values]);
 
 									}
 								}
@@ -232,7 +229,11 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	async doStateCreate(state, name) {
+	async doStateCreate(stateName, name, value) {
+
+		// Strinfnify value if needed
+
+		if (typeof(value) === 'object') { value = JSON.stringify(value);}
 
 		// Try to get details from state lib, if not use defaults. throw warning if states is not known in attribute list
 		const common = {};
@@ -242,55 +243,53 @@ class Discovergy extends utils.Adapter {
 				warnMessages[name] = warnMessage;
 				console.warn(warnMessage);
 				this.log.warn(warnMessage);
+
+				// Send information to Sentry
 				this.sendSentry(warnMessage);
 			}
 		}
 
 		common.name = stateAttr[name] !== undefined ? stateAttr[name].name || name : name;
-		common.type = stateAttr[name] !== undefined ? stateAttr[name].type || 'mixed' : 'mixed';
+		common.type = typeof(value);
 		common.role = stateAttr[name] !== undefined ? stateAttr[name].role || 'state' : 'state';
 		common.read = true;
 		common.unit = stateAttr[name] !== undefined ? stateAttr[name].unit || '' : '';
 		common.write = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
 
-		if ((!this.createdStatesDetails[state])
-			|| (this.createdStatesDetails[state]
+		if ((!this.createdStatesDetails[stateName])
+			|| (this.createdStatesDetails[stateName]
 				&& (
-					common.name !== this.createdStatesDetails[state].name
-					|| common.name !== this.createdStatesDetails[state].name
-					|| common.type !== this.createdStatesDetails[state].type
-					|| common.role !== this.createdStatesDetails[state].role
-					|| common.read !== this.createdStatesDetails[state].read
-					|| common.unit !== this.createdStatesDetails[state].unit
-					|| common.write !== this.createdStatesDetails[state].write
+					common.name !== this.createdStatesDetails[stateName].name
+					|| common.name !== this.createdStatesDetails[stateName].name
+					|| common.type !== this.createdStatesDetails[stateName].type
+					|| common.role !== this.createdStatesDetails[stateName].role
+					|| common.read !== this.createdStatesDetails[stateName].read
+					|| common.unit !== this.createdStatesDetails[stateName].unit
+					|| common.write !== this.createdStatesDetails[stateName].write
 				)
 			)) {
 
 			// console.log(`An attribute has changed : ${state}`);
 
-			await this.extendObjectAsync(state, {
+			await this.extendObjectAsync(stateName, {
 				type: 'state',
 				common
 			});
+
 		} else {
 			// console.log(`Nothing changed do not update object`);
 		}
 
 		// Store current object definition to memory
-		this.createdStatesDetails[state] = common;
-		
-	}
+		this.createdStatesDetails[stateName] = common;
 
-	calc_factor(state, value, type) {
-
-		// Handle calculation factor
-		if (!stateAttr[type] || !stateAttr[type].factor) {
-			this.setState(state, { val: value, ack: true });
+		// Handle calculation factor and set state
+		if (!stateAttr[name] || !stateAttr[name].factor) {
+			this.setState(stateName, { val: value, ack: true });
 		} else {
-			const calcValue = value / stateAttr[type].factor;
-			this.setState(state, { val: calcValue, ack: true });
+			const calcValue = value / stateAttr[name].factor;
+			this.setState(stateName, { val: calcValue, ack: true });
 		}
-
 	}
 
 	// Function to decrypt passwords
