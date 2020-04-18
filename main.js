@@ -242,6 +242,7 @@ class Discovergy extends utils.Adapter {
 				warnMessages[name] = warnMessage;
 				console.warn(warnMessage);
 				this.log.warn(warnMessage);
+				this.sendSentry(warnMessage);
 			}
 		}
 
@@ -315,6 +316,17 @@ class Discovergy extends utils.Adapter {
 			callback();
 		}
 	}
+
+	async sendSentry(msg) {
+		this.log.info(`[Error catched and send to Sentry, thank you collaborating!] error: ${msg}`);
+		if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
+			const sentryInstance = this.getPluginInstance('sentry');
+			if (sentryInstance) {
+				sentryInstance.getSentryObject().captureException(msg);
+			}
+		}
+	}
+
 }
 
 // @ts-ignore parent is a valid property on module
