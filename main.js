@@ -92,7 +92,7 @@ class Discovergy extends utils.Adapter {
 						if (!stateAttr[infoState]) {
 							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
 						} else {
-							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, stateAttr[infoState].name, stateAttr[infoState].type, stateAttr[infoState].role, stateAttr[infoState].read, stateAttr[infoState].unit, stateAttr[infoState].write);
+							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, infoState);
 							await this.setState(objArray[meters]['meterId'] + '.info.' + infoState, objArray[meters][infoState], true);
 						}
 					}
@@ -162,11 +162,11 @@ class Discovergy extends utils.Adapter {
 									switch (x) {
 										case 'power':
 											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_Consumption', 'Momentanwert jetzige Abnahme', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption');
 												this.calc_factor(serial + '.Power_Consumption', data[i][x], x);
 												this.calc_factor(serial + '.Power_Delivery', 0, x);
 											} else {
-												this.doStateCreate(serial + '.Power_Delivery', 'Momentanwert jetziger Abgabe', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery');
 												this.calc_factor(serial + '.Power_Delivery', Math.abs(data[i][x]), x);
 												this.calc_factor(serial + '.Power_Consumption', 0, x);
 											}
@@ -175,11 +175,11 @@ class Discovergy extends utils.Adapter {
 
 										case 'power1':
 											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Momentanwert jetzige Abnahme T1', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption');
 												this.calc_factor(serial + '.Power_T1_Consumption', data[i][x], x);
 												this.calc_factor(serial + '.Power_T1_Delivery', 0, x);
 											} else {
-												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Momentanwert jetziger Abgabe T1', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery');
 												this.calc_factor(serial + '.Power_T1_Delivery', Math.abs(data[i][x]), x);
 												this.calc_factor(serial + '.Power_T1_Consumption', 0, x);
 											}
@@ -188,11 +188,11 @@ class Discovergy extends utils.Adapter {
 
 										case 'power2':
 											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Momentanwert jetzige Abnahme T2', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption');
 												this.calc_factor(serial + '.Power_T2_Consumption', data[i][x], x);
 												this.calc_factor(serial + '.Power_T2_Delivery', 0, x);
 											} else {
-												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Momentanwert jetziger Abgabe T2', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery');
 												this.calc_factor(serial + '.Power_T2_Delivery', Math.abs(data[i][x]), x);
 												this.calc_factor(serial + '.Power_T2_Consumption', 0, x);
 											}
@@ -201,11 +201,11 @@ class Discovergy extends utils.Adapter {
 
 										case 'power3':
 											if (data[i][x] > 0) {
-												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Momentanwert jetzige Abnahme T3', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption');
 												this.calc_factor(serial + '.Power_T3_Consumption', data[i][x], x);
 												this.calc_factor(serial + '.Power_T3_Delivery', 0, x);
 											} else {
-												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Momentanwert jetziger Abgabe T3', stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery');
 												this.calc_factor(serial + '.Power_T3_Delivery', Math.abs(data[i][x]), x);
 												this.calc_factor(serial + '.Power_T3_Consumption', 0, x);
 											}
@@ -214,7 +214,7 @@ class Discovergy extends utils.Adapter {
 
 										default:
 
-											await this.doStateCreate(serial + '.' + x, stateAttr[x].name, stateAttr[x].type, stateAttr[x].role, stateAttr[x].read, stateAttr[x].unit, stateAttr[x].write);
+											await this.doStateCreate(serial + '.' + x, x);
 											this.calc_factor(serial + '.' + x, data[i][x], x);
 
 									}
@@ -232,16 +232,25 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	async doStateCreate(state, name, type, role, read, unit, write) {
+	async doStateCreate(state, name) {
 
-		const common = {
-			name: name,
-			type: type,
-			role: role,
-			read: true,
-			unit: unit,
-			write: write,
-		};
+		// Try to get details from state lib, if not use defaults. throw warning if states is not known in attribute list
+		const common = {};
+		if (!stateAttr[name]) {
+			const warnMessage = `State attribute definition missing for + ${name}`;
+			if (warnMessages[name] !== warnMessage) {
+				warnMessages[name] = warnMessage;
+				console.warn(warnMessage);
+				this.log.warn(warnMessage);
+			}
+		}
+
+		common.name = stateAttr[name] !== undefined ? stateAttr[name].name || name : name;
+		common.type = stateAttr[name] !== undefined ? stateAttr[name].type || 'mixed' : 'mixed';
+		common.role = stateAttr[name] !== undefined ? stateAttr[name].role || 'state' : 'state';
+		common.read = true;
+		common.unit = stateAttr[name] !== undefined ? stateAttr[name].unit || '' : '';
+		common.write = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
 
 		if ((!this.createdStatesDetails[state])
 			|| (this.createdStatesDetails[state]
@@ -256,14 +265,14 @@ class Discovergy extends utils.Adapter {
 				)
 			)) {
 
-			console.log(`An attribute has changed : ${state}`);
+			// console.log(`An attribute has changed : ${state}`);
 
 			await this.extendObjectAsync(state, {
 				type: 'state',
 				common
 			});
 		} else {
-			console.log(`Nothing changed do not update object`);
+			// console.log(`Nothing changed do not update object`);
 		}
 
 		// Store current object definition to memory
@@ -273,103 +282,12 @@ class Discovergy extends utils.Adapter {
 
 	calc_factor(state, value, type) {
 
-		switch (type) {
-
-			case 'energy':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energy1':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energy2':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energy3':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyOut':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyOut1':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyOut2':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyOut3':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyProducer8':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyProducer9':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'energyProducer10':
-
-				this.setState(state, { val: (value / 10000000000), ack: true });
-				break;
-
-			case 'power':
-
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'power1':
-
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'power2':
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'power3':
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'voltage':
-
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'voltage1':
-
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'voltage2':
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			case 'voltage3':
-				this.setState(state, { val: (value / 1000), ack: true });
-				break;
-
-			default:
-				// this.log.error('Error in case handling of type identificaton : ' + state);
-				this.setState(state, { val: value, ack: true });
-				return;
+		// Handle calculation factor
+		if (!stateAttr[type] || !stateAttr[type].factor) {
+			this.setState(state, { val: value, ack: true });
+		} else {
+			const calcValue = value / stateAttr[type].factor;
+			this.setState(state, { val: calcValue, ack: true });
 		}
 
 	}
