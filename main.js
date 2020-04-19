@@ -89,8 +89,8 @@ class Discovergy extends utils.Adapter {
 
 					// Create device and info channel
 					this.log.debug(JSON.stringify(objArray[meters]));
-					await this.createDevice(objArray[meters]['meterId']);
-					await this.createChannel(objArray[meters]['meterId'], 'info');
+					await this.createDevice(objArray[meters]['serialNumber']);
+					await this.createChannel(objArray[meters]['serialNumber'], 'info');
 
 					// Create info channel for alle meter devices
 					for (const infoState in objArray[meters]) {
@@ -98,15 +98,14 @@ class Discovergy extends utils.Adapter {
 						if (!stateAttr[infoState]) {
 							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
 						} else {
-							await this.doStateCreate(objArray[meters]['meterId'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
-							await this.setState(objArray[meters]['meterId'] + '.info.' + infoState, objArray[meters][infoState], true);
+							await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
 						}
 					}
 
 					// Exclude RLM meters, no values to receive
 					if (objArray[meters]['type'] !== 'RLM') {
 
-						this.allMeters[objArray[meters]['serialNumber']] = objArray[meters];
+						this.allMeters[objArray[meters]['meterId']] = objArray[meters];
 					}
 
 				}
@@ -143,10 +142,10 @@ class Discovergy extends utils.Adapter {
 
 	}
 
-	async doDiscovergyMeter(endpoint, urlencoded_parameters, serial) {
+	async doDiscovergyMeter(endpoint, urlencoded_parameters, meterId) {
 		try {
-
-			const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?meterId=${serial}`;
+			const stateName = this.allMeters[meterId].serialNumber;
+			const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?meterId=${meterId}`;
 			await request(requestUrl, async (error, response, body) => {
 
 				if (!error && response.statusCode === 200) {
@@ -168,51 +167,51 @@ class Discovergy extends utils.Adapter {
 									switch (values) {
 										case 'power':
 											if (data[attributes][values] > 0) {
-												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
-												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery', 0);
+												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
+												this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', 0);
 											} else {
-												this.doStateCreate(serial + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(serial + '.Power_Consumption', 'Power_Consumption', 0);
+												this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', 0);
 											}
 
 											break;
 
 										case 'power1':
 											if (data[attributes][values] > 0) {
-												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption', data[attributes][values]);
-												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery', 0);
+												await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', data[attributes][values]);
+												await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T1_Delivery', 'Power_T1_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(serial + '.Power_T1_Consumption', 'Power_T1_Consumption', 0);
+												await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', 0);
 											}
 
 											break;
 
 										case 'power2':
 											if (data[attributes][values] > 0) {
-												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption', data[attributes][values]);
-												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery', 0);
+												await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', data[attributes][values]);
+												await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T2_Delivery', 'Power_T2_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(serial + '.Power_T2_Consumption', 'Power_T2_Consumption', 0);
+												await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', 0);
 											}
 
 											break;
 
 										case 'power3':
 											if (data[attributes][values] > 0) {
-												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption', data[attributes][values]);
-												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery', 0);
+												await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', data[attributes][values]);
+												await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', 0);
 											} else {
-												await this.doStateCreate(serial + '.Power_T3_Delivery', 'Power_T3_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(serial + '.Power_T3_Consumption', 'Power_T3_Consumption', 0);
+												await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', 0);
 											}
 
 											break;
 
 										default:
 
-											await this.doStateCreate(serial + '.' + values, values, data[attributes][values]);
+											await this.doStateCreate(stateName + '.' + values, values, data[attributes][values]);
 
 									}
 								}
@@ -221,7 +220,7 @@ class Discovergy extends utils.Adapter {
 					}
 
 				} else { // error or non-200 status code
-					this.log.error('Error retrieving information for : ' + serial);
+					this.log.error('Error retrieving information for : ' + meterId);
 				}
 			});
 		} catch (error) {
