@@ -33,6 +33,9 @@ If you like my work, please feel free to provide a personal donation
 
 ## Changelog
 
+### 0.5.4 (19-04-2020) Bugfix : Wrong Unit
+* (Dutchman) Bugfix : Wrong Unit
+
 ### 0.5.3 (19-04-2020) Bugfix : change root back to SerialNumber
 * (Dutchman) Bugfix : Change root of information back to SerialNumber instead of MeterId
 

@@ -1,12 +1,9 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.5.3",
-        "news": {
-            "0.5.3": {
-                "en": "Bugfix : change root back to SerialNumber"
-            },            
-            "0.5.2": {
+        "version": "0.5.4",
+        "news": {         
+            "0.5.4": {
                 "en": "Optimisations",
                 "de": "Optimierungen",
                 "ru": "Оптимизации",
