@@ -71,6 +71,8 @@ class Discovergy extends utils.Adapter {
 	async doDiscovergyCall(endpoint, urlencoded_parameters) {
 
 		const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
+
+		//TODO: add try catch for failed api call
 		await request(requestUrl, async (error, response, body) => {
 
 			if (!error && response.statusCode === 200) {
