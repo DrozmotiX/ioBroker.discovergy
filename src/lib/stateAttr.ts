@@ -1,5 +1,6 @@
 // Classification of all state attributes possible
-const stateAttrb = {
+// TODO: Read / Write ergänzen
+const stateAttrb: Record<string, Partial<ioBroker.StateCommon> & {factor?: number}> = {
 	'actualityDuration': {
 		name: '< unknown >',
 		type: 'number',
@@ -240,7 +241,7 @@ const stateAttrb = {
 		role: 'value.power.consumption',
 		unit: 'W',
 		factor: 1000,
-	},	
+	},
 	'voltage': {
 		name: 'Voltage',
 		type: 'number',
@@ -277,5 +278,4 @@ const stateAttrb = {
 	},
 };
 
-
-module.exports = stateAttrb;
+export default stateAttrb;

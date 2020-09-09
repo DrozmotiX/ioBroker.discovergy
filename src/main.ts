@@ -1,24 +1,32 @@
-/* eslint-disable quotes */
-'use strict';
-
 /*
  * Created with @iobroker/create-adapter v1.16.0
  */
 
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
-const utils = require('@iobroker/adapter-core');
-const request = require('request-promise-native');
-const stateAttr = require(__dirname + '/lib/stateAttr.js');
-const settings = { Username: "", Password: "", intervall: 30000 }, warnMessages = {};
-let timer = null;
+import * as utils from '@iobroker/adapter-core';
+import request from 'request-promise-native';
+import stateAttr from "./lib/stateAttr";
+import { Meter } from './lib/discovergyAPI';
+const settings = { Username: "", Password: "", intervall: 30000 }
+const warnMessages: Record<string, string> = {};
+let timer: NodeJS.Timeout | null = null;
+
+// Augment the adapter.config object with the actual types
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace ioBroker {
+		interface AdapterConfig {
+			Username: string,
+			Password: string,
+			intervall: number
+		}
+	}
+}
 
 class Discovergy extends utils.Adapter {
 
-	/**
-	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
-	 */
-	constructor(options) {
+	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		// @ts-ignore
 		super({
 			...options,
@@ -30,6 +38,9 @@ class Discovergy extends utils.Adapter {
 		this.on('unload', this.onUnload.bind(this));
 	}
 
+	private createdStatesDetails: Record<string, ioBroker.StateCommon>;
+	private allMeters: Record<number, Meter>;
+
 	/**
 	 * Is called when databases are connected and adapter received configuration.
 	 */
@@ -40,13 +51,13 @@ class Discovergy extends utils.Adapter {
 		settings.Password = this.config.Password;
 		settings.intervall = (1000 * this.config.intervall);
 
-		await this.setState('info.connection', false, true);
+		this.setState('info.connection', false, true);
 
-		this.log.info('Discovergy Adapter startet, trying to discover meters associated with your account');
+		this.log.info('Discovergy Adapter started, trying to discover meters associated with your account');
 
 		// Check if credentials are not empty and decrypt stored password
-		if (settings.user !== '' && settings.Password !== '') {
-			this.getForeignObject('system.config', async (err, obj) => {
+		if (settings.Username !== '' && settings.Password !== '') {
+			this.getForeignObject('system.config', async (_err, obj) => {
 				if (obj && obj.native && obj.native.secret) {
 					//noinspection JSUnresolvedVariable
 					settings.Password = await this.decrypt(obj.native.secret, this.config.Password);
@@ -68,7 +79,7 @@ class Discovergy extends utils.Adapter {
 	}
 
 	// Get all meters connected to Discovergy account
-	async doDiscovergyCall(endpoint, urlencoded_parameters) {
+	async doDiscovergyCall(endpoint: string, urlencoded_parameters: string) {
 
 		const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
 
@@ -78,36 +89,35 @@ class Discovergy extends utils.Adapter {
 			if (!error && response.statusCode === 200) {
 				
 				// We got a response API is 
-				await this.setState('info.connection', true, true);
+				this.setState('info.connection', true, true);
 
 				// Retrieve all meter objects from Discovergy API
-				/** @type {Record<string, any>[]} */
-				const objArray = JSON.parse(body);
+				const objArray: Meter[] = JSON.parse(body);
 				this.log.debug(JSON.stringify(objArray));
 
 				// Run truth array off all meter
 
-				for (const meters of Object.keys(objArray)) {
+				for (const meter of objArray) {
 
 					// Create device and info channel
-					this.log.debug(JSON.stringify(objArray[meters]));
-					await this.createDevice(objArray[meters]['serialNumber']);
-					await this.createChannel(objArray[meters]['serialNumber'], 'info');
+					this.log.debug(JSON.stringify(meter));
+					await this.createDeviceAsync(meter.serialNumber);
+					await this.createChannelAsync(meter['serialNumber'], 'info');
 
 					// Create info channel for alle meter devices
-					for (const infoState in objArray[meters]) {
+					for (const [infoState, value] of Object.entries(meter)) {
 
 						if (!stateAttr[infoState]) {
-							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
+							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(value));
 						} else {
-							await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
+							await this.doStateCreate(meter['serialNumber'] + '.info.' + infoState, infoState, value);
 						}
 					}
 
 					// Exclude RLM meters, no values to receive
-					if (objArray[meters]['type'] !== 'RLM') {
+					if (meter['type'] !== 'RLM') {
 
-						this.allMeters[objArray[meters]['meterId']] = objArray[meters];
+						this.allMeters[meter['meterId']] = meter;
 					}
 
 				}
@@ -137,14 +147,14 @@ class Discovergy extends utils.Adapter {
 		}
 
 		// New data polling at intervall time
-		if (timer) timer = null;
+		if (timer) clearTimeout(timer);
 		timer = setTimeout(() => {
 			this.dataPolling();
 		}, settings.intervall);
 
 	}
 
-	async doDiscovergyMeter(endpoint, urlencoded_parameters, meterId) {
+	async doDiscovergyMeter(endpoint: string, _urlencoded_parameters: string, meterId: Meter['meterId']) {
 		try {
 			const stateName = this.allMeters[meterId].serialNumber;
 			const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?meterId=${meterId}`;
@@ -230,15 +240,16 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	async doStateCreate(stateName, name, value) {
+	async doStateCreate(stateName: string, name: string, value: any): Promise<void> {
 
 		// Strinfnify value if needed
 
 		if (typeof(value) === 'object') { value = JSON.stringify(value);}
 
+		const defCommon = stateAttr[name];
+
 		// Try to get details from state lib, if not use defaults. throw warning if states is not known in attribute list
-		const common = {};
-		if (!stateAttr[name]) {
+		if (!defCommon) {
 			const warnMessage = `State attribute definition missing for + ${name}`;
 			if (warnMessages[name] !== warnMessage) {
 				warnMessages[name] = warnMessage;
@@ -250,12 +261,14 @@ class Discovergy extends utils.Adapter {
 			}
 		}
 
-		common.name = stateAttr[name] !== undefined ? stateAttr[name].name || name : name;
-		common.type = typeof(value);
-		common.role = stateAttr[name] !== undefined ? stateAttr[name].role || 'state' : 'state';
-		common.read = true;
-		common.unit = stateAttr[name] !== undefined ? stateAttr[name].unit || '' : '';
-		common.write = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
+		const common: ioBroker.StateCommon = {
+			name: defCommon !== undefined ? defCommon.name || name : name,
+			type: typeof(value) as any,
+			role: defCommon !== undefined ? defCommon.role || 'state' : 'state',
+			read: true,
+			unit: defCommon !== undefined ? defCommon.unit || '' : '',
+			write: defCommon !== undefined ? defCommon.write || false : false,
+		};
 
 		if ((!this.createdStatesDetails[stateName])
 			|| (this.createdStatesDetails[stateName]
@@ -285,16 +298,17 @@ class Discovergy extends utils.Adapter {
 		this.createdStatesDetails[stateName] = common;
 
 		// Handle calculation factor and set state
-		if (!stateAttr[name] || !stateAttr[name].factor) {
+		if (!defCommon || !defCommon.factor) {
 			this.setState(stateName, { val: value, ack: true });
 		} else {
-			const calcValue = value / stateAttr[name].factor;
+			const calcValue = value / defCommon.factor;
 			this.setState(stateName, { val: calcValue, ack: true });
 		}
 	}
 
 	// Function to decrypt passwords
-	decrypt(key, value) {
+	// @ts-expect-error
+	decrypt(key: string, value: string): string {
 		let result = '';
 		for (let i = 0; i < value.length; ++i) {
 			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
@@ -307,7 +321,7 @@ class Discovergy extends utils.Adapter {
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 * @param {() => void} callback
 	 */
-	onUnload(callback) {
+	private onUnload(callback: () => void): void {
 		try {
 			this.log.info('cleaned everything up...');
 			if (timer) timer = null;
@@ -317,7 +331,7 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	async sendSentry(msg) {
+	async sendSentry(msg: string) {
 		this.log.info(`[Error catched and send to Sentry, thank you collaborating!] error: ${msg}`);
 		if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
 			const sentryInstance = this.getPluginInstance('sentry');
@@ -332,10 +346,7 @@ class Discovergy extends utils.Adapter {
 // @ts-ignore parent is a valid property on module
 if (module.parent) {
 	// Export the constructor in compact mode
-	/**
-	 * @param {Partial<ioBroker.AdapterOptions>} [options={}]
-	 */
-	module.exports = (options) => new Discovergy(options);
+	module.exports = (options: Partial<utils.AdapterOptions>) => new Discovergy(options);
 } else {
 	// otherwise start the instance directly
 	new Discovergy();
