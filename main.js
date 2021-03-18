@@ -37,13 +37,14 @@ class Discovergy extends utils.Adapter {
 
 		// Load user settings
 		settings.Username = this.config.Username;
-		settings.Password = this.config.Password;
+		settings.Password = this.config.Password; //ToDo: Change to lib
 		settings.intervall = (1000 * this.config.intervall);
 
 		await this.setState('info.connection', false, true);
 
 		this.log.info('Discovergy Adapter startet, trying to discover meters associated with your account');
 
+		//ToDo: Change to lib
 		// Check if credentials are not empty and decrypt stored password
 		if (settings.user !== '' && settings.Password !== '') {
 			this.getForeignObject('system.config', async (err, obj) => {
@@ -57,7 +58,7 @@ class Discovergy extends utils.Adapter {
 				// Adapter is alive, make API call
 				await this.setForeignState('system.this.' + this.namespace + '.alive', false);
 
-				// Make a call to discovergai API and get a list of all meters
+				// Make a call to discovergi API and get a list of all meters
 				await this.doDiscovergyCall('meters', '');
 
 			});
@@ -72,58 +73,62 @@ class Discovergy extends utils.Adapter {
 
 		const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
 
-		//TODO: add try catch for failed api call
-		await request(requestUrl, async (error, response, body) => {
+		try {
+			await request(requestUrl, async (error, response, body) => {
 
-			if (!error && response.statusCode === 200) {
-				
-				// We got a response API is 
-				await this.setState('info.connection', true, true);
+				if (!error && response.statusCode === 200) {
 
-				// Retrieve all meter objects from Discovergy API
-				/** @type {Record<string, any>[]} */
-				const objArray = JSON.parse(body);
-				this.log.debug(JSON.stringify(objArray));
+					// We got a response API is
+					await this.setState('info.connection', true, true);
 
-				// Run truth array off all meter
+					// Retrieve all meter objects from Discovergy API
+					/** @type {Record<string, any>[]} */
+					const objArray = JSON.parse(body);
+					this.log.debug(JSON.stringify(objArray));
 
-				for (const meters of Object.keys(objArray)) {
+					// Run truth array off all meter
 
-					// Create device and info channel
-					this.log.debug(JSON.stringify(objArray[meters]));
-					await this.createDevice(objArray[meters]['serialNumber']);
-					await this.createChannel(objArray[meters]['serialNumber'], 'info');
+					for (const meters of Object.keys(objArray)) {
 
-					// Create info channel for alle meter devices
-					for (const infoState in objArray[meters]) {
+						// Create device and info channel
+						this.log.debug(JSON.stringify(objArray[meters]));
+						await this.createDevice(objArray[meters]['serialNumber']);
+						await this.createChannel(objArray[meters]['serialNumber'], 'info');
 
-						if (!stateAttr[infoState]) {
-							this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
-						} else {
-							await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
+						// Create info channel for alle meter devices
+						for (const infoState in objArray[meters]) {
+
+							if (!stateAttr[infoState]) {
+								this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
+							} else {
+								await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
+							}
 						}
+
+						// Exclude RLM meters, no values to receive
+						if (objArray[meters]['type'] !== 'RLM') {
+
+							this.allMeters[objArray[meters]['meterId']] = objArray[meters];
+						}
+
 					}
 
-					// Exclude RLM meters, no values to receive
-					if (objArray[meters]['type'] !== 'RLM') {
+					this.log.info('All meters associated to your account discovered, initialise meters');
+					this.log.debug('All meters : ' + JSON.stringify(this.allMeters));
 
-						this.allMeters[objArray[meters]['meterId']] = objArray[meters];
-					}
+					await this.dataPolling();
 
+					this.log.info(`All meters initialized, polling data every ${this.config.intervall} seconds`);
+
+				} else { // error or non-200 status code
+					this.log.error('Connection_Failed at meter indication run, check your credentials !');
+					this.setState('info.connection', false, true);
 				}
+			});
+		} catch (e) {
+			this.log.error(`[doDiscovergyCall] ${e}`);
+		}
 
-				this.log.info('All meters associated to your account discovered, initialise meters');
-				this.log.debug('All meters : ' + JSON.stringify(this.allMeters));
-
-				await this.dataPolling();
-
-				this.log.info(`All meters initialized, polling data every ${this.config.intervall} seconds`);
-
-			} else { // error or non-200 status code
-				this.log.error('Connection_Failed at meter indication run, check your credentials !');
-				this.setState('info.connection', false, true);
-			}
-		});
 	}
 
 	// Data polling timer, get read values for every meter (Last reading)
