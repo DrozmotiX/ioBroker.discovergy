@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.5.5",
+        "version": "0.5.6",
         "news": {
+            "0.5.6": {
+                "en": "Bugfix : Voltage unknown",
+                "de": "Bugfix: Spannung unbekannt",
+                "ru": "Исправление: напряжение неизвестно",
+                "pt": "Correção de bug: tensão desconhecida",
+                "nl": "Bugfix: Voltage onbekend",
+                "fr": "Correctif: tension inconnue",
+                "it": "Bugfix: voltaggio sconosciuto",
+                "es": "Corrección de error: voltaje desconocido",
+                "pl": "Poprawka: nieznane napięcie",
+                "zh-cn": "错误修正：电压未知"
+            },
             "0.5.5": {
                 "en": "Bugfix : Voltage unknown",
                 "de": "Bugfix: Spannung unbekannt",

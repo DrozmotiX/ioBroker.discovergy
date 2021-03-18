@@ -38,7 +38,7 @@ If you like my work, please feel free to provide a personal donation
     ### __WORK IN PROGRESS__
 -->
 
-### __WORK IN PROGRESS__
+### 0.5.6 (2021-03-18)
 * (DutchmanNL) Bugfix : Voltage unknown
 
 ### 0.5.4 (19-04-2020) Bugfix : Wrong Unit
