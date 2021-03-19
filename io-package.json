@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.5.7-0",
+        "version": "0.5.7",
         "news": {
+            "0.5.7": {
+                "en": "Change why of password encryption, you my need to re-enter your credentials !\nBugfix : State \"system.this.discovergy.0.alive\" has no existing object, this might lead to an error in future versions",
+                "de": "Ändern Sie, warum der Passwortverschlüsselung, müssen Sie Ihre Anmeldeinformationen erneut eingeben!\nBugfix: Der Status \"system.this.discovergy.0.alive\" hat kein vorhandenes Objekt. Dies kann in zukünftigen Versionen zu einem Fehler führen",
+                "ru": "Измените причину шифрования пароля, вам нужно повторно ввести свои учетные данные!\nИсправление: состояние \"system.this.discovergy.0.alive\" не имеет существующего объекта, это может привести к ошибке в будущих версиях.",
+                "pt": "Mude o porquê da criptografia de senha, você precisa inserir novamente suas credenciais!\nCorreção de bug: o estado \"system.this.discovergy.0.alive\" não tem objeto existente, isso pode levar a um erro em versões futuras",
+                "nl": "Verander waarom van wachtwoordcodering, u moet uw inloggegevens opnieuw invoeren!\nBugfix: Status \"system.this.discovergy.0.alive\" heeft geen bestaand object, dit kan leiden tot een fout in toekomstige versies",
+                "fr": "Changez la raison du cryptage du mot de passe, vous devez saisir à nouveau vos informations d'identification!\nCorrection de bug: l'état \"system.this.discovergy.0.alive\" n'a pas d'objet existant, cela pourrait conduire à une erreur dans les versions futures",
+                "it": "Cambia il motivo della crittografia della password, devi reinserire le tue credenziali!\nBugfix: lo stato \"system.this.discovergy.0.alive\" non ha alcun oggetto esistente, questo potrebbe portare a un errore nelle versioni future",
+                "es": "Cambie el motivo del cifrado de contraseña, ¡es necesario que vuelva a ingresar sus credenciales!\nCorrección de error: el estado \"system.this.discovergy.0.alive\" no tiene ningún objeto existente, esto podría dar lugar a un error en versiones futuras",
+                "pl": "Zmień powód szyfrowania hasła, musisz ponownie wprowadzić swoje dane uwierzytelniające!\nPoprawka: Stan „system.this.discovergy.0.alive” nie ma istniejącego obiektu, może to prowadzić do błędu w przyszłych wersjach",
+                "zh-cn": "更改密码加密的原因，我需要重新输入凭据！\n错误修正：状态“ system.this.discovergy.0.alive”没有现有对象，这可能会导致将来版本中出现错误"
+            },
             "0.5.6": {
                 "en": "Bugfix : Voltage unknown",
                 "de": "Bugfix: Spannung unbekannt",
