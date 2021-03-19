@@ -47,18 +47,8 @@ class Discovergy extends utils.Adapter {
 		//ToDo: Change to lib
 		// Check if credentials are not empty and decrypt stored password
 		if (settings.user !== '' && settings.Password !== '') {
-		// this.getForeignObject('system.config', async (err, obj) => {
-			// if (obj && obj.native && obj.native.secret) {
-			// 	//noinspection JSUnresolvedVariable
-			// 	settings.Password = await this.decrypt(obj.native.secret, this.config.Password);
-			// } else {
-			// 	//noinspection JSUnresolvedVariable
-			// 	settings.Password = await this.decrypt('Zgfr56gFe87jJOM', this.config.Password);
-			// }
-			// Adapter is alive, make API call
-			await this.setForeignState('system.this.' + this.namespace + '.alive', false);
 
-			// Make a call to discovergi API and get a list of all meters
+			// Make a call to Discovergy API and get a list of all meters
 			await this.doDiscovergyCall('meters', '');
 
 			// });
@@ -297,16 +287,6 @@ class Discovergy extends utils.Adapter {
 			this.setState(stateName, { val: calcValue, ack: true });
 		}
 	}
-
-	// // Function to decrypt passwords
-	// decrypt(key, value) {
-	// 	let result = '';
-	// 	for (let i = 0; i < value.length; ++i) {
-	// 		result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-	// 	}
-	// 	this.log.debug('client_secret decrypt ready');
-	// 	return result;
-	// }
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
