@@ -19,22 +19,22 @@
 
 	<script type="text/javascript">
 
-		// Create secret for encrypted password storage
-		var secret;
-		function encrypt(key, value) {
-			var result = '';
-			for(var i = 0; i < value.length; ++i) {
-				result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-			}
-			return result;
-		}
-		function decrypt(key, value) {
-			var result = '';
-			for(var i = 0; i < value.length; ++i) {
-				result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-			}
-			return result;
-		}
+		// // Create secret for encrypted password storage
+		// var secret;
+		// function encrypt(key, value) {
+		// 	var result = '';
+		// 	for(var i = 0; i < value.length; ++i) {
+		// 		result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+		// 	}
+		// 	return result;
+		// }
+		// function decrypt(key, value) {
+		// 	var result = '';
+		// 	for(var i = 0; i < value.length; ++i) {
+		// 		result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
+		// 	}
+		// 	return result;
+		// }
 
 		function loadHelper(settings, onChange) {
       // example: select elements with id=key and class=value and insert value
@@ -42,9 +42,9 @@
          		$('.value').each(function () {
 					var $key = $(this);
 					var id = $key.attr('id');
-					if (id === 'Password') {
-						settings[id] = decrypt(secret, settings[id]);
-					}
+					// if (id === 'Password') {
+					// 	settings[id] = decrypt(secret, settings[id]);
+					// }
 					if ($key.attr('type') === 'checkbox') {
 					// do not call onChange direct, because onChange could expect some arguments
 						$key.prop('checked', settings[id]).change(function() {
@@ -68,10 +68,10 @@
 		function load(settings, onChange) {
 			// example: select elements with id=key and class=value and insert value
 			if (!settings) return;
-			socket.emit('getObject', 'system.config', function (err, obj) {
-             secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
-             loadHelper(settings, onChange);
-   		});
+			// socket.emit('getObject', 'system.config', function (err, obj) {
+            //  secret = (obj.native ? obj.native.secret : '') || 'Zgfr56gFe87jJOM';
+            //  loadHelper(settings, onChange);
+   			// });
 			onChange(false);
 			// reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
 //			if (M) M.updateTextFields();
@@ -88,13 +88,13 @@
                  obj[id] = $this.prop('checked');
              } else {
                  var value = $this.val();
-                 if (id === 'Password') {
-                     value = encrypt(secret, value);
-                 }
+                 // if (id === 'Password') {
+                 //     value = encrypt(secret, value);
+                 // }
                  obj[id] = value;
              }
          });
-  
+
    callback(obj);
   }
 	</script>
