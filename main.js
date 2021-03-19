@@ -53,8 +53,8 @@ class Discovergy extends utils.Adapter {
 
 			// });
 		} else {
-			this.log.error('*** Adapter deactivated, credentials missing in Adaptper Settings !!!  ***');
-			this.setForeignState('system.this.' + this.namespace + '.alive', false);
+			this.log.error('*** Adapter deactivated, credentials missing in Adapter Settings !!!  ***');
+			this.setForeignState('system.' + this.namespace + '.alive', false);
 		}
 	}
 
@@ -294,6 +294,7 @@ class Discovergy extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
+			this.setState('info.connection', false, true);
 			this.log.info('cleaned everything up...');
 			if (timer) timer = null;
 			callback();
