@@ -37,7 +37,7 @@ class Discovergy extends utils.Adapter {
 
 		// Load user settings
 		settings.Username = this.config.Username;
-		settings.Password = this.config.Password; //ToDo: Change to lib
+		settings.Password = this.config.Password;
 		settings.intervall = (1000 * this.config.intervall);
 
 		await this.setState('info.connection', false, true);
@@ -47,24 +47,14 @@ class Discovergy extends utils.Adapter {
 		//ToDo: Change to lib
 		// Check if credentials are not empty and decrypt stored password
 		if (settings.user !== '' && settings.Password !== '') {
-			this.getForeignObject('system.config', async (err, obj) => {
-				if (obj && obj.native && obj.native.secret) {
-					//noinspection JSUnresolvedVariable
-					settings.Password = await this.decrypt(obj.native.secret, this.config.Password);
-				} else {
-					//noinspection JSUnresolvedVariable
-					settings.Password = await this.decrypt('Zgfr56gFe87jJOM', this.config.Password);
-				}
-				// Adapter is alive, make API call
-				await this.setForeignState('system.this.' + this.namespace + '.alive', false);
 
-				// Make a call to discovergi API and get a list of all meters
-				await this.doDiscovergyCall('meters', '');
+			// Make a call to Discovergy API and get a list of all meters
+			await this.doDiscovergyCall('meters', '');
 
-			});
+			// });
 		} else {
-			this.log.error('*** Adapter deactivated, credentials missing in Adaptper Settings !!!  ***');
-			this.setForeignState('system.this.' + this.namespace + '.alive', false);
+			this.log.error('*** Adapter deactivated, credentials missing in Adapter Settings !!!  ***');
+			this.setForeignState('system.' + this.namespace + '.alive', false);
 		}
 	}
 
@@ -298,22 +288,13 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	// Function to decrypt passwords
-	decrypt(key, value) {
-		let result = '';
-		for (let i = 0; i < value.length; ++i) {
-			result += String.fromCharCode(key[i % key.length].charCodeAt(0) ^ value.charCodeAt(i));
-		}
-		this.log.debug('client_secret decrypt ready');
-		return result;
-	}
-
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 * @param {() => void} callback
 	 */
 	onUnload(callback) {
 		try {
+			this.setState('info.connection', false, true);
 			this.log.info('cleaned everything up...');
 			if (timer) timer = null;
 			callback();
