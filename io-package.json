@@ -191,7 +191,9 @@
         "loglevel": "info",
         "mode": "daemon",
         "type": "energy",
-        "compact": false,
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "compact": true,
         "license": "MIT",
         "materialize": true,
         "plugins": {
