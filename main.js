@@ -13,6 +13,8 @@ const stateAttr = require(__dirname + '/lib/stateAttr.js');
 const settings = { Username: "", Password: "", intervall: 30000 }, warnMessages = {};
 let timer = null;
 
+const disableSentry = false; // Ensure to set to true during development !
+
 class Discovergy extends utils.Adapter {
 
 	/**
@@ -265,7 +267,7 @@ class Discovergy extends utils.Adapter {
 				)
 			)) {
 
-			// console.log(`An attribute has changed : ${state}`);
+			console.log(`An attribute has changed : ${stateName}`);
 
 			await this.extendObjectAsync(stateName, {
 				type: 'state',
@@ -303,13 +305,18 @@ class Discovergy extends utils.Adapter {
 		}
 	}
 
-	async sendSentry(msg) {
-		this.log.info(`[Error catched and send to Sentry, thank you collaborating!] error: ${msg}`);
-		if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
-			const sentryInstance = this.getPluginInstance('sentry');
-			if (sentryInstance) {
-				sentryInstance.getSentryObject().captureException(msg);
+	sendSentry(msg) {
+
+		if (!disableSentry) {
+			if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
+				const sentryInstance = this.getPluginInstance('sentry');
+				if (sentryInstance) {
+					this.log.info(`[Error caught and sent to Sentry, thank you for collaborating!] error: ${msg}`);
+					sentryInstance.getSentryObject().captureException(msg);
+				}
 			}
+		} else {
+			this.log.error(`Sentry disabled, error caught : ${msg}`);
 		}
 	}
 

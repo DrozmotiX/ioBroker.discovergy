@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.5.7",
+        "version": "0.5.8",
         "news": {
+            "0.5.8": {
+                "en": "Minor dependency & configuration updates, stable release candidate",
+                "de": "Kleinere Abhängigkeits- und Konfigurationsupdates, stabiler Release-Kandidat",
+                "ru": "Незначительные обновления зависимостей и конфигурации, стабильный релиз-кандидат",
+                "pt": "Dependência secundária e atualizações de configuração, candidato a lançamento estável",
+                "nl": "Kleine afhankelijkheid en configuratie-updates, stabiele release-kandidaat",
+                "fr": "Mises à jour mineures des dépendances et de la configuration, version candidate stable",
+                "it": "Dipendenze minori e aggiornamenti di configurazione, candidato al rilascio stabile",
+                "es": "Actualizaciones menores de dependencia y configuración, candidata a versión estable",
+                "pl": "Drobne aktualizacje zależności i konfiguracji, stabilny kandydat do wydania",
+                "zh-cn": "次要依赖和配置更新，稳定的候选版本"
+            },
             "0.5.7": {
                 "en": "Change why of password encryption, you my need to re-enter your credentials !\nBugfix : State \"system.this.discovergy.0.alive\" has no existing object, this might lead to an error in future versions",
                 "de": "Ändern Sie, warum der Passwortverschlüsselung, müssen Sie Ihre Anmeldeinformationen erneut eingeben!\nBugfix: Der Status \"system.this.discovergy.0.alive\" hat kein vorhandenes Objekt. Dies kann in zukünftigen Versionen zu einem Fehler führen",
