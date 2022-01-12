@@ -155,6 +155,10 @@ class Discovergy extends utils.Adapter {
 
 					for (const attributes in data) {
 
+						if (data.time){
+							await this.doStateCreate(stateName + '.timestamp', 'Timestamp of last value update', data.time);
+						}
+
 						for (const values in data[attributes]) {
 
 							if (stateAttr[values] === undefined) {
@@ -167,9 +171,9 @@ class Discovergy extends utils.Adapter {
 										case 'power':
 											if (data[attributes][values] > 0) {
 												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
-												this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', 0);
+												await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', 0);
 											} else {
-												this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
+												await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
 												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', 0);
 											}
 
