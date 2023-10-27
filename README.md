@@ -37,12 +37,9 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### 0.5.10 (2023-10-27) - Bugfixes
+### __WORK IN PROGRESS__ - Bugfixes
 * (DutchmanNL) Error handling improved in cases data processing fails
-* (DutchmanNL) Git issues #200 #219 #220 #229 #235 #237 #238 #506 #507 solved
-
-### 0.5.9-0 (2021-08-17) Beta version 
-* (DutchmanNL) Timestamp of last value update added
+* (DutchmanNL) Fixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507
 
 ### 0.5.8 (2021-08-17)
 * (DutchmanNL) Minor dependency & configuration updates, stable release candidate
