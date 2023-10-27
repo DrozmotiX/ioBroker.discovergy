@@ -11,6 +11,7 @@ const utils = require('@iobroker/adapter-core');
 const request = require('request-promise-native');
 const stateAttr = require(__dirname + '/lib/stateAttr.js');
 const settings = { Username: "", Password: "", intervall: 30000 }, warnMessages = {};
+let isConnected = false;
 let timer = null;
 
 const disableSentry = false; // Ensure to set to true during development !
@@ -42,7 +43,8 @@ class Discovergy extends utils.Adapter {
 		settings.Password = this.config.Password;
 		settings.intervall = (1000 * this.config.intervall);
 
-		await this.setState('info.connection', false, true);
+		this.setState('info.connection', false, true);
+		isConnected = false
 
 		this.log.info('Discovergy Adapter startet, trying to discover meters associated with your account');
 
@@ -72,6 +74,7 @@ class Discovergy extends utils.Adapter {
 
 					// We got a response API is
 					await this.setState('info.connection', true, true);
+					isConnected = true;
 
 					// Retrieve all meter objects from Discovergy API
 					/** @type {Record<string, any>[]} */
@@ -150,8 +153,8 @@ class Discovergy extends utils.Adapter {
 				if (!error && response.statusCode === 200) {
 					// we got a response
 
-					const result = body;
-					const data = JSON.parse(result);
+					this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`)
+					const data = JSON.parse(body);
 
 					for (const attributes in data) {
 
@@ -222,12 +225,19 @@ class Discovergy extends utils.Adapter {
 						}
 					}
 
+					this.setState('info.connection', true, true);
+					isConnected = true
+
 				} else { // error or non-200 status code
-					this.log.error('Error retrieving information for : ' + meterId);
+					this.log.error('[doDiscovergyMeter] Error retrieving information for : ' + meterId);
+					this.setState('info.connection', false, true);
+					isConnected = false
 				}
 			});
 		} catch (error) {
-			console.error(error);
+			this.log.error(`[doDiscovergyMeter] ${error}`);
+			this.setState('info.connection', false, true);
+			isConnected = false
 		}
 	}
 
