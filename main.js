@@ -151,78 +151,87 @@ class Discovergy extends utils.Adapter {
 			await request(requestUrl, async (error, response, body) => {
 
 				if (!error && response.statusCode === 200) {
+
 					// we got a response
 
-					this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`)
-					const data = JSON.parse(body);
+					try {
+						
+						this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`)
+						const data = JSON.parse(body);
 
-					for (const attributes in data) {
+						for (const attributes in data) {
 
-						if (data.time){
-							await this.doStateCreate(stateName + '.timestamp', 'Timestamp of last value update', data.time);
-						}
+							if (data.time){
+								await this.doStateCreate(stateName + '.timestamp', 'Timestamp of last value update', data.time);
+							}
 
-						for (const values in data[attributes]) {
+							for (const values in data[attributes]) {
 
-							if (stateAttr[values] === undefined) {
-								this.log.error(`State type : ${values} unknown, send this information to the developer ==> ${values} : ${JSON.stringify(data[attributes][values])}`);
-							} else {
+								if (stateAttr[values] === undefined) {
+									this.log.error(`State type : ${values} unknown, send this information to the developer ==> ${values} : ${JSON.stringify(data[attributes][values])}`);
+								} else {
 
-								if (stateAttr[values].type !== undefined) {
+									if (stateAttr[values].type !== undefined) {
 
-									switch (values) {
-										case 'power':
-											if (data[attributes][values] > 0) {
-												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
-												await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', 0);
-											} else {
-												await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', 0);
-											}
+										switch (values) {
+											case 'power':
+												if (data[attributes][values] > 0) {
+													await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', data[attributes][values]);
+													await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', 0);
+												} else {
+													await this.doStateCreate(stateName + '.Power_Delivery', 'Power_Delivery', Math.abs(data[attributes][values]));
+													await this.doStateCreate(stateName + '.Power_Consumption', 'Power_Consumption', 0);
+												}
 
-											break;
+												break;
 
-										case 'power1':
-											if (data[attributes][values] > 0) {
-												await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', data[attributes][values]);
-												await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', 0);
-											} else {
-												await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', 0);
-											}
+											case 'power1':
+												if (data[attributes][values] > 0) {
+													await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', data[attributes][values]);
+													await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', 0);
+												} else {
+													await this.doStateCreate(stateName + '.Power_T1_Delivery', 'Power_T1_Delivery', Math.abs(data[attributes][values]));
+													await this.doStateCreate(stateName + '.Power_T1_Consumption', 'Power_T1_Consumption', 0);
+												}
 
-											break;
+												break;
 
-										case 'power2':
-											if (data[attributes][values] > 0) {
-												await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', data[attributes][values]);
-												await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', 0);
-											} else {
-												await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', 0);
-											}
+											case 'power2':
+												if (data[attributes][values] > 0) {
+													await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', data[attributes][values]);
+													await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', 0);
+												} else {
+													await this.doStateCreate(stateName + '.Power_T2_Delivery', 'Power_T2_Delivery', Math.abs(data[attributes][values]));
+													await this.doStateCreate(stateName + '.Power_T2_Consumption', 'Power_T2_Consumption', 0);
+												}
 
-											break;
+												break;
 
-										case 'power3':
-											if (data[attributes][values] > 0) {
-												await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', data[attributes][values]);
-												await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', 0);
-											} else {
-												await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', Math.abs(data[attributes][values]));
-												await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', 0);
-											}
+											case 'power3':
+												if (data[attributes][values] > 0) {
+													await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', data[attributes][values]);
+													await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', 0);
+												} else {
+													await this.doStateCreate(stateName + '.Power_T3_Delivery', 'Power_T3_Delivery', Math.abs(data[attributes][values]));
+													await this.doStateCreate(stateName + '.Power_T3_Consumption', 'Power_T3_Consumption', 0);
+												}
 
-											break;
+												break;
 
-										default:
+											default:
 
-											await this.doStateCreate(stateName + '.' + values, values, data[attributes][values]);
+												await this.doStateCreate(stateName + '.' + values, values, data[attributes][values]);
 
+										}
 									}
 								}
 							}
 						}
+
+					} catch (e) {
+						this.log.error('[doDiscovergyMeter Response] Error retrieving information for : ' + meterId);
+						this.setState('info.connection', false, true);
+						isConnected = false
 					}
 
 					this.setState('info.connection', true, true);
