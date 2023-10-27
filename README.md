@@ -37,7 +37,7 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### 0.5.9 (2023-10-27) - Bugfixes #237 & #238
+### __WORK IN PROGRESS__ - Bugfixes
 * (DutchmanNL) Error handling improved in cases data processing fails
 * (DutchmanNL) Git issues #200 #219 #220 #229 #235 #237 #238 #506 #507 solved
 
