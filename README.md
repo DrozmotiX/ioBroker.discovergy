@@ -37,8 +37,7 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-
-### __WORK IN PROGRESS__ - Bugfixes #237 & #238
+### 0.5.9 (2023-10-27) - Bugfixes #237 & #238
 * (DutchmanNL) Error handling improved in cases data processing fails
 * (DutchmanNL) Git issues #200 #219 #220 #229 #235 #237 #238 #506 #507 solved
 
@@ -133,7 +132,6 @@ If you like my work, please feel free to provide a personal donation
 * (DutchmanNL) Please remove all current objects within tree discoververgy.x, version 0.2.5 introduce device creation by serial number !
 * (DutchmanNL) Changed object tree of device from meterId to sererialnumber, please not this means all vallue are now in a different tree
 * (DutchmanNL) Remark : not all possbile devices are in the demo, if a device cannot be handled you will get an error message i need that information to implement !
-
 
 ### 0.2.2
 * (DutchmanNL) add support for values power1, power2
