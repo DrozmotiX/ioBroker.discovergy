@@ -38,6 +38,10 @@ If you like my work, please feel free to provide a personal donation
     ### __WORK IN PROGRESS__
 -->
 
+### __WORK IN PROGRESS__ - Bugfixes #237 & #238
+* (DutchmanNL) Error handling improved in cases data processing fails
+* (DutchmanNL) Git issues #200 #219 #220 #229 #235 #237 #238 #506 #507 solved
+
 ### 0.5.9-0 (2021-08-17) Beta version 
 * (DutchmanNL) Timestamp of last value update added
 
