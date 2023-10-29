@@ -37,6 +37,10 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* (DutchmanNL) Ignore meters not providing any data (like removed devices) #215
+
 ### 0.5.11 (2023-10-27) - Bugfixes
 * (DutchmanNL) Error handling improved in cases data processing fails
 * (DutchmanNL) Fixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507

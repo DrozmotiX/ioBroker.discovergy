@@ -85,27 +85,32 @@ class Discovergy extends utils.Adapter {
 
 					for (const meters of Object.keys(objArray)) {
 
-						// Create device and info channel
-						this.log.debug(JSON.stringify(objArray[meters]));
-						await this.createDevice(objArray[meters]['serialNumber']);
-						await this.createChannel(objArray[meters]['serialNumber'], 'info');
+						// Identify is meter is active and data should be retrieved
+						if (objArray[meters].firstMeasurementTime != -1) {
 
-						// Create info channel for alle meter devices
-						for (const infoState in objArray[meters]) {
+							// Create device and info channel
+							this.log.debug(JSON.stringify(objArray[meters]));
+							await this.createDevice(objArray[meters]['serialNumber']);
+							await this.createChannel(objArray[meters]['serialNumber'], 'info');
 
-							if (!stateAttr[infoState]) {
-								this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
-							} else {
-								await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
+							// Create info channel for alle meter devices
+							for (const infoState in objArray[meters]) {
+
+								if (!stateAttr[infoState]) {
+									this.log.error('State type : ' + infoState + ' unknown, send this information to the developer ==> ' + infoState + ' : ' + JSON.stringify(objArray[meters][infoState]));
+								} else {
+									await this.doStateCreate(objArray[meters]['serialNumber'] + '.info.' + infoState, infoState, objArray[meters][infoState]);
+								}
 							}
+
+							// Exclude RLM meters, no values to receive
+							if (objArray[meters]['type'] !== 'RLM') {
+
+								this.allMeters[objArray[meters]['meterId']] = objArray[meters];
+							}
+						} else {
+							this.log.debug(`Inactive meter detected, ignoring ${objArray[meters]['serialNumber']} | ${objArray[meters]['meterId']}`)
 						}
-
-						// Exclude RLM meters, no values to receive
-						if (objArray[meters]['type'] !== 'RLM') {
-
-							this.allMeters[objArray[meters]['meterId']] = objArray[meters];
-						}
-
 					}
 
 					this.log.info('All meters associated to your account discovered, initialise meters');
@@ -162,7 +167,7 @@ class Discovergy extends utils.Adapter {
 						for (const attributes in data) {
 
 							if (data.time){
-								await this.doStateCreate(stateName + '.timestamp', 'Timestamp of last value update', data.time);
+								await this.doStateCreate(stateName + '.timestamp', 'timestamp', data.time);
 							}
 
 							for (const values in data[attributes]) {
