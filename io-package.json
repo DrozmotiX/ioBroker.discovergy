@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "discovergy",
-    "version": "0.5.11",
+    "version": "0.5.12",
     "news": {
+      "0.5.12": {
+        "en": "Ignore meters not providing any data (like removed devices) #215",
+        "de": "Ignorieren von Zählern die keine Daten liefern (zb entfernte Geräte) #215",
+        "ru": "Игнорировать счетчики, не предоставляя никаких данных (например, удаленные устройства) #215",
+        "pt": "Ignorar medidores não fornecendo dados (como dispositivos removidos) #215",
+        "nl": "Negeer meters die geen gegevens geven",
+        "fr": "Ignore les compteurs ne fournissant aucune donnée (comme les périphériques supprimés) #215",
+        "it": "Ignora i contatori non fornendo dati (come dispositivi rimossi) #215",
+        "es": "Ignorar medidores no proporcionando ningún dato (como dispositivos eliminados) #215",
+        "pl": "Ignore m nie dostarczając żadnych danych (np. usuniętych urządzeń)",
+        "uk": "Ignore лічильники не забезпечують ніяких даних (наприклад, видалених пристроїв) #215",
+        "zh-cn": "Ignore满足者没有提供任何数据(例如拆除装置)"
+      },
       "0.5.11": {
         "en": "Error handling improved in cases data processing fails\nFixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
         "de": "Fehlerbehandlung verbessert in Fällen, in denen die Datenverarbeitung ausfällt\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
@@ -75,18 +88,6 @@
         "es": "Optimizaciones",
         "pl": "Optymalizacje",
         "zh-cn": "最佳化"
-      },
-      "0.5.1": {
-        "en": "Avoid writing objects unnecessarily",
-        "de": "Vermeiden Sie unnötiges Schreiben von Objekten",
-        "ru": "Избегайте писать объекты без необходимости",
-        "pt": "Evite escrever objetos desnecessariamente",
-        "nl": "Vermijd onnodig schrijven van objecten",
-        "fr": "Évitez d'écrire des objets inutilement",
-        "it": "Evita di scrivere oggetti inutilmente",
-        "es": "Evite escribir objetos innecesariamente",
-        "pl": "Unikaj niepotrzebnego pisania przedmiotów",
-        "zh-cn": "避免不必要地写对象"
       }
     },
     "title": "Discovergy",
