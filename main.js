@@ -65,10 +65,15 @@ class Discovergy extends utils.Adapter {
 	// Get all meters connected to Discovergy account
 	async doDiscovergyCall(endpoint, urlencoded_parameters) {
 
-		const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
+		const requestUrl = `https://api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
 
 		try {
-			await request(requestUrl, async (error, response, body) => {
+			await request({
+				url: requestUrl,
+				headers: {
+					"Authorization" : 'Basic ' + new Buffer(`${settings.Username}:${settings.Password}`).toString('base64')
+				}
+			}, async (error, response, body) => {
 
 				if (!error && response.statusCode === 200) {
 
@@ -152,8 +157,13 @@ class Discovergy extends utils.Adapter {
 	async doDiscovergyMeter(endpoint, urlencoded_parameters, meterId) {
 		try {
 			const stateName = this.allMeters[meterId].serialNumber;
-			const requestUrl = `https://${settings.Username}:${settings.Password}@api.discovergy.com/public/v1/${endpoint}?meterId=${meterId}`;
-			await request(requestUrl, async (error, response, body) => {
+			const requestUrl = `https://api.discovergy.com/public/v1/${endpoint}?meterId=${meterId}`;
+			await request({
+				url: requestUrl,
+				headers: {
+					"Authorization" : 'Basic ' + new Buffer(`${settings.Username}:${settings.Password}`).toString('base64')
+				}
+			}, async (error, response, body) => {
 
 				if (!error && response.statusCode === 200) {
 
