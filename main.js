@@ -155,7 +155,7 @@ class Discovergy extends utils.Adapter {
 					// we got a response
 
 					try {
-						
+
 						this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`)
 						const data = JSON.parse(body);
 
@@ -259,7 +259,7 @@ class Discovergy extends utils.Adapter {
 		// Try to get details from state lib, if not use defaults. throw warning if states is not known in attribute list
 		const common = {};
 		if (!stateAttr[name]) {
-			const warnMessage = `State attribute definition missing for + ${name}`;
+			const warnMessage = `State attribute definition missing for ${name}`;
 			if (warnMessages[name] !== warnMessage) {
 				warnMessages[name] = warnMessage;
 				console.warn(warnMessage);
