@@ -144,6 +144,9 @@
                 "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
             }
         },
+        "adminUI": {
+            "config": "json"
+        },
         "dependencies": [
             {
                 "js-controller": ">=3.3.22"
