@@ -1,0 +1,25 @@
+{
+	"i18n": true,
+	"type": "panel",
+	"items": {
+		"Username": {
+			"type": "text",
+			"label": "Your Discovergy Username",
+			"newLine": true
+		},
+		"Password": {
+			"type": "password",
+			"label": "Password",
+			"newLine": true,
+			"sm": 3
+		},
+		"intervall": {
+			"type": "number",
+			"label": "Seconds between data polling",
+			"sm": 1,
+			"default": 30,
+			"min" : 1,
+			"max": 1800
+		}
+	}
+}
