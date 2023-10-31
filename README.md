@@ -6,14 +6,14 @@
 
 # ioBroker.discovergy
 
-This is an ioBroker adapter for your Discovergy Power meassurement meter.
-It uses the Discovergy API to read data of your meters and syncronise it's current values to ioBroker.
+This is an ioBroker adapter for your Discovergy Power measurement meter.
+It uses the Discovergy API to read data of your meters and synchronise it's current values to ioBroker.
 
 https://api.discovergy.com/docs/
 
-Please feel free to add issue for your wanted funktionality or problems you see so i can take a look at it !
+Please feel free to add issue for your wanted functionality or problems you see so i can take a look at it !
 
-Remark : I dont have all possbile devices and also the demo-account does not provide all existing values devices can provide.
+Remark : I don't have all possible devices and also the demo-account does not provide all existing values devices can provide.
 If you receive the following error :
 
 				Information received from Discovergy which is not yet part of this adapter"
@@ -37,8 +37,12 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* (sbeh) Support more characters in login credentials fixes #117, #227
+
 ### 0.5.12 (2023-10-29)
-* (DutchmanNL) Ignore meters not providing any data (like removed devices) #215
+* (DutchmanNL) Ignore meters not providing any data (like removed devices) fixes #84
 
 ### 0.5.11 (2023-10-27) - Bugfixes
 * (DutchmanNL) Error handling improved in cases data processing fails
@@ -74,7 +78,7 @@ If you like my work, please feel free to provide a personal donation
 * (DutchmanNL) Rebuild complete logic of data pulling
 * (DutchmanNL) Rewrite adapter to class and support JS-Controller 2.0 with compact mode
 * (DutchmanNL) For new Devices : Write error for unknwon states but create device with basic information
-* (DutchmanNL) Variable JSON-Array scan for attributes, if Discovergy adds new devices they will be visible immidiatly
+* (DutchmanNL) Variable JSON-Array scan for attributes, if Discovergy adds new devices they will be visible immediately
 
 ### 0.4.9 Fix wrong readings and make intervall adjustable
 * (Dutchman) code cleanup
@@ -85,14 +89,14 @@ If you like my work, please feel free to provide a personal donation
 * (Dutchman) implement adjustable timing intervall
 * (Dutchman) Ensure propper reset to 0 of power values
 
-### 0.4.4 ALPHA version of rebuilded adapter
-* (Dutchman) Rebuild complete logic of data pullin
+### 0.4.4 ALPHA version of rebuild adapter
+* (Dutchman) Rebuild complete logic of data polling
 * (Dutchman) make state attributes configurable in library
 * (Dutchman) ensure split values for consumption and delivery
 * (Dutchman) implement data pulling (needs improvement to avoid block by provider)
 * (Dutchman) Rewrite adapter to class and support JS-Controller 2.0 with compact mode
-* (Dutchman) For new Devices : Write error for unknwon states but create device with basic information
-* (Dutchman) Variable JSON-Array scan for attributes, if Discovergy adds new devices they will be visible immidiatly
+* (Dutchman) For new Devices : Write error for unknown states but create device with basic information
+* (Dutchman) Variable JSON-Array scan for attributes, if Discovergy adds new devices they will be visible immediately
 
 ### 0.4.0 Stable Release
 * small code fixes
