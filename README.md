@@ -37,6 +37,10 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+
+### __WORK IN PROGRESS__
+* (DutchmanNL) Migrate admin settings to JSON config. Fixes #211
+
 ### 0.5.13 (2023-10-31)
 * (sbeh) Support more characters in login credentials fixes #117, #227
 

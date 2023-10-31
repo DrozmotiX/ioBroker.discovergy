@@ -5,7 +5,8 @@
 		"Username": {
 			"type": "text",
 			"label": "Your Discovergy Username",
-			"newLine": true
+			"newLine": true,
+			"sm": 3
 		},
 		"Password": {
 			"type": "password",
@@ -16,7 +17,8 @@
 		"intervall": {
 			"type": "number",
 			"label": "Seconds between data polling",
-			"sm": 1,
+			"newLine": true,
+			"sm": 3,
 			"default": 30,
 			"min" : 1,
 			"max": 1800
