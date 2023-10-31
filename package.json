@@ -1,6 +1,6 @@
 {
   "name": "iobroker.discovergy",
-  "version": "0.5.12",
+  "version": "0.5.13",
   "description": "Receive all data of Discovery API into ioBroker to have your daily, weekly etc power consumption and delivery monitored",
   "author": {
     "name": "DutchmanNL",

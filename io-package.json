@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "discovergy",
-    "version": "0.5.12",
+    "version": "0.5.13",
     "news": {
+      "0.5.13": {
+        "en": "Support more characters in login credentials fixes #117, #227",
+        "de": "Support mehr Zeichen in Anmeldeinformationen fixes #117, #227",
+        "ru": "Поддержите больше символов в логинах исправлений #117, #227",
+        "pt": "Suporte mais caracteres em credenciais de login corrige #117, #227",
+        "nl": "Steun meer personages in login referenties",
+        "fr": "Supporter plus de caractères dans les corrections de login #117, #227",
+        "it": "Supporta più caratteri nelle credenziali di accesso correzioni #117, #227",
+        "es": "Soporta más caracteres en las credenciales de inicio de sesión fija #117, #227",
+        "pl": "Większa liczba bohaterów w grze loginów wynosi #117, #227",
+        "uk": "Підтримка більше символів в облікових записах #117, #227",
+        "zh-cn": "第117号、第227号"
+      },
       "0.5.12": {
         "en": "Ignore meters not providing any data (like removed devices) #215",
         "de": "Ignorieren von Zählern die keine Daten liefern (zb entfernte Geräte) #215",
@@ -76,18 +89,6 @@
         "es": "Corrección de error: voltaje desconocido",
         "pl": "Poprawka: nieznane napięcie",
         "zh-cn": "错误修正：电压未知"
-      },
-      "0.5.4": {
-        "en": "Optimisations",
-        "de": "Optimierungen",
-        "ru": "Оптимизации",
-        "pt": "Otimizações",
-        "nl": "Optimalisaties",
-        "fr": "Optimisations",
-        "it": "ottimizzazioni",
-        "es": "Optimizaciones",
-        "pl": "Optymalizacje",
-        "zh-cn": "最佳化"
       }
     },
     "title": "Discovergy",
