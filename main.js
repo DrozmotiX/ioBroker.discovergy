@@ -65,7 +65,7 @@ class Discovergy extends utils.Adapter {
 	// Get all meters connected to Discovergy account
 	async doDiscovergyCall(endpoint, urlencoded_parameters) {
 
-		const requestUrl = `https://api.discovergy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
+		const requestUrl = `https://api.inexogy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
 
 		try {
 			await request({
@@ -157,7 +157,7 @@ class Discovergy extends utils.Adapter {
 	async doDiscovergyMeter(endpoint, urlencoded_parameters, meterId) {
 		try {
 			const stateName = this.allMeters[meterId].serialNumber;
-			const requestUrl = `https://api.discovergy.com/public/v1/${endpoint}?meterId=${meterId}`;
+			const requestUrl = `https://api.inexogy.com/public/v1/${endpoint}?meterId=${meterId}`;
 			await request({
 				url: requestUrl,
 				headers: {
