@@ -1,4 +1,8 @@
 # Older changes
+## 0.5.7 (2021-03-19)
+* (DutchmanNL) Change why of password encryption, you my need to re-enter your credentials !
+* (DutchmanNL) Bugfix : State "system.this.discovergy.0.alive" has no existing object, this might lead to an error in future versions
+
 ## 0.5.6 (2021-03-18)
 * (DutchmanNL) Bugfix : Voltage unknown
 
