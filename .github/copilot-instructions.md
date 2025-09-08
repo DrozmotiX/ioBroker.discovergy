@@ -64,7 +64,7 @@ Always reference these instructions first and fallback to search or bash command
 - Always check `lib/stateAttr.js` after adding new meter reading types
 
 ## Technology Stack
-- **Runtime**: Node.js (supports 18.x, 20.x, 22.x)
+- **Runtime**: Node.js (supports 20.x, 22.x)
 - **Language**: JavaScript (ES2015+ with some TypeScript definitions)
 - **Framework**: ioBroker adapter-core v3.0.4
 - **HTTP Client**: request-promise-native (deprecated but functional)
@@ -127,4 +127,4 @@ Always reference these instructions first and fallback to search or bash command
 3. Run `npm run test:package` to validate package structure  
 4. Run `npm run test:integration` to test adapter startup (45 seconds)
 5. Test functionality with demo credentials if API changes made
-6. Commit changes (CI will run full test matrix on Node 18.x/20.x/22.x across Ubuntu/Windows/macOS)
+6. Commit changes (CI will run full test matrix on Node 20.x/22.x across Ubuntu/Windows/macOS)
