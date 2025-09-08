@@ -6,31 +6,31 @@
 			"type": "text",
 			"label": "Your Discovergy Username",
 			"newLine": true,
-			"sm": 3,
+			"sm": 12,
 			"xs": 12,
 			"md": 6,
 			"lg": 4,
-			"xl": 3
+			"xl": 4
 		},
 		"Password": {
 			"type": "password",
 			"label": "Password",
 			"newLine": true,
-			"sm": 3,
+			"sm": 12,
 			"xs": 12,
 			"md": 6,
 			"lg": 4,
-			"xl": 3
+			"xl": 4
 		},
 		"intervall": {
 			"type": "number",
 			"label": "Seconds between data polling",
 			"newLine": true,
-			"sm": 3,
+			"sm": 12,
 			"xs": 12,
 			"md": 6,
 			"lg": 4,
-			"xl": 3,
+			"xl": 4,
 			"default": 30,
 			"min" : 1,
 			"max": 1800
