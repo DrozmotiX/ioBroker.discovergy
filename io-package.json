@@ -92,7 +92,6 @@
                 "zh-cn": "错误修正：电压未知"
             }
         },
-        "title": "Discovergy",
         "titleLang": {
             "en": "Discovergy",
             "de": "Discovergy",
@@ -103,6 +102,7 @@
             "it": "Discovergy",
             "es": "Discovergy",
             "pl": "Discovergy",
+            "uk": "Discovergy",
             "zh-cn": "发现"
         },
         "desc": {
@@ -115,6 +115,7 @@
             "it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
             "es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
             "pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker",
+            "uk": "Цей адаптер дозволяє користувачам Discovergy синхронізувати всі свої вимірювання з ioBroker",
             "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker"
         },
         "authors": [
@@ -122,12 +123,12 @@
         ],
         "keywords": [
             "ioBroker",
-            "template",
-            "Smart Home",
-            "home automation"
+            "energy",
+            "meter",
+            "consumption",
+            "messurement"
         ],
         "platform": "Javascript/Node.js",
-        "main": "main.js",
         "icon": "discovergy.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/DrozmotiX/ioBroker.discovergy/master/admin/discovergy.png",
@@ -135,11 +136,14 @@
         "loglevel": "info",
         "mode": "daemon",
         "type": "energy",
+        "tier": 2,
         "connectionType": "cloud",
         "dataSource": "poll",
         "compact": true,
-        "license": "MIT",
-        "materialize": true,
+        "licenseInformation": {
+            "license": "MIT",
+            "type": "free"
+        },
         "plugins": {
             "sentry": {
                 "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
@@ -150,16 +154,19 @@
         },
         "dependencies": [
             {
-                "js-controller": ">=3.3.22"
+                "js-controller": ">=6.0.11"
             }
         ],
         "globalDependencies": [
             {
-                "admin": ">=5.1.13"
+                "admin": ">=7.6.17"
             }
         ]
     },
     "encryptedNative": [
+        "Password"
+    ],
+    "protectedNative": [
         "Password"
     ],
     "native": {
