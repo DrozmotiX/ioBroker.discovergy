@@ -11,6 +11,7 @@ const request = require('request-promise-native');
 const stateAttr = require(`${__dirname}/lib/stateAttr.js`);
 const settings = { Username: '', Password: '', intervall: 30000 },
     warnMessages = {};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let isConnected = false;
 let timer = null;
 
@@ -21,7 +22,7 @@ class Discovergy extends utils.Adapter {
      * @param {Partial<ioBroker.AdapterOptions>} [options]
      */
     constructor(options) {
-        // @ts-ignore
+        // @ts-expect-error - Parent property exists but not typed in adapter options
         super({
             ...options,
             name: 'discovergy',
@@ -134,8 +135,8 @@ class Discovergy extends utils.Adapter {
                     }
                 },
             );
-        } catch (e) {
-            this.log.error(`[doDiscovergyCall] ${e}`);
+        } catch (_e) {
+            this.log.error(`[doDiscovergyCall] ${_e}`);
         }
     }
 
@@ -306,7 +307,7 @@ class Discovergy extends utils.Adapter {
                                     }
                                 }
                             }
-                        } catch (e) {
+                        } catch {
                             this.log.error(
                                 `[doDiscovergyMeter Response] Error retrieving information for : ${meterId}`,
                             );
@@ -406,7 +407,7 @@ class Discovergy extends utils.Adapter {
                 timer = null;
             }
             callback();
-        } catch (e) {
+        } catch {
             callback();
         }
     }
@@ -426,7 +427,7 @@ class Discovergy extends utils.Adapter {
     }
 }
 
-// @ts-ignore parent is a valid property on module
+// @ts-expect-error parent is a valid property on module
 if (module.parent) {
     // Export the constructor in compact mode
     /**
