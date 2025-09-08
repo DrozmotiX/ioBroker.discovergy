@@ -3,19 +3,6 @@
     "name": "discovergy",
     "version": "0.6.0",
     "news": {
-      "0.6.0": {
-        "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
-        "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
-        "ru": "Bugfix: API сменится на Inexogy. Fixes #249\nПереместить настройки администратора на конфигурацию JSON. #211",
-        "pt": "Bugfix: Mudança de API para Inexogy. Correções #249\nMigrar configurações de administrador para JSON config. Correções #211",
-        "nl": "Bugfix: API-wijziging naar Inexogy. Fixes #249\nAdmin instellingen migreren naar JSON configuratie. Fixes #211",
-        "fr": "Bugfix : l'API change pour Inexogy. Corrections #249\nMigrer les paramètres d'administration en configuration JSON. Corrections #211",
-        "it": "Bugfix: API change to Inexogy. Correzioni #249\nMigrare le impostazioni di amministrazione a JSON config. Correzioni #211",
-        "es": "Bugfix: cambio de API a Inexogy. Arreglos #249\nMigrar los ajustes de administración a JSON config. Arreglos #211",
-        "pl": "Bugfix: API zmienić na Inexogy. Fixes # 249\nMigracja ustawień admin do konfiguracji JSON. Fixes # 211",
-        "uk": "Помилки: Зміна API в невибагливий. Виправлення #249\nMigrate настройки адміністратора в налаштування JSON. Виправлення #211",
-        "zh-cn": "Bugfix:API变更为Inexogy. 修理249号\n将管理员设置迁移到 JSON 配置 。 211号"
-      },
       "0.5.13": {
         "en": "Support more characters in login credentials fixes #117, #227",
         "de": "Support mehr Zeichen in Anmeldeinformationen fixes #117, #227",
@@ -92,7 +79,6 @@
         "zh-cn": "错误修正：电压未知"
       }
     },
-    "title": "Discovergy",
     "titleLang": {
       "en": "Discovergy",
       "de": "Discovergy",
@@ -103,7 +89,8 @@
       "it": "Discovergy",
       "es": "Discovergy",
       "pl": "Discovergy",
-      "zh-cn": "发现"
+      "zh-cn": "发现",
+      "uk": "Discovergy"
     },
     "desc": {
       "en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
@@ -115,7 +102,8 @@
       "it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
       "es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
       "pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker",
-      "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker"
+      "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker",
+      "uk": "Цей адаптер дозволяє користувачам Discovergy синхронізувати всі свої вимірювання з ioBroker"
     },
     "authors": [
       "DutchmanNL <rdrozda86@gmail.com>"
@@ -127,7 +115,6 @@
       "home automation"
     ],
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "discovergy.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/DrozmotiX/ioBroker.discovergy/master/admin/discovergy.png",
@@ -138,8 +125,10 @@
     "connectionType": "cloud",
     "dataSource": "poll",
     "compact": true,
-    "license": "MIT",
-    "materialize": true,
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
     "plugins": {
       "sentry": {
         "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
@@ -150,16 +139,20 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=3.3.22"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=5.1.13"
+        "admin": ">=7.6.17"
       }
-    ]
+    ],
+    "tier": 2
   },
   "encryptedNative": [
+    "Password"
+  ],
+  "protectedNative": [
     "Password"
   ],
   "native": {
