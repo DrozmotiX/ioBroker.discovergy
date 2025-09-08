@@ -1,0 +1,8 @@
+{
+    "Password": "Пароль",
+    "Username": "Ім'я користувача",
+    "Your Discovergy Username": "Ваше ім'я користувача Discovergy",
+    "discovergy adapter settings": "Налаштування адаптера discovergy",
+    "intervall": "Інтервал оновлення в секундах",
+    "Seconds between data polling": "Секунди між опитуванням даних"
+}

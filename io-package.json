@@ -52,7 +52,8 @@
         "it": "Dipendenze minori e aggiornamenti di configurazione, candidato al rilascio stabile",
         "es": "Actualizaciones menores de dependencia y configuración, candidata a versión estable",
         "pl": "Drobne aktualizacje zależności i konfiguracji, stabilny kandydat do wydania",
-        "zh-cn": "次要依赖和配置更新，稳定的候选版本"
+        "zh-cn": "次要依赖和配置更新，稳定的候选版本",
+        "uk": "Невеликі оновлення залежностей та конфігурації, стабільний кандидат на випуск"
       },
       "0.5.7": {
         "en": "Change why of password encryption, you my need to re-enter your credentials !\nBugfix : State \"system.this.discovergy.0.alive\" has no existing object, this might lead to an error in future versions",
@@ -76,7 +77,8 @@
         "it": "Bugfix: voltaggio sconosciuto",
         "es": "Corrección de error: voltaje desconocido",
         "pl": "Poprawka: nieznane napięcie",
-        "zh-cn": "错误修正：电压未知"
+        "zh-cn": "错误修正：电压未知",
+        "uk": "Виправлення помилки: напруга невідома"
       }
     },
     "titleLang": {
@@ -109,10 +111,11 @@
       "DutchmanNL <rdrozda86@gmail.com>"
     ],
     "keywords": [
-      "ioBroker",
-      "template",
-      "Smart Home",
-      "home automation"
+      "discovergy",
+      "energy",
+      "meter",
+      "smart meter",
+      "electricity"
     ],
     "platform": "Javascript/Node.js",
     "icon": "discovergy.png",
