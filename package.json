@@ -35,7 +35,7 @@
     "@iobroker/eslint-config": "^2.1.0",
     "@iobroker/testing": "^5.1.1",
     "@types/gulp": "^4.0.9",
-    "@types/node": "^14.17.9",
+    "@types/node": "^24.3.1",
     "gulp": "^4.0.2"
   },
   "main": "main.js",
