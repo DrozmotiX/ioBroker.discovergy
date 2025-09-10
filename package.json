@@ -36,7 +36,7 @@
     "@iobroker/testing": "^5.1.1",
     "@types/gulp": "^4.0.9",
     "@types/node": "^24.3.1",
-    "gulp": "^4.0.2"
+    "gulp": "^5.0.1"
   },
   "main": "main.js",
   "scripts": {
