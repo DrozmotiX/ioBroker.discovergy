@@ -24,8 +24,9 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.3.2",
+    "axios": "^1.12.1",
     "request": "^2.88.2",
-    "request-promise-native": "^1.0.8"
+    "request-promise-native": "^1.0.9"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.8.0",
@@ -52,5 +53,13 @@
   "bugs": {
     "url": "https://github.com/DrozmotiX/ioBroker.discovergy/issues"
   },
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "files": [
+    "admin/",
+    "lib/",
+    "main.js",
+    "io-package.json",
+    "README.md",
+    "LICENSE"
+  ]
 }
