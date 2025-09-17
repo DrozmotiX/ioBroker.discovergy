@@ -7,7 +7,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-const request = require('request-promise-native');
+// Native fetch is available in Node.js 18+
 const stateAttr = require(`${__dirname}/lib/stateAttr.js`);
 const settings = { Username: '', Password: '', intervall: 30000 },
     warnMessages = {};
@@ -65,76 +65,71 @@ class Discovergy extends utils.Adapter {
         const requestUrl = `https://api.inexogy.com/public/v1/${endpoint}?${urlencoded_parameters}`;
 
         try {
-            await request(
-                {
-                    url: requestUrl,
-                    headers: {
-                        Authorization: `Basic ${new Buffer(`${settings.Username}:${settings.Password}`).toString('base64')}`,
-                    },
+            const response = await fetch(requestUrl, {
+                headers: {
+                    Authorization: `Basic ${Buffer.from(`${settings.Username}:${settings.Password}`).toString('base64')}`,
                 },
-                async (error, response, body) => {
-                    if (!error && response.statusCode === 200) {
-                        // We got a response API is
-                        await this.setState('info.connection', true, true);
-                        isConnected = true;
+            });
 
-                        // Retrieve all meter objects from Discovergy API
-                        const objArray = JSON.parse(body);
-                        this.log.debug(JSON.stringify(objArray));
+            if (response.ok) {
+                // We got a response API is
+                await this.setState('info.connection', true, true);
+                isConnected = true;
 
-                        // Run truth array off all meter
+                const body = await response.text();
+                // Retrieve all meter objects from Discovergy API
+                const objArray = JSON.parse(body);
+                this.log.debug(JSON.stringify(objArray));
 
-                        for (const meters of Object.keys(objArray)) {
-                            // Identify is meter is active and data should be retrieved
-                            if (objArray[meters].firstMeasurementTime != -1) {
-                                // Create device and info channel
-                                this.log.debug(JSON.stringify(objArray[meters]));
-                                await this.createDevice(objArray[meters]['serialNumber']);
-                                await this.createChannel(objArray[meters]['serialNumber'], 'info');
+                // Run truth array off all meter
 
-                                // Create info channel for alle meter devices
-                                for (const infoState in objArray[meters]) {
-                                    if (!stateAttr[infoState]) {
-                                        this.log.error(
-                                            `State type : ${
-                                                infoState
-                                            } unknown, send this information to the developer ==> ${
-                                                infoState
-                                            } : ${JSON.stringify(objArray[meters][infoState])}`,
-                                        );
-                                    } else {
-                                        await this.doStateCreate(
-                                            `${objArray[meters]['serialNumber']}.info.${infoState}`,
-                                            infoState,
-                                            objArray[meters][infoState],
-                                        );
-                                    }
-                                }
+                for (const meters of Object.keys(objArray)) {
+                    // Identify is meter is active and data should be retrieved
+                    if (objArray[meters].firstMeasurementTime != -1) {
+                        // Create device and info channel
+                        this.log.debug(JSON.stringify(objArray[meters]));
+                        await this.createDevice(objArray[meters]['serialNumber']);
+                        await this.createChannel(objArray[meters]['serialNumber'], 'info');
 
-                                // Exclude RLM meters, no values to receive
-                                if (objArray[meters]['type'] !== 'RLM') {
-                                    this.allMeters[objArray[meters]['meterId']] = objArray[meters];
-                                }
+                        // Create info channel for alle meter devices
+                        for (const infoState in objArray[meters]) {
+                            if (!stateAttr[infoState]) {
+                                this.log.error(
+                                    `State type : ${infoState} unknown, send this information to the developer ==> ${
+                                        infoState
+                                    } : ${JSON.stringify(objArray[meters][infoState])}`,
+                                );
                             } else {
-                                this.log.debug(
-                                    `Inactive meter detected, ignoring ${objArray[meters]['serialNumber']} | ${objArray[meters]['meterId']}`,
+                                await this.doStateCreate(
+                                    `${objArray[meters]['serialNumber']}.info.${infoState}`,
+                                    infoState,
+                                    objArray[meters][infoState],
                                 );
                             }
                         }
 
-                        this.log.info('All meters associated to your account discovered, initialise meters');
-                        this.log.debug(`All meters : ${JSON.stringify(this.allMeters)}`);
-
-                        await this.dataPolling();
-
-                        this.log.info(`All meters initialized, polling data every ${this.config.intervall} seconds`);
+                        // Exclude RLM meters, no values to receive
+                        if (objArray[meters]['type'] !== 'RLM') {
+                            this.allMeters[objArray[meters]['meterId']] = objArray[meters];
+                        }
                     } else {
-                        // error or non-200 status code
-                        this.log.error('Connection_Failed at meter indication run, check your credentials !');
-                        this.setState('info.connection', false, true);
+                        this.log.debug(
+                            `Inactive meter detected, ignoring ${objArray[meters]['serialNumber']} | ${objArray[meters]['meterId']}`,
+                        );
                     }
-                },
-            );
+                }
+
+                this.log.info('All meters associated to your account discovered, initialise meters');
+                this.log.debug(`All meters : ${JSON.stringify(this.allMeters)}`);
+
+                await this.dataPolling();
+
+                this.log.info(`All meters initialized, polling data every ${this.config.intervall} seconds`);
+            } else {
+                // error or non-200 status code
+                this.log.error('Connection_Failed at meter indication run, check your credentials !');
+                this.setState('info.connection', false, true);
+            }
         } catch (_e) {
             this.log.error(`[doDiscovergyCall] ${_e}`);
         }
@@ -160,171 +155,167 @@ class Discovergy extends utils.Adapter {
         try {
             const stateName = this.allMeters[meterId].serialNumber;
             const requestUrl = `https://api.inexogy.com/public/v1/${endpoint}?meterId=${meterId}`;
-            await request(
-                {
-                    url: requestUrl,
-                    headers: {
-                        Authorization: `Basic ${new Buffer(`${settings.Username}:${settings.Password}`).toString('base64')}`,
-                    },
+
+            const response = await fetch(requestUrl, {
+                headers: {
+                    Authorization: `Basic ${Buffer.from(`${settings.Username}:${settings.Password}`).toString('base64')}`,
                 },
-                async (error, response, body) => {
-                    if (!error && response.statusCode === 200) {
-                        // we got a response
+            });
 
-                        try {
-                            this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`);
-                            const data = JSON.parse(body);
+            if (response.ok) {
+                // we got a response
+                const body = await response.text();
 
-                            for (const attributes in data) {
-                                if (data.time) {
-                                    await this.doStateCreate(`${stateName}.timestamp`, 'timestamp', data.time);
-                                }
+                try {
+                    this.log.debug(`[doDiscovergyMeter] Data : ${JSON.stringify(body)}`);
+                    const data = JSON.parse(body);
 
-                                for (const values in data[attributes]) {
-                                    if (stateAttr[values] === undefined) {
-                                        this.log.error(
-                                            `State type : ${values} unknown, send this information to the developer ==> ${values} : ${JSON.stringify(data[attributes][values])}`,
-                                        );
-                                    } else {
-                                        if (stateAttr[values].type !== undefined) {
-                                            switch (values) {
-                                                case 'power':
-                                                    if (data[attributes][values] > 0) {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_Consumption`,
-                                                            'Power_Consumption',
-                                                            data[attributes][values],
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_Delivery`,
-                                                            'Power_Delivery',
-                                                            0,
-                                                        );
-                                                    } else {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_Delivery`,
-                                                            'Power_Delivery',
-                                                            Math.abs(data[attributes][values]),
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_Consumption`,
-                                                            'Power_Consumption',
-                                                            0,
-                                                        );
-                                                    }
+                    for (const attributes in data) {
+                        if (data.time) {
+                            await this.doStateCreate(`${stateName}.timestamp`, 'timestamp', data.time);
+                        }
 
-                                                    break;
-
-                                                case 'power1':
-                                                    if (data[attributes][values] > 0) {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T1_Consumption`,
-                                                            'Power_T1_Consumption',
-                                                            data[attributes][values],
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T1_Delivery`,
-                                                            'Power_T1_Delivery',
-                                                            0,
-                                                        );
-                                                    } else {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T1_Delivery`,
-                                                            'Power_T1_Delivery',
-                                                            Math.abs(data[attributes][values]),
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T1_Consumption`,
-                                                            'Power_T1_Consumption',
-                                                            0,
-                                                        );
-                                                    }
-
-                                                    break;
-
-                                                case 'power2':
-                                                    if (data[attributes][values] > 0) {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T2_Consumption`,
-                                                            'Power_T2_Consumption',
-                                                            data[attributes][values],
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T2_Delivery`,
-                                                            'Power_T2_Delivery',
-                                                            0,
-                                                        );
-                                                    } else {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T2_Delivery`,
-                                                            'Power_T2_Delivery',
-                                                            Math.abs(data[attributes][values]),
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T2_Consumption`,
-                                                            'Power_T2_Consumption',
-                                                            0,
-                                                        );
-                                                    }
-
-                                                    break;
-
-                                                case 'power3':
-                                                    if (data[attributes][values] > 0) {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T3_Consumption`,
-                                                            'Power_T3_Consumption',
-                                                            data[attributes][values],
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T3_Delivery`,
-                                                            'Power_T3_Delivery',
-                                                            0,
-                                                        );
-                                                    } else {
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T3_Delivery`,
-                                                            'Power_T3_Delivery',
-                                                            Math.abs(data[attributes][values]),
-                                                        );
-                                                        await this.doStateCreate(
-                                                            `${stateName}.Power_T3_Consumption`,
-                                                            'Power_T3_Consumption',
-                                                            0,
-                                                        );
-                                                    }
-
-                                                    break;
-
-                                                default:
-                                                    await this.doStateCreate(
-                                                        `${stateName}.${values}`,
-                                                        values,
-                                                        data[attributes][values],
-                                                    );
+                        for (const values in data[attributes]) {
+                            if (stateAttr[values] === undefined) {
+                                this.log.error(
+                                    `State type : ${values} unknown, send this information to the developer ==> ${values} : ${JSON.stringify(data[attributes][values])}`,
+                                );
+                            } else {
+                                if (stateAttr[values].type !== undefined) {
+                                    switch (values) {
+                                        case 'power':
+                                            if (data[attributes][values] > 0) {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_Consumption`,
+                                                    'Power_Consumption',
+                                                    data[attributes][values],
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_Delivery`,
+                                                    'Power_Delivery',
+                                                    0,
+                                                );
+                                            } else {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_Delivery`,
+                                                    'Power_Delivery',
+                                                    Math.abs(data[attributes][values]),
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_Consumption`,
+                                                    'Power_Consumption',
+                                                    0,
+                                                );
                                             }
-                                        }
+
+                                            break;
+
+                                        case 'power1':
+                                            if (data[attributes][values] > 0) {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T1_Consumption`,
+                                                    'Power_T1_Consumption',
+                                                    data[attributes][values],
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T1_Delivery`,
+                                                    'Power_T1_Delivery',
+                                                    0,
+                                                );
+                                            } else {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T1_Delivery`,
+                                                    'Power_T1_Delivery',
+                                                    Math.abs(data[attributes][values]),
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T1_Consumption`,
+                                                    'Power_T1_Consumption',
+                                                    0,
+                                                );
+                                            }
+
+                                            break;
+
+                                        case 'power2':
+                                            if (data[attributes][values] > 0) {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T2_Consumption`,
+                                                    'Power_T2_Consumption',
+                                                    data[attributes][values],
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T2_Delivery`,
+                                                    'Power_T2_Delivery',
+                                                    0,
+                                                );
+                                            } else {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T2_Delivery`,
+                                                    'Power_T2_Delivery',
+                                                    Math.abs(data[attributes][values]),
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T2_Consumption`,
+                                                    'Power_T2_Consumption',
+                                                    0,
+                                                );
+                                            }
+
+                                            break;
+
+                                        case 'power3':
+                                            if (data[attributes][values] > 0) {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T3_Consumption`,
+                                                    'Power_T3_Consumption',
+                                                    data[attributes][values],
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T3_Delivery`,
+                                                    'Power_T3_Delivery',
+                                                    0,
+                                                );
+                                            } else {
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T3_Delivery`,
+                                                    'Power_T3_Delivery',
+                                                    Math.abs(data[attributes][values]),
+                                                );
+                                                await this.doStateCreate(
+                                                    `${stateName}.Power_T3_Consumption`,
+                                                    'Power_T3_Consumption',
+                                                    0,
+                                                );
+                                            }
+
+                                            break;
+
+                                        default:
+                                            await this.doStateCreate(
+                                                `${stateName}.${values}`,
+                                                values,
+                                                data[attributes][values],
+                                            );
                                     }
                                 }
                             }
-                        } catch {
-                            this.log.error(
-                                `[doDiscovergyMeter Response] Error retrieving information for : ${meterId}`,
-                            );
-                            this.setState('info.connection', false, true);
-                            isConnected = false;
                         }
-
-                        this.setState('info.connection', true, true);
-                        isConnected = true;
-                    } else {
-                        // error or non-200 status code
-                        this.log.error(`[doDiscovergyMeter] Error retrieving information for : ${meterId}`);
-                        this.setState('info.connection', false, true);
-                        isConnected = false;
                     }
-                },
-            );
+                } catch {
+                    this.log.error(`[doDiscovergyMeter Response] Error retrieving information for : ${meterId}`);
+                    this.setState('info.connection', false, true);
+                    isConnected = false;
+                }
+
+                this.setState('info.connection', true, true);
+                isConnected = true;
+            } else {
+                // error or non-200 status code
+                this.log.error(`[doDiscovergyMeter] Error retrieving information for : ${meterId}`);
+                this.setState('info.connection', false, true);
+                isConnected = false;
+            }
         } catch (error) {
             this.log.error(`[doDiscovergyMeter] ${error}`);
             this.setState('info.connection', false, true);
