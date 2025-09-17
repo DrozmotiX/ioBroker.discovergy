@@ -51,11 +51,11 @@ jobs:
           # Uncomment the following line if your adapter cannot be installed using 'npm ci'
           # install-command: 'npm install'
 
-  # Tests API connectivity with demo credentials
+  # Tests API connectivity with demo credentials (runs separately)
   demo-api-tests:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
@@ -79,7 +79,7 @@ jobs:
 
   # Deploys the final package to NPM
   deploy:
-    needs: [check-and-lint, adapter-tests, demo-api-tests]
+    needs: [check-and-lint, adapter-tests]
 
     # Trigger this step only when a commit on any branch is tagged with a version number
     if: |
