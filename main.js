@@ -49,7 +49,7 @@ class Discovergy extends utils.Adapter {
 
         //ToDo: Change to lib
         // Check if credentials are not empty and decrypt stored password
-        if (settings.user !== '' && settings.Password !== '') {
+        if (settings.Username !== '' && settings.Password !== '') {
             // Make a call to Discovergy API and get a list of all meters
             await this.doDiscovergyCall('meters', '');
 
