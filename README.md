@@ -23,7 +23,7 @@ Please go to your logfile and download it, create an issue here on github with t
 Do not copy-paste from Admin webinterface, information is missing here which i need !
 
 You can test this adapter by using the demo credentials of discovergy (or with your own :-)):
-username = demo@discovergy.com
+username = demo@inexogy.com
 pass = demo
 
 ## Support me

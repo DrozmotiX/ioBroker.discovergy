@@ -45,6 +45,7 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit",
     "test:integration": "mocha test/integration --exit",
+    "test:integration-demo": "mocha test/integration-demo --exit",
     "test": "npm run test:js && npm run test:package",
     "lint": "eslint -c eslint.config.mjs .",
     "release": "release-script --all",

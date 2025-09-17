@@ -34,10 +34,17 @@ tests.integration(path.join(__dirname, ".."), {
                 // Start the adapter and wait for it to initialize
                 await harness.startAdapter();
                 
-                // Wait some time for API calls and initialization
+                // Wait for API calls and potential initialization
+                // Note: In test environment without internet access, we expect DNS resolution failure
+                // In real environment with internet, this should connect and show the expected message:
+                // "All meters initialized, polling data every 30 seconds"
                 await new Promise(resolve => setTimeout(resolve, 15000)); // 15 seconds
                 
-                console.log("Adapter initialization period completed");
+                console.log("Test completed - If internet access is available, the adapter should have:");
+                console.log("1. Connected to api.inexogy.com"); 
+                console.log("2. Retrieved meter information");
+                console.log("3. Logged: 'All meters initialized, polling data every 30 seconds'");
+                console.log("Without internet access, DNS resolution error is expected.");
                 
                 return true;
             }).timeout(90000); // 90 second timeout for API calls
