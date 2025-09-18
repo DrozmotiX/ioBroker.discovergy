@@ -88,8 +88,20 @@ class Discovergy extends utils.Adapter {
                     if (objArray[meters].firstMeasurementTime != -1) {
                         // Create device and info channel
                         this.log.debug(JSON.stringify(objArray[meters]));
-                        await this.createDevice(objArray[meters]['serialNumber']);
-                        await this.createChannel(objArray[meters]['serialNumber'], 'info');
+                        await this.setObjectAsync(objArray[meters]['serialNumber'], {
+                            type: 'device',
+                            common: {
+                                name: objArray[meters]['serialNumber'],
+                            },
+                            native: {},
+                        });
+                        await this.setObjectAsync(`${objArray[meters]['serialNumber']}.info`, {
+                            type: 'channel',
+                            common: {
+                                name: 'info',
+                            },
+                            native: {},
+                        });
 
                         // Create info channel for alle meter devices
                         for (const infoState in objArray[meters]) {

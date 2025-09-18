@@ -38,6 +38,8 @@ If you like my work, please feel free to provide a personal donation
     ### __WORK IN PROGRESS__
 -->
 ### __WORK IN PROGRESS__
+* (DutchmanNL) **FIXED**: Repository checker issues - deprecated methods replaced and VSCode configuration improved
+* (DutchmanNL) **ENHANCED**: VSCode IntelliSense support for io-package.json and package.json validation
 * (DutchmanNL) **NEW**: Added comprehensive API testing with demo credentials to ensure adapter reliability
 * (DutchmanNL) **FIXED**: Critical bug where adapter would always show "credentials missing" even with valid credentials - now properly validates user login
 * (DutchmanNL) **ENHANCED**: Demo testing now includes proper password encryption matching ioBroker admin interface behavior
