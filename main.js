@@ -29,6 +29,7 @@ class Discovergy extends utils.Adapter {
         });
         this.allMeters = {};
         this.createdStatesDetails = {};
+        this.createdObjectsDetails = {}; // Track created devices and channels
         this.on('ready', this.onReady.bind(this));
         this.on('unload', this.onUnload.bind(this));
     }
@@ -88,22 +89,46 @@ class Discovergy extends utils.Adapter {
                     if (objArray[meters].firstMeasurementTime != -1) {
                         // Create device and info channel
                         this.log.debug(JSON.stringify(objArray[meters]));
-                        await this.setObjectAsync(objArray[meters]['serialNumber'], {
-                            type: 'device',
-                            common: {
-                                name: objArray[meters]['name'] || objArray[meters]['serialNumber'],
-                            },
-                            native: {
-                                serialNumber: objArray[meters]['serialNumber'],
-                            },
-                        });
-                        await this.setObjectAsync(`${objArray[meters]['serialNumber']}.info`, {
-                            type: 'channel',
-                            common: {
-                                name: 'info',
-                            },
-                            native: {},
-                        });
+
+                        // Create device only if not already created
+                        const deviceId = objArray[meters]['serialNumber'];
+                        const deviceCommon = {
+                            name: objArray[meters]['name'] || objArray[meters]['serialNumber'],
+                        };
+                        const deviceNative = {
+                            serialNumber: objArray[meters]['serialNumber'],
+                        };
+
+                        if (
+                            !this.createdObjectsDetails[deviceId] ||
+                            JSON.stringify(this.createdObjectsDetails[deviceId]) !==
+                                JSON.stringify({ common: deviceCommon, native: deviceNative })
+                        ) {
+                            await this.extendObjectAsync(deviceId, {
+                                type: 'device',
+                                common: deviceCommon,
+                                native: deviceNative,
+                            });
+                            this.createdObjectsDetails[deviceId] = { common: deviceCommon, native: deviceNative };
+                        }
+
+                        // Create info channel only if not already created
+                        const channelId = `${objArray[meters]['serialNumber']}.info`;
+                        const channelCommon = { name: 'info' };
+                        const channelNative = {};
+
+                        if (
+                            !this.createdObjectsDetails[channelId] ||
+                            JSON.stringify(this.createdObjectsDetails[channelId]) !==
+                                JSON.stringify({ common: channelCommon, native: channelNative })
+                        ) {
+                            await this.extendObjectAsync(channelId, {
+                                type: 'channel',
+                                common: channelCommon,
+                                native: channelNative,
+                            });
+                            this.createdObjectsDetails[channelId] = { common: channelCommon, native: channelNative };
+                        }
 
                         // Create info channel for alle meter devices
                         for (const infoState in objArray[meters]) {
