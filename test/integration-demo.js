@@ -74,10 +74,11 @@ tests.integration(path.join(__dirname, ".."), {
                     console.log("❌ FAIL: API connection was not established");
                     console.log("Connection state:", connectionState);
                     
-                    // The test should now work properly with encrypted password
-                    // If it still fails, it's likely due to invalid demo credentials or network issues
-                    throw new Error("Test failed: Expected API connection to be established with demo credentials. " +
-                        "The adapter should log 'All meters initialized, polling data every 30 seconds' on successful connection.");
+                    // The test should fail clearly if API connection fails
+                    // This ensures recognizable failure for issues like incorrect API address
+                    throw new Error("API Test Failed: Expected API connection to be established with demo credentials. " +
+                        "The adapter should log 'All meters initialized, polling data every 30 seconds' on successful connection. " +
+                        "Check logs above for specific API errors (DNS resolution, 401 Unauthorized, network issues, etc.)");
                 }
             }).timeout(120000); // 2 minutes timeout for API calls
         });

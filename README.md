@@ -37,6 +37,13 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* (DutchmanNL) **NEW**: Added comprehensive API testing with demo credentials to ensure adapter reliability
+* (DutchmanNL) **FIXED**: Critical bug where adapter would always show "credentials missing" even with valid credentials - now properly validates user login
+* (DutchmanNL) **ENHANCED**: Demo testing now includes proper password encryption matching ioBroker admin interface behavior
+* (DutchmanNL) **TESTING**: New `npm run test:integration-demo` command validates full API connectivity with working demo credentials (`demo@inexogy.com` / `demo`)
+* (DutchmanNL) **CI/CD**: Automated testing ensures adapter connects properly to Discovergy/Inexogy API and initializes meters successfully
+
 ### 0.6.0 (2024-12-04) - API change to Inexogy
 * (DutchmanNL) Bugfix: API change to Inexogy. Fixes #249
 * (DutchmanNL) Migrate admin settings to JSON config. Fixes #211

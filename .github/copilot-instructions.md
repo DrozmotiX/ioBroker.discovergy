@@ -127,4 +127,38 @@ Always reference these instructions first and fallback to search or bash command
 3. Run `npm run test:package` to validate package structure  
 4. Run `npm run test:integration` to test adapter startup (45 seconds)
 5. Test functionality with demo credentials if API changes made
-6. Commit changes (CI will run full test matrix on Node 20.x/22.x across Ubuntu/Windows/macOS)
+6. **ALWAYS** update README.md with user-friendly description of changes under `### __WORK IN PROGRESS__` section
+7. Commit changes (CI will run full test matrix on Node 20.x/22.x across Ubuntu/Windows/macOS)
+
+### README Update Requirements
+For **every PR or new feature**, always add a user-friendly entry to README.md:
+- Add entries under `### __WORK IN PROGRESS__` section before committing
+- Use format: `* (author) **TYPE**: Description of user-visible change`
+- Types: **NEW** (features), **FIXED** (bugs), **ENHANCED** (improvements), **TESTING** (test additions), **CI/CD** (automation)
+- Focus on user impact, not technical implementation details
+- Example: `* (DutchmanNL) **FIXED**: Adapter now properly validates login credentials instead of always showing "credentials missing"`
+
+## Testing with Credentials (Lessons Learned)
+
+### Password Encryption for Integration Tests
+When creating integration tests that need encrypted passwords (like those marked as `encryptedNative` in io-package.json):
+
+1. **Read system secret**: Use `harness.objects.getObjectAsync("system.config")` to get `obj.native.secret`
+2. **Apply XOR encryption**: Implement the encryption algorithm:
+   ```javascript
+   function encryptPassword(secret, password) {
+       let result = '';
+       for (let i = 0; i < password.length; ++i) {
+           result += String.fromCharCode(secret[i % secret.length].charCodeAt(0) ^ password.charCodeAt(i));
+       }
+       return result;
+   }
+   ```
+3. **Store encrypted password**: Set the encrypted result in adapter config, not the plain text
+4. **Result**: Adapter will properly decrypt and use credentials, enabling full API connectivity testing
+
+### Demo Credentials Testing
+- Demo credentials `demo@inexogy.com` / `demo` are working and provide access to multiple test meters
+- Proper encryption enables full API connectivity validation in integration tests
+- Test should fail clearly with recognizable error messages for API issues
+- Expected success log: "All meters initialized, polling data every 30 seconds"
