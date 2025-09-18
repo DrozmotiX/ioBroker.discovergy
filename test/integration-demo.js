@@ -1,6 +1,26 @@
 const path = require("path");
 const { tests } = require("@iobroker/testing");
 
+// Helper function to encrypt password using ioBroker's encryption method
+async function encryptPassword(harness, password) {
+    // Read the system.config object to get the secret
+    const systemConfig = await harness.objects.getObjectAsync("system.config");
+    
+    if (!systemConfig || !systemConfig.native || !systemConfig.native.secret) {
+        throw new Error("Could not retrieve system secret for password encryption");
+    }
+    
+    const secret = systemConfig.native.secret;
+    
+    // Apply ioBroker's encryption logic
+    let result = '';
+    for (let i = 0; i < password.length; ++i) {
+        result += String.fromCharCode(secret[i % secret.length].charCodeAt(0) ^ password.charCodeAt(i));
+    }
+    
+    return result;
+}
+
 // Run integration tests with demo credentials from Discovergy/Inexogy
 tests.integration(path.join(__dirname, ".."), {
     defineAdditionalTests({ suite }) {
@@ -20,12 +40,16 @@ tests.integration(path.join(__dirname, ".."), {
                     await harness.stopAdapter();
                 }
                 
+                // Encrypt the password using ioBroker's encryption method
+                const encryptedPassword = await encryptPassword(harness, "demo");
+                console.log("Password encrypted successfully");
+                
                 // Set demo credentials in adapter config (native section)
-                // Use demo@inexogy.com as specified in the issue
+                // Use demo@inexogy.com as specified in the issue with encrypted password
                 await harness.changeAdapterConfig("discovergy", {
                     native: {
                         Username: "demo@inexogy.com",
-                        Password: "demo", 
+                        Password: encryptedPassword, 
                         intervall: 30
                     }
                 });
@@ -50,21 +74,10 @@ tests.integration(path.join(__dirname, ".."), {
                     console.log("❌ FAIL: API connection was not established");
                     console.log("Connection state:", connectionState);
                     
-                    // Check if we're in a CI environment where API access might be blocked
-                    if (process.env.CI || process.env.GITHUB_ACTIONS) {
-                        console.log("Running in CI environment - API access may be blocked or demo credentials may be invalid");
-                        console.log("Test validates that:");
-                        console.log("1. Credentials are properly loaded (no 'credentials missing' error)");
-                        console.log("2. API connection is attempted");
-                        console.log("3. With valid credentials, the adapter would log: 'All meters initialized, polling data every 30 seconds'");
-                        
-                        // In CI, we accept the test as passing if it at least tried to connect
-                        // (no "credentials missing" error)
-                        return true;
-                    } else {
-                        throw new Error("Test failed: Expected API connection to be established with demo credentials. " +
-                            "The adapter should log 'All meters initialized, polling data every 30 seconds' on successful connection.");
-                    }
+                    // The test should now work properly with encrypted password
+                    // If it still fails, it's likely due to invalid demo credentials or network issues
+                    throw new Error("Test failed: Expected API connection to be established with demo credentials. " +
+                        "The adapter should log 'All meters initialized, polling data every 30 seconds' on successful connection.");
                 }
             }).timeout(120000); // 2 minutes timeout for API calls
         });
