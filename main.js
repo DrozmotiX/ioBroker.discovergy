@@ -91,9 +91,11 @@ class Discovergy extends utils.Adapter {
                         await this.setObjectAsync(objArray[meters]['serialNumber'], {
                             type: 'device',
                             common: {
-                                name: objArray[meters]['serialNumber'],
+                                name: objArray[meters]['name'] || objArray[meters]['serialNumber'],
                             },
-                            native: {},
+                            native: {
+                                serialNumber: objArray[meters]['serialNumber'],
+                            },
                         });
                         await this.setObjectAsync(`${objArray[meters]['serialNumber']}.info`, {
                             type: 'channel',
