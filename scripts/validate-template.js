@@ -238,7 +238,7 @@ class TemplateValidator {
                 this.warnings.push('No template version specified in package.json');
             }
         } catch {
-            // Package.json validation will catch this
+            // Intentionally ignored: package.json parsing errors are handled by validatePackageJson()
         }
 
         console.log(`📋 Expected template version: ${this.templateVersion}`);
