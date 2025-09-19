@@ -45,6 +45,9 @@ If you like my work, please feel free to provide a personal donation
 * (DutchmanNL) **ENHANCED**: Demo testing now includes proper password encryption matching ioBroker admin interface behavior
 * (DutchmanNL) **TESTING**: New `npm run test:integration-demo` command validates full API connectivity with working demo credentials (`demo@inexogy.com` / `demo`)
 * (DutchmanNL) **CI/CD**: Automated testing ensures adapter connects properly to Discovergy/Inexogy API and initializes meters successfully
+* (copilot) **NEW**: Added comprehensive GitHub Copilot instructions and template validation system
+* (copilot) **ENHANCED**: New `npm run validate-template` command validates ioBroker adapter template compliance and version compatibility
+* (copilot) **TESTING**: Template validation checks required files, package structure, GitHub Actions, and template versioning
 
 ### 0.6.0 (2024-12-04) - API change to Inexogy
 * (DutchmanNL) Bugfix: API change to Inexogy. Fixes #249

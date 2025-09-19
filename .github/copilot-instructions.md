@@ -33,8 +33,17 @@ Always reference these instructions first and fallback to search or bash command
 - Always run `npm run lint` before committing changes - the CI will fail without it
 - Always run `npm run test:package` to validate package structure
 - Always run `npm run test:integration` to ensure adapter starts correctly (expect ~45 seconds)
+- **NEW**: Run `npm run validate-template` to check template compliance and version compatibility
 - **MANUAL TESTING**: Use demo credentials to test actual API functionality (requires internet access to api.discovergy.com)
 - Security audit warnings are expected - do not attempt to fix them unless specifically requested
+
+## Template Validation
+- **Template Version**: This adapter uses template version 1.0.0 (see `package.json`)
+- **Local Validation**: Run `npm run validate-template` to verify template compliance
+- **Required Files**: All template files are validated including package.json, io-package.json, GitHub Actions, etc.
+- **Version Sync**: Automatic check ensures package.json and io-package.json versions match
+- **Best Practices**: Validates ioBroker adapter standards and modern JSON config usage
+- **Updates**: Template version is tracked and warnings shown for outdated configurations
 
 ## Project Structure and Navigation
 
@@ -100,6 +109,7 @@ Always reference these instructions first and fallback to search or bash command
   "test:integration": "mocha test/integration --exit",  // ✅ Works - takes 45s
   "test": "npm run test:js && npm run test:package",    // BROKEN - due to test:js
   "lint": "eslint",                                     // ✅ Works - <1s
+  "validate-template": "node scripts/validate-template.js", // ✅ Template compliance
   "release": "release-script --all",                    // Production releases
   "release-dry": "release-script --all --dry"          // Test releases
 }
@@ -111,6 +121,7 @@ Always reference these instructions first and fallback to search or bash command
 - `npm run test:package`: <1 second  
 - `npm run test:unit`: <1 second
 - `npm run test:integration`: ~45 seconds (**NEVER CANCEL**)
+- `npm run validate-template`: <5 seconds - Template compliance check
 - `npx tsc --noEmit`: ~4 seconds
 - `npx gulp default`: <1 second
 
@@ -125,10 +136,11 @@ Always reference these instructions first and fallback to search or bash command
 1. Make code changes
 2. Run `npm run lint` to check code style
 3. Run `npm run test:package` to validate package structure  
-4. Run `npm run test:integration` to test adapter startup (45 seconds)
-5. Test functionality with demo credentials if API changes made
-6. **ALWAYS** update README.md with user-friendly description of changes under `### __WORK IN PROGRESS__` section
-7. Commit changes (CI will run full test matrix on Node 20.x/22.x across Ubuntu/Windows/macOS)
+4. Run `npm run validate-template` to verify template compliance
+5. Run `npm run test:integration` to test adapter startup (45 seconds)
+6. Test functionality with demo credentials if API changes made
+7. **ALWAYS** update README.md with user-friendly description of changes under `### __WORK IN PROGRESS__` section
+8. Commit changes (CI will run full test matrix on Node 20.x/22.x across Ubuntu/Windows/macOS)
 
 ### README Update Requirements
 For **every PR or new feature**, always add a user-friendly entry to README.md:

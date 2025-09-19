@@ -45,6 +45,7 @@
     "test:integration-demo": "mocha test/integration-demo --exit",
     "test": "npm run test:js && npm run test:package",
     "lint": "eslint -c eslint.config.mjs .",
+    "validate-template": "node scripts/validate-template.js",
     "release": "release-script --all",
     "release-dry": "release-script --all --dry"
   },
@@ -52,6 +53,7 @@
     "url": "https://github.com/DrozmotiX/ioBroker.discovergy/issues"
   },
   "readmeFilename": "README.md",
+  "templateVersion": "1.0.0",
   "files": [
     "admin/",
     "lib/",
