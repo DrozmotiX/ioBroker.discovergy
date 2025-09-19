@@ -38,6 +38,7 @@ If you like my work, please feel free to provide a personal donation
     ### __WORK IN PROGRESS__
 -->
 ### __WORK IN PROGRESS__
+* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.0 with comprehensive testing framework patterns and enhanced development guidelines. Fixes #287
 * (DutchmanNL) **FIXED**: Repository checker issues - deprecated methods replaced and VSCode configuration improved
 * (DutchmanNL) **ENHANCED**: VSCode IntelliSense support for io-package.json and package.json validation
 * (DutchmanNL) **NEW**: Added comprehensive API testing with demo credentials to ensure adapter reliability
