@@ -20,7 +20,7 @@ class TemplateValidator {
     constructor() {
         this.errors = [];
         this.warnings = [];
-        this.templateVersion = '1.0.0'; // Current template version
+        this.templateVersion = '0.4.0'; // Current template version
     }
 
     /**

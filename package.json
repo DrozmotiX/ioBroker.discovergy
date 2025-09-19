@@ -53,7 +53,6 @@
     "url": "https://github.com/DrozmotiX/ioBroker.discovergy/issues"
   },
   "readmeFilename": "README.md",
-  "templateVersion": "1.0.0",
   "files": [
     "admin/",
     "lib/",
