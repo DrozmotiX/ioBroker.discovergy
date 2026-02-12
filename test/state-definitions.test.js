@@ -13,7 +13,7 @@ describe('State Definitions', () => {
         expect(stateAttr).to.have.property('kWhScalingFactor');
         expect(stateAttr.kWhScalingFactor).to.have.property('name', 'kWh Scaling Factor');
         expect(stateAttr.kWhScalingFactor).to.have.property('type', 'number');
-        expect(stateAttr.kWhScalingFactor).to.have.property('role', 'value');
+        expect(stateAttr.kWhScalingFactor).to.have.property('role', 'state');
     });
 
     it('should have all required energy states defined with correct factors', () => {
