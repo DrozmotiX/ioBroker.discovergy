@@ -38,6 +38,8 @@ If you like my work, please feel free to provide a personal donation
     ### __WORK IN PROGRESS__
 -->
 ### __WORK IN PROGRESS__
+* (DutchmanNL) **FIXED**: Replaced deprecated `createDevice` and `createChannel` methods with `setObjectNotExistsAsync` to prevent deprecation warnings in js-controller 7.1
+* (DutchmanNL) **FIXED**: Added missing state definition for `kWhScalingFactor` to prevent unknown state type errors
 * (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.0 with comprehensive testing framework patterns and enhanced development guidelines. Fixes #287
 * (DutchmanNL) **FIXED**: Repository checker issues - deprecated methods replaced and VSCode configuration improved
 * (DutchmanNL) **ENHANCED**: VSCode IntelliSense support for io-package.json and package.json validation

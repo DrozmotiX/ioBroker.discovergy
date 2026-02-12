@@ -99,11 +99,19 @@ class Discovergy extends utils.Adapter {
                             serialNumber: objArray[meters]['serialNumber'],
                         };
 
-                        if (
-                            !this.createdObjectsDetails[deviceId] ||
+                        if (!this.createdObjectsDetails[deviceId]) {
+                            // First time creating device - use setObjectNotExistsAsync to avoid deprecation warning
+                            await this.setObjectNotExistsAsync(deviceId, {
+                                type: 'device',
+                                common: deviceCommon,
+                                native: deviceNative,
+                            });
+                            this.createdObjectsDetails[deviceId] = { common: deviceCommon, native: deviceNative };
+                        } else if (
                             JSON.stringify(this.createdObjectsDetails[deviceId]) !==
-                                JSON.stringify({ common: deviceCommon, native: deviceNative })
+                            JSON.stringify({ common: deviceCommon, native: deviceNative })
                         ) {
+                            // Device exists but needs update - use extendObjectAsync
                             await this.extendObjectAsync(deviceId, {
                                 type: 'device',
                                 common: deviceCommon,
@@ -117,11 +125,19 @@ class Discovergy extends utils.Adapter {
                         const channelCommon = { name: 'info' };
                         const channelNative = {};
 
-                        if (
-                            !this.createdObjectsDetails[channelId] ||
+                        if (!this.createdObjectsDetails[channelId]) {
+                            // First time creating channel - use setObjectNotExistsAsync to avoid deprecation warning
+                            await this.setObjectNotExistsAsync(channelId, {
+                                type: 'channel',
+                                common: channelCommon,
+                                native: channelNative,
+                            });
+                            this.createdObjectsDetails[channelId] = { common: channelCommon, native: channelNative };
+                        } else if (
                             JSON.stringify(this.createdObjectsDetails[channelId]) !==
-                                JSON.stringify({ common: channelCommon, native: channelNative })
+                            JSON.stringify({ common: channelCommon, native: channelNative })
                         ) {
+                            // Channel exists but needs update - use extendObjectAsync
                             await this.extendObjectAsync(channelId, {
                                 type: 'channel',
                                 common: channelCommon,
@@ -390,19 +406,25 @@ class Discovergy extends utils.Adapter {
         common.unit = stateAttr[name] !== undefined ? stateAttr[name].unit || '' : '';
         common.write = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
 
-        if (
-            !this.createdStatesDetails[stateName] ||
-            (this.createdStatesDetails[stateName] &&
-                (common.name !== this.createdStatesDetails[stateName].name ||
-                    common.name !== this.createdStatesDetails[stateName].name ||
-                    common.type !== this.createdStatesDetails[stateName].type ||
-                    common.role !== this.createdStatesDetails[stateName].role ||
-                    common.read !== this.createdStatesDetails[stateName].read ||
-                    common.unit !== this.createdStatesDetails[stateName].unit ||
-                    common.write !== this.createdStatesDetails[stateName].write))
+        if (!this.createdStatesDetails[stateName]) {
+            console.log(`Creating new state: ${stateName}`);
+            // First time creating state - use setObjectNotExistsAsync to avoid deprecation warning
+            await this.setObjectNotExistsAsync(stateName, {
+                type: 'state',
+                common,
+            });
+        } else if (
+            this.createdStatesDetails[stateName] &&
+            (common.name !== this.createdStatesDetails[stateName].name ||
+                common.name !== this.createdStatesDetails[stateName].name ||
+                common.type !== this.createdStatesDetails[stateName].type ||
+                common.role !== this.createdStatesDetails[stateName].role ||
+                common.read !== this.createdStatesDetails[stateName].read ||
+                common.unit !== this.createdStatesDetails[stateName].unit ||
+                common.write !== this.createdStatesDetails[stateName].write)
         ) {
             console.log(`An attribute has changed : ${stateName}`);
-
+            // State exists but needs update - use extendObjectAsync
             await this.extendObjectAsync(stateName, {
                 type: 'state',
                 common,
