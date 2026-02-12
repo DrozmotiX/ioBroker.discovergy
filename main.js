@@ -99,11 +99,20 @@ class Discovergy extends utils.Adapter {
                             serialNumber: objArray[meters]['serialNumber'],
                         };
 
+                        // Always ensure device exists first
+                        await this.setObjectNotExistsAsync(deviceId, {
+                            type: 'device',
+                            common: deviceCommon,
+                            native: deviceNative,
+                        });
+
+                        // Check if device needs update by comparing with in-memory cache
                         if (
                             !this.createdObjectsDetails[deviceId] ||
                             JSON.stringify(this.createdObjectsDetails[deviceId]) !==
                                 JSON.stringify({ common: deviceCommon, native: deviceNative })
                         ) {
+                            // Device is new or has changes - update it
                             await this.extendObjectAsync(deviceId, {
                                 type: 'device',
                                 common: deviceCommon,
@@ -117,11 +126,20 @@ class Discovergy extends utils.Adapter {
                         const channelCommon = { name: 'info' };
                         const channelNative = {};
 
+                        // Always ensure channel exists first
+                        await this.setObjectNotExistsAsync(channelId, {
+                            type: 'channel',
+                            common: channelCommon,
+                            native: channelNative,
+                        });
+
+                        // Check if channel needs update by comparing with in-memory cache
                         if (
                             !this.createdObjectsDetails[channelId] ||
                             JSON.stringify(this.createdObjectsDetails[channelId]) !==
                                 JSON.stringify({ common: channelCommon, native: channelNative })
                         ) {
+                            // Channel is new or has changes - update it
                             await this.extendObjectAsync(channelId, {
                                 type: 'channel',
                                 common: channelCommon,
@@ -390,25 +408,29 @@ class Discovergy extends utils.Adapter {
         common.unit = stateAttr[name] !== undefined ? stateAttr[name].unit || '' : '';
         common.write = stateAttr[name] !== undefined ? stateAttr[name].write || false : false;
 
+        // Always ensure state exists first
+        await this.setObjectNotExistsAsync(stateName, {
+            type: 'state',
+            common,
+        });
+
+        // Check if state needs update by comparing with in-memory cache
         if (
             !this.createdStatesDetails[stateName] ||
             (this.createdStatesDetails[stateName] &&
                 (common.name !== this.createdStatesDetails[stateName].name ||
-                    common.name !== this.createdStatesDetails[stateName].name ||
                     common.type !== this.createdStatesDetails[stateName].type ||
                     common.role !== this.createdStatesDetails[stateName].role ||
                     common.read !== this.createdStatesDetails[stateName].read ||
                     common.unit !== this.createdStatesDetails[stateName].unit ||
                     common.write !== this.createdStatesDetails[stateName].write))
         ) {
-            console.log(`An attribute has changed : ${stateName}`);
-
+            this.log.debug(`State attribute has changed: ${stateName}`);
+            // State is new or has changes - update it
             await this.extendObjectAsync(stateName, {
                 type: 'state',
                 common,
             });
-        } else {
-            // console.log(`Nothing changed do not update object`);
         }
 
         // Store current object definition to memory
