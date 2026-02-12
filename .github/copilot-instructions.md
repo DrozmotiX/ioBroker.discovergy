@@ -1,6 +1,6 @@
 # ioBroker.discovergy
 
-**Version:** 0.4.0
+**Version:** 0.4.2
 **Template Source:** https://github.com/DrozmotiX/ioBroker-Copilot-Instructions
 
 This file contains instructions and best practices for GitHub Copilot when working on ioBroker adapter development.
@@ -85,6 +85,7 @@ const { tests } = require('@iobroker/testing');
 
 // Define test coordinates or configuration
 const TEST_COORDINATES = '52.520008,13.404954'; // Berlin
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // Use tests.integration() with defineAdditionalTests
 tests.integration(path.join(__dirname, '..'), {
@@ -96,39 +97,80 @@ tests.integration(path.join(__dirname, '..'), {
                 harness = getHarness();
             });
 
-            it('should configure and start adapter', () => new Promise(async (resolve) => {
-                // Get adapter object and configure
-                harness.objects.getObject('system.adapter.discovergy.0', async (err, obj) => {
-                    if (err) {
-                        console.error('Error getting adapter object:', err);
-                        resolve();
-                        return;
-                    }
-
-                    // Configure adapter properties
-                    obj.native.Username = 'demo@inexogy.com';
-                    obj.native.Password = 'demo';
-                    obj.native.Polltime = 30;
-                    // ... other configuration
-
-                    // Set the updated configuration
-                    harness.objects.setObject(obj._id, obj);
-
-                    // Start adapter and wait
-                    await harness.startAdapterAndWait();
-
-                    // Wait for adapter to process data
-                    setTimeout(() => {
-                        // Verify states were created
-                        harness.states.getState('discovergy.0.info.connection', (err, state) => {
-                            if (state && state.val === true) {
-                                console.log('✅ Adapter started successfully');
-                            }
-                            resolve();
+            it('should configure and start adapter', function () {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        harness = getHarness();
+                        
+                        // Get adapter object using promisified pattern
+                        const obj = await new Promise((res, rej) => {
+                            harness.objects.getObject('system.adapter.discovergy.0', (err, o) => {
+                                if (err) return rej(err);
+                                res(o);
+                            });
                         });
-                    }, 15000); // Allow time for API calls
+                        
+                        if (!obj) {
+                            return reject(new Error('Adapter object not found'));
+                        }
+
+                        // Configure adapter properties
+                        Object.assign(obj.native, {
+                            Username: 'demo@inexogy.com',
+                            Password: 'demo',
+                            Polltime: 30,
+                            // Add other configuration as needed
+                        });
+
+                        // Set the updated configuration
+                        harness.objects.setObject(obj._id, obj);
+
+                        console.log('✅ Step 1: Configuration written, starting adapter...');
+                        
+                        // Start adapter and wait
+                        await harness.startAdapterAndWait();
+                        
+                        console.log('✅ Step 2: Adapter started');
+
+                        // Wait for adapter to process data
+                        const waitMs = 15000;
+                        await wait(waitMs);
+
+                        console.log('🔍 Step 3: Checking states after adapter run...');
+                        
+                        // Get all states created by adapter
+                        const stateIds = await harness.dbConnection.getStateIDs('discovergy.0.*');
+                        
+                        console.log(`📊 Found ${stateIds.length} states`);
+
+                        if (stateIds.length > 0) {
+                            console.log('✅ Adapter successfully created states');
+                            
+                            // Show sample of created states
+                            const allStates = await new Promise((res, rej) => {
+                                harness.states.getStates(stateIds, (err, states) => {
+                                    if (err) return rej(err);
+                                    res(states || []);
+                                });
+                            });
+                            
+                            console.log('📋 Sample states created:');
+                            stateIds.slice(0, 5).forEach((stateId, index) => {
+                                const state = allStates[index];
+                                console.log(`   ${stateId}: ${state && state.val !== undefined ? state.val : 'undefined'}`);
+                            });
+                            
+                            await harness.stopAdapter();
+                            resolve(true);
+                        } else {
+                            console.log('❌ No states were created by the adapter');
+                            reject(new Error('Adapter did not create any states'));
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
                 });
-            })).timeout(30000);
+            }).timeout(40000);
         });
     }
 });
@@ -140,11 +182,142 @@ tests.integration(path.join(__dirname, '..'), {
 
 ```javascript
 // Example: Testing successful configuration
-it('should configure and start adapter with valid configuration', () => new Promise(async (resolve) => {
-    // ... successful configuration test as shown above
-})).timeout(30000);
+it('should configure and start adapter with valid configuration', function () {
+    return new Promise(async (resolve, reject) => {
+        // ... successful configuration test as shown above
+    });
+}).timeout(40000);
 
 // Example: Testing failure scenarios
+it('should NOT create daily states when daily is disabled', function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            harness = getHarness();
+            
+            console.log('🔍 Step 1: Fetching adapter object...');
+            const obj = await new Promise((res, rej) => {
+                harness.objects.getObject('system.adapter.discovergy.0', (err, o) => {
+                    if (err) return rej(err);
+                    res(o);
+                });
+            });
+            
+            if (!obj) return reject(new Error('Adapter object not found'));
+            console.log('✅ Step 1.5: Adapter object loaded');
+
+            console.log('🔍 Step 2: Updating adapter config...');
+            Object.assign(obj.native, {
+                Username: 'demo@inexogy.com',
+                Password: 'demo',
+                Polltime: 30,
+                // Configure with specific disabled features to test
+            });
+
+            await new Promise((res, rej) => {
+                harness.objects.setObject(obj._id, obj, (err) => {
+                    if (err) return rej(err);
+                    console.log('✅ Step 2.5: Adapter object updated');
+                    res(undefined);
+                });
+            });
+
+            console.log('🔍 Step 3: Starting adapter...');
+            await harness.startAdapterAndWait();
+            console.log('✅ Step 4: Adapter started');
+
+            console.log('⏳ Step 5: Waiting 20 seconds for states...');
+            await new Promise((res) => setTimeout(res, 20000));
+
+            console.log('🔍 Step 6: Fetching state IDs...');
+            const stateIds = await harness.dbConnection.getStateIDs('discovergy.0.*');
+
+            console.log(`📊 Step 7: Found ${stateIds.length} total states`);
+
+            // Verify expected behavior based on configuration
+            if (stateIds.length > 0) {
+                console.log(`✅ Step 8: States created as expected`);
+            } else {
+                console.log('❌ Step 8: No states created (test failed)');
+                return reject(new Error('Expected states but found none'));
+            }
+
+            await harness.stopAdapter();
+            console.log('🛑 Step 9: Adapter stopped');
+
+            resolve(true);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}).timeout(40000);
+
+// Example: Testing missing required configuration  
+it('should handle missing required configuration properly', function () {
+    return new Promise(async (resolve, reject) => {
+        try {
+            harness = getHarness();
+            
+            console.log('🔍 Step 1: Fetching adapter object...');
+            const obj = await new Promise((res, rej) => {
+                harness.objects.getObject('system.adapter.discovergy.0', (err, o) => {
+                    if (err) return rej(err);
+                    res(o);
+                });
+            });
+            
+            if (!obj) return reject(new Error('Adapter object not found'));
+
+            console.log('🔍 Step 2: Removing required configuration...');
+            // Remove required configuration to test failure handling
+            delete obj.native.Username; // This should cause failure or graceful handling
+
+            await new Promise((res, rej) => {
+                harness.objects.setObject(obj._id, obj, (err) => {
+                    if (err) return rej(err);
+                    res(undefined);
+                });
+            });
+
+            console.log('🔍 Step 3: Starting adapter...');
+            await harness.startAdapterAndWait();
+
+            console.log('⏳ Step 4: Waiting for adapter to process...');
+            await new Promise((res) => setTimeout(res, 10000));
+
+            console.log('🔍 Step 5: Checking adapter behavior...');
+            const stateIds = await harness.dbConnection.getStateIDs('discovergy.0.*');
+
+            // Check if adapter handled missing configuration gracefully
+            if (stateIds.length === 0) {
+                console.log('✅ Adapter properly handled missing configuration - no invalid states created');
+                resolve(true);
+            } else {
+                // If states were created, check if they're in error state
+                const connectionState = await new Promise((res, rej) => {
+                    harness.states.getState('discovergy.0.info.connection', (err, state) => {
+                        if (err) return rej(err);
+                        res(state);
+                    });
+                });
+                
+                if (!connectionState || connectionState.val === false) {
+                    console.log('✅ Adapter properly failed with missing configuration');
+                    resolve(true);
+                } else {
+                    console.log('❌ Adapter should have failed or handled missing config gracefully');
+                    reject(new Error('Adapter should have handled missing configuration'));
+                }
+            }
+
+            await harness.stopAdapter();
+        } catch (error) {
+            console.log('✅ Adapter correctly threw error with missing configuration:', error.message);
+            resolve(true);
+        }
+    });
+}).timeout(40000);
+
+// Legacy example (for reference, use pattern above instead):
 it('should fail gracefully with invalid configuration', () => new Promise(async (resolve) => {
     harness.objects.getObject('system.adapter.discovergy.0', async (err, obj) => {
         if (err) {
@@ -442,7 +615,7 @@ When updating README.md files, ensure these sections are present and well-docume
 - When creating PRs, add entries to README under "## **WORK IN PROGRESS**" section following ioBroker release script standard
 - Always reference related issues in commits and PR descriptions (e.g., "solves #xx" or "fixes #xx")
 
-### README Update Requirements
+### Mandatory README Updates for PRs
 For **every PR or new feature**, always add a user-friendly entry to README.md:
 - Add entries under `### __WORK IN PROGRESS__` section before committing
 - Use format: `* (author) **TYPE**: Description of user-visible change`
@@ -506,10 +679,12 @@ Use this consistent format for changelog entries:
 
 ### Package Management
 - Always use `npm` for dependency management in ioBroker adapters
+- When working on new features in a repository with an existing package-lock.json file, use `npm ci` to install dependencies. Use `npm install` only when adding or updating dependencies.
 - Keep dependencies minimal and focused
-- Regularly update dependencies to latest stable versions
-- Use `npm audit` to check for security vulnerabilities
-- Before committing, ensure package.json and package-lock.json are in sync by running `npm install`
+- Only update dependencies to latest stable versions when necessary or in separate Pull Requests. Avoid updating dependencies when adding features that don't require these updates.
+- When you modify `package.json`:
+  1. Run `npm install` to update and sync `package-lock.json`.
+  2. If `package-lock.json` was updated, commit both `package.json` and `package-lock.json`.
 
 ### Dependency Best Practices
 - Prefer built-in Node.js modules when possible
@@ -531,15 +706,10 @@ When creating admin configuration interfaces:
   {
     "type": "panel",
     "items": {
-      "Username": {
+      "host": {
         "type": "text",
-        "label": "Username",
-        "help": "Your Discovergy/Inexogy username/email"
-      },
-      "Password": {
-        "type": "password",
-        "label": "Password",
-        "help": "Your Discovergy/Inexogy password"
+        "label": "Host address",
+        "help": "IP address or hostname of the device"
       }
     }
   }
@@ -556,14 +726,13 @@ When creating admin configuration interfaces:
 ## Best Practices for Dependencies
 
 ### HTTP Client Libraries
-- **Preferred:** Use native `fetch` API (available in Node.js 18+)
-- **Alternative:** Use `node-fetch` for older Node.js versions
+- **Preferred:** Use native `fetch` API (Node.js 20+ required for adapters; built-in since Node.js 18)
 - **Avoid:** `axios` unless specific features are required (reduces bundle size)
 
 ### Example with fetch:
 ```javascript
 try {
-  const response = await fetch('https://api.inexogy.com/data');
+  const response = await fetch('https://api.example.com/data');
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
@@ -594,7 +763,7 @@ try {
 try {
   await this.connectToDevice();
 } catch (error) {
-  this.log.error(`Failed to connect to Discovergy API: ${error.message}`);
+  this.log.error(`Failed to connect to device: ${error.message}`);
   this.setState('info.connection', false, true);
   // Implement retry logic if needed
 }
@@ -722,13 +891,12 @@ tests.integration(path.join(__dirname, ".."), {
                     await harness.stopAdapter();
                 }
                 
-                const encryptedPassword = await encryptPassword(harness, "demo");
+                const encryptedPassword = await encryptPassword(harness, "demo_password");
                 
-                await harness.changeAdapterConfig("discovergy", {
+                await harness.changeAdapterConfig("your-adapter", {
                     native: {
-                        Username: "demo@inexogy.com",
-                        Password: encryptedPassword,
-                        Polltime: 30,
+                        username: "demo@provider.com",
+                        password: encryptedPassword,
                         // other config options
                     }
                 });
@@ -739,7 +907,7 @@ tests.integration(path.join(__dirname, ".."), {
                 // Wait for API calls and initialization
                 await new Promise(resolve => setTimeout(resolve, 60000));
                 
-                const connectionState = await harness.states.getStateAsync("discovergy.0.info.connection");
+                const connectionState = await harness.states.getStateAsync("your-adapter.0.info.connection");
                 
                 if (connectionState && connectionState.val === true) {
                     console.log("✅ SUCCESS: API connection established");
@@ -753,3 +921,5 @@ tests.integration(path.join(__dirname, ".."), {
     }
 });
 ```
+
+[CUSTOMIZE: Add any adapter-specific coding standards or patterns here]

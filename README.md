@@ -37,6 +37,9 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.2 with improved integration testing patterns, npm ci guidance, and fetch API best practices
+
 ### 0.6.1 (2026-02-12)
 * (DutchmanNL) **FIXED**: Replaced deprecated `createDevice` and `createChannel` methods with `setObjectNotExistsAsync` to prevent deprecation warnings in js-controller 7.1
 * (DutchmanNL) **FIXED**: Added missing state definition for `kWhScalingFactor` to prevent unknown state type errors
