@@ -37,20 +37,12 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* (DutchmanNL) **FIXED**: Removed non-existent version 0.6.1 from changelog to comply with ioBroker repository checker requirements (E2004)
+* (DutchmanNL) **ENHANCED**: Cleaned up common.news entries in io-package.json to maintain only published versions
+
 ### 0.7.0 (2026-02-15)
 * (DutchmanNL) release fixes and improvements in 0.7.0, resolved #316 #313
-
-### 0.6.1 (2026-02-12)
-* (DutchmanNL) **FIXED**: Replaced deprecated `createDevice` and `createChannel` methods with `setObjectNotExistsAsync` to prevent deprecation warnings in js-controller 7.1
-* (DutchmanNL) **FIXED**: Added missing state definition for `kWhScalingFactor` to prevent unknown state type errors
-* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.0 with comprehensive testing framework patterns and enhanced development guidelines. Fixes #287
-* (DutchmanNL) **FIXED**: Repository checker issues - deprecated methods replaced and VSCode configuration improved
-* (DutchmanNL) **ENHANCED**: VSCode IntelliSense support for io-package.json and package.json validation
-* (DutchmanNL) **NEW**: Added comprehensive API testing with demo credentials to ensure adapter reliability
-* (DutchmanNL) **FIXED**: Critical bug where adapter would always show "credentials missing" even with valid credentials - now properly validates user login
-* (DutchmanNL) **ENHANCED**: Demo testing now includes proper password encryption matching ioBroker admin interface behavior
-* (DutchmanNL) **TESTING**: New `npm run test:integration-demo` command validates full API connectivity with working demo credentials (`demo@inexogy.com` / `demo`)
-* (DutchmanNL) **CI/CD**: Automated testing ensures adapter connects properly to Discovergy/Inexogy API and initializes meters successfully
 
 ### 0.6.0 (2024-12-04) - API change to Inexogy
 * (DutchmanNL) Bugfix: API change to Inexogy. Fixes #249

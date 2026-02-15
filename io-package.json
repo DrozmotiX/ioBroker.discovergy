@@ -16,19 +16,7 @@
         "uk": "виправлення випуску та вдосконалення 0.7.0, вирішене #316 #313",
         "zh-cn": "0.7.0中的释放修正和改进"
       },
-      "0.6.1": {
-        "en": "Fixed deprecated createDevice/createChannel methods for js-controller 7.1\nAdded missing kWhScalingFactor state definition\nImproved object creation pattern with proper restart handling",
-        "de": "Veraltete createDevice/createChannel-Methoden für js-controller 7.1 behoben\nFehlende kWhScalingFactor-Statusdefinition hinzugefügt\nVerbessertes Objekterstellungsmuster mit ordnungsgemäßer Neustartbehandlung",
-        "ru": "Исправлены устаревшие методы createDevice/createChannel для js-controller 7.1\nДобавлено недостающее определение состояния kWhScalingFactor\nУлучшена схема создания объектов с правильной обработкой перезапуска",
-        "pt": "Corrigidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAdicionada definição de estado kWhScalingFactor ausente\nMelhorado padrão de criação de objetos com tratamento adequado de reinicialização",
-        "nl": "Verouderde createDevice/createChannel-methoden voor js-controller 7.1 opgelost\nOntbrekende kWhScalingFactor-statusdefinitie toegevoegd\nVerbeterd objectaanmaakpatroon met correcte herstart-afhandeling",
-        "fr": "Correction des méthodes obsolètes createDevice/createChannel pour js-controller 7.1\nAjout de la définition d'état kWhScalingFactor manquante\nModèle de création d'objets amélioré avec gestion appropriée du redémarrage",
-        "it": "Corretti metodi obsoleti createDevice/createChannel per js-controller 7.1\nAggiunta definizione dello stato kWhScalingFactor mancante\nMigliorato modello di creazione oggetti con gestione corretta del riavvio",
-        "es": "Corregidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAgregada definición de estado kWhScalingFactor faltante\nMejorado patrón de creación de objetos con manejo adecuado de reinicio",
-        "pl": "Naprawiono przestarzałe metody createDevice/createChannel dla js-controller 7.1\nDodano brakującą definicję stanu kWhScalingFactor\nUlepszono wzorzec tworzenia obiektów z prawidłową obsługą restartu",
-        "uk": "Виправлено застарілі методи createDevice/createChannel для js-controller 7.1\nДодано відсутнє визначення стану kWhScalingFactor\nПокращено схему створення об'єктів з правильною обробкою перезапуску",
-        "zh-cn": "修复了 js-controller 7.1 的已弃用 createDevice/createChannel 方法\n添加了缺失的 kWhScalingFactor 状态定义\n改进了对象创建模式，正确处理重启"
-      },
+
       "0.6.0": {
         "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
         "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
