@@ -1,8 +1,21 @@
 {
     "common": {
         "name": "discovergy",
-        "version": "0.6.0",
+        "version": "0.6.1",
         "news": {
+            "0.6.1": {
+                "en": "Fixed deprecated createDevice/createChannel methods for js-controller 7.1\nAdded missing kWhScalingFactor state definition\nImproved object creation pattern with proper restart handling",
+                "de": "Veraltete createDevice/createChannel-Methoden für js-controller 7.1 behoben\nFehlende kWhScalingFactor-Statusdefinition hinzugefügt\nVerbessertes Objekterstellungsmuster mit ordnungsgemäßer Neustartbehandlung",
+                "ru": "Исправлены устаревшие методы createDevice/createChannel для js-controller 7.1\nДобавлено недостающее определение состояния kWhScalingFactor\nУлучшена схема создания объектов с правильной обработкой перезапуска",
+                "pt": "Corrigidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAdicionada definição de estado kWhScalingFactor ausente\nMelhorado padrão de criação de objetos com tratamento adequado de reinicialização",
+                "nl": "Verouderde createDevice/createChannel-methoden voor js-controller 7.1 opgelost\nOntbrekende kWhScalingFactor-statusdefinitie toegevoegd\nVerbeterd objectaanmaakpatroon met correcte herstart-afhandeling",
+                "fr": "Correction des méthodes obsolètes createDevice/createChannel pour js-controller 7.1\nAjout de la définition d'état kWhScalingFactor manquante\nModèle de création d'objets amélioré avec gestion appropriée du redémarrage",
+                "it": "Corretti metodi obsoleti createDevice/createChannel per js-controller 7.1\nAggiunta definizione dello stato kWhScalingFactor mancante\nMigliorato modello di creazione oggetti con gestione corretta del riavvio",
+                "es": "Corregidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAgregada definición de estado kWhScalingFactor faltante\nMejorado patrón de creación de objetos con manejo adecuado de reinicio",
+                "pl": "Naprawiono przestarzałe metody createDevice/createChannel dla js-controller 7.1\nDodano brakującą definicję stanu kWhScalingFactor\nUlepszono wzorzec tworzenia obiektów z prawidłową obsługą restartu",
+                "uk": "Виправлено застарілі методи createDevice/createChannel для js-controller 7.1\nДодано відсутнє визначення стану kWhScalingFactor\nПокращено схему створення об'єктів з правильною обробкою перезапуску",
+                "zh-cn": "修复了 js-controller 7.1 的已弃用 createDevice/createChannel 方法\n添加了缺失的 kWhScalingFactor 状态定义\n改进了对象创建模式，正确处理重启"
+            },
             "0.6.0": {
                 "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
                 "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
@@ -65,6 +78,7 @@
                 "it": "Dipendenze minori e aggiornamenti di configurazione, candidato al rilascio stabile",
                 "es": "Actualizaciones menores de dependencia y configuración, candidata a versión estable",
                 "pl": "Drobne aktualizacje zależności i konfiguracji, stabilny kandydat do wydania",
+                "uk": "Незначні оновлення залежностей і конфігурації, стабільний кандидат на випуск",
                 "zh-cn": "次要依赖和配置更新，稳定的候选版本"
             },
             "0.5.7": {
@@ -77,7 +91,8 @@
                 "it": "Cambia il motivo della crittografia della password, devi reinserire le tue credenziali!\nBugfix: lo stato \"system.this.discovergy.0.alive\" non ha alcun oggetto esistente, questo potrebbe portare a un errore nelle versioni future",
                 "es": "Cambie el motivo del cifrado de contraseña, ¡es necesario que vuelva a ingresar sus credenciales!\nCorrección de error: el estado \"system.this.discovergy.0.alive\" no tiene ningún objeto existente, esto podría dar lugar a un error en versiones futuras",
                 "pl": "Zmień powód szyfrowania hasła, musisz ponownie wprowadzić swoje dane uwierzytelniające!\nPoprawka: Stan „system.this.discovergy.0.alive” nie ma istniejącego obiektu, może to prowadzić do błędu w przyszłych wersjach",
-                "zh-cn": "更改密码加密的原因，我需要重新输入凭据！\n错误修正：状态“ system.this.discovergy.0.alive”没有现有对象，这可能会导致将来版本中出现错误"
+                "zh-cn": "更改密码加密的原因，我需要重新输入凭据！\n错误修正：状态“ system.this.discovergy.0.alive”没有现有对象，这可能会导致将来版本中出现错误",
+                "uk": "Змініть причину шифрування пароля, вам потрібно повторно ввести свої облікові дані!\nВиправлення помилки: стан \"system.this.discovergy.0.alive\" не має існуючого об'єкта, це може призвести до помилки в майбутніх версіях"
             },
             "0.5.6": {
                 "en": "Bugfix : Voltage unknown",
@@ -89,7 +104,8 @@
                 "it": "Bugfix: voltaggio sconosciuto",
                 "es": "Corrección de error: voltaje desconocido",
                 "pl": "Poprawka: nieznane napięcie",
-                "zh-cn": "错误修正：电压未知"
+                "zh-cn": "错误修正：电压未知",
+                "uk": "Виправлення помилки: невідома напруга"
             }
         },
         "titleLang": {
@@ -122,7 +138,6 @@
             "DutchmanNL <rdrozda86@gmail.com>"
         ],
         "keywords": [
-            "ioBroker",
             "energy",
             "meter",
             "consumption",

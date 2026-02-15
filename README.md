@@ -23,7 +23,7 @@ Please go to your logfile and download it, create an issue here on github with t
 Do not copy-paste from Admin webinterface, information is missing here which i need !
 
 You can test this adapter by using the demo credentials of discovergy (or with your own :-)):
-username = demo@discovergy.com
+username = demo@inexogy.com
 pass = demo
 
 ## Support me
@@ -37,6 +37,21 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.2 with improved integration testing patterns, npm ci guidance, and fetch API best practices
+
+### 0.6.1 (2026-02-12)
+* (DutchmanNL) **FIXED**: Replaced deprecated `createDevice` and `createChannel` methods with `setObjectNotExistsAsync` to prevent deprecation warnings in js-controller 7.1
+* (DutchmanNL) **FIXED**: Added missing state definition for `kWhScalingFactor` to prevent unknown state type errors
+* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.0 with comprehensive testing framework patterns and enhanced development guidelines. Fixes #287
+* (DutchmanNL) **FIXED**: Repository checker issues - deprecated methods replaced and VSCode configuration improved
+* (DutchmanNL) **ENHANCED**: VSCode IntelliSense support for io-package.json and package.json validation
+* (DutchmanNL) **NEW**: Added comprehensive API testing with demo credentials to ensure adapter reliability
+* (DutchmanNL) **FIXED**: Critical bug where adapter would always show "credentials missing" even with valid credentials - now properly validates user login
+* (DutchmanNL) **ENHANCED**: Demo testing now includes proper password encryption matching ioBroker admin interface behavior
+* (DutchmanNL) **TESTING**: New `npm run test:integration-demo` command validates full API connectivity with working demo credentials (`demo@inexogy.com` / `demo`)
+* (DutchmanNL) **CI/CD**: Automated testing ensures adapter connects properly to Discovergy/Inexogy API and initializes meters successfully
+
 ### 0.6.0 (2024-12-04) - API change to Inexogy
 * (DutchmanNL) Bugfix: API change to Inexogy. Fixes #249
 * (DutchmanNL) Migrate admin settings to JSON config. Fixes #211
@@ -61,7 +76,7 @@ If you like my work, please feel free to provide a personal donation
 ## License
 MIT License
 
-Copyright (c) 2025 DutchmanNL
+Copyright (c) 2025-2026 DutchmanNL
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
