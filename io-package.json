@@ -1,216 +1,203 @@
 {
-    "common": {
-        "name": "discovergy",
-        "version": "0.6.1",
-        "news": {
-            "0.6.1": {
-                "en": "Fixed deprecated createDevice/createChannel methods for js-controller 7.1\nAdded missing kWhScalingFactor state definition\nImproved object creation pattern with proper restart handling",
-                "de": "Veraltete createDevice/createChannel-Methoden für js-controller 7.1 behoben\nFehlende kWhScalingFactor-Statusdefinition hinzugefügt\nVerbessertes Objekterstellungsmuster mit ordnungsgemäßer Neustartbehandlung",
-                "ru": "Исправлены устаревшие методы createDevice/createChannel для js-controller 7.1\nДобавлено недостающее определение состояния kWhScalingFactor\nУлучшена схема создания объектов с правильной обработкой перезапуска",
-                "pt": "Corrigidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAdicionada definição de estado kWhScalingFactor ausente\nMelhorado padrão de criação de objetos com tratamento adequado de reinicialização",
-                "nl": "Verouderde createDevice/createChannel-methoden voor js-controller 7.1 opgelost\nOntbrekende kWhScalingFactor-statusdefinitie toegevoegd\nVerbeterd objectaanmaakpatroon met correcte herstart-afhandeling",
-                "fr": "Correction des méthodes obsolètes createDevice/createChannel pour js-controller 7.1\nAjout de la définition d'état kWhScalingFactor manquante\nModèle de création d'objets amélioré avec gestion appropriée du redémarrage",
-                "it": "Corretti metodi obsoleti createDevice/createChannel per js-controller 7.1\nAggiunta definizione dello stato kWhScalingFactor mancante\nMigliorato modello di creazione oggetti con gestione corretta del riavvio",
-                "es": "Corregidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAgregada definición de estado kWhScalingFactor faltante\nMejorado patrón de creación de objetos con manejo adecuado de reinicio",
-                "pl": "Naprawiono przestarzałe metody createDevice/createChannel dla js-controller 7.1\nDodano brakującą definicję stanu kWhScalingFactor\nUlepszono wzorzec tworzenia obiektów z prawidłową obsługą restartu",
-                "uk": "Виправлено застарілі методи createDevice/createChannel для js-controller 7.1\nДодано відсутнє визначення стану kWhScalingFactor\nПокращено схему створення об'єктів з правильною обробкою перезапуску",
-                "zh-cn": "修复了 js-controller 7.1 的已弃用 createDevice/createChannel 方法\n添加了缺失的 kWhScalingFactor 状态定义\n改进了对象创建模式，正确处理重启"
-            },
-            "0.6.0": {
-                "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
-                "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
-                "ru": "Bugfix: API сменится на Inexogy. Fixes #249\nПереместить настройки администратора на конфигурацию JSON. #211",
-                "pt": "Bugfix: Mudança de API para Inexogy. Correções #249\nMigrar configurações de administrador para JSON config. Correções #211",
-                "nl": "Bugfix: API-wijziging naar Inexogy. Fixes #249\nAdmin instellingen migreren naar JSON configuratie. Fixes #211",
-                "fr": "Bugfix : l'API change pour Inexogy. Corrections #249\nMigrer les paramètres d'administration en configuration JSON. Corrections #211",
-                "it": "Bugfix: API change to Inexogy. Correzioni #249\nMigrare le impostazioni di amministrazione a JSON config. Correzioni #211",
-                "es": "Bugfix: cambio de API a Inexogy. Arreglos #249\nMigrar los ajustes de administración a JSON config. Arreglos #211",
-                "pl": "Bugfix: API zmienić na Inexogy. Fixes # 249\nMigracja ustawień admin do konfiguracji JSON. Fixes # 211",
-                "uk": "Помилки: Зміна API в невибагливий. Виправлення #249\nMigrate настройки адміністратора в налаштування JSON. Виправлення #211",
-                "zh-cn": "Bugfix:API变更为Inexogy. 修理249号\n将管理员设置迁移到 JSON 配置 。 211号"
-            },
-            "0.5.13": {
-                "en": "Support more characters in login credentials fixes #117, #227",
-                "de": "Support mehr Zeichen in Anmeldeinformationen fixes #117, #227",
-                "ru": "Поддержите больше символов в логинах исправлений #117, #227",
-                "pt": "Suporte mais caracteres em credenciais de login corrige #117, #227",
-                "nl": "Steun meer personages in login referenties",
-                "fr": "Supporter plus de caractères dans les corrections de login #117, #227",
-                "it": "Supporta più caratteri nelle credenziali di accesso correzioni #117, #227",
-                "es": "Soporta más caracteres en las credenciales de inicio de sesión fija #117, #227",
-                "pl": "Większa liczba bohaterów w grze loginów wynosi #117, #227",
-                "uk": "Підтримка більше символів в облікових записах #117, #227",
-                "zh-cn": "第117号、第227号"
-            },
-            "0.5.12": {
-                "en": "Ignore meters not providing any data (like removed devices) #215",
-                "de": "Ignorieren von Zählern die keine Daten liefern (zb entfernte Geräte) #215",
-                "ru": "Игнорировать счетчики, не предоставляя никаких данных (например, удаленные устройства) #215",
-                "pt": "Ignorar medidores não fornecendo dados (como dispositivos removidos) #215",
-                "nl": "Negeer meters die geen gegevens geven",
-                "fr": "Ignore les compteurs ne fournissant aucune donnée (comme les périphériques supprimés) #215",
-                "it": "Ignora i contatori non fornendo dati (come dispositivi rimossi) #215",
-                "es": "Ignorar medidores no proporcionando ningún dato (como dispositivos eliminados) #215",
-                "pl": "Ignore m nie dostarczając żadnych danych (np. usuniętych urządzeń)",
-                "uk": "Ignore лічильники не забезпечують ніяких даних (наприклад, видалених пристроїв) #215",
-                "zh-cn": "Ignore满足者没有提供任何数据(例如拆除装置)"
-            },
-            "0.5.11": {
-                "en": "Error handling improved in cases data processing fails\nFixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "de": "Fehlerbehandlung verbessert in Fällen, in denen die Datenverarbeitung ausfällt\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "ru": "Обработка ошибок улучшена в случаях обработки данных не проходит\nФиксы #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "pt": "O tratamento de erros melhorado nos casos em que o processamento de dados falha\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "nl": "Verbetering verbeterd in gevallen data verwerking faalt\nQuality over Quantity (QoQ) Releases Vertaling:",
-                "fr": "Gestion des erreurs améliorées dans les cas où le traitement des données échoue\nFixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "it": "Gestione degli errori migliorata nei casi in cui l'elaborazione dei dati fallisce\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "es": "Manejo de errores mejorado en casos en que el procesamiento de datos falla\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
-                "pl": "Poprawa sterowania errorem w przypadkach przetwarzania danych nie powiodła się\n#214 #215 #200 #219 #220 #229 #235 #237 #237 #238",
-                "uk": "Обробка помилок у випадках обробки даних не вдається\nВиправлення #214 #215 #200 #219 #220 #224 #229 #235 #237 #238 #506 #507",
-                "zh-cn": "在数据处理方面改进的处理工作失败\n编号:214 #215"
-            },
-            "0.5.8": {
-                "en": "Minor dependency & configuration updates, stable release candidate",
-                "de": "Kleinere Abhängigkeits- und Konfigurationsupdates, stabiler Release-Kandidat",
-                "ru": "Незначительные обновления зависимостей и конфигурации, стабильный релиз-кандидат",
-                "pt": "Dependência secundária e atualizações de configuração, candidato a lançamento estável",
-                "nl": "Kleine afhankelijkheid en configuratie-updates, stabiele release-kandidaat",
-                "fr": "Mises à jour mineures des dépendances et de la configuration, version candidate stable",
-                "it": "Dipendenze minori e aggiornamenti di configurazione, candidato al rilascio stabile",
-                "es": "Actualizaciones menores de dependencia y configuración, candidata a versión estable",
-                "pl": "Drobne aktualizacje zależności i konfiguracji, stabilny kandydat do wydania",
-                "uk": "Незначні оновлення залежностей і конфігурації, стабільний кандидат на випуск",
-                "zh-cn": "次要依赖和配置更新，稳定的候选版本"
-            },
-            "0.5.7": {
-                "en": "Change why of password encryption, you my need to re-enter your credentials !\nBugfix : State \"system.this.discovergy.0.alive\" has no existing object, this might lead to an error in future versions",
-                "de": "Ändern Sie, warum der Passwortverschlüsselung, müssen Sie Ihre Anmeldeinformationen erneut eingeben!\nBugfix: Der Status \"system.this.discovergy.0.alive\" hat kein vorhandenes Objekt. Dies kann in zukünftigen Versionen zu einem Fehler führen",
-                "ru": "Измените причину шифрования пароля, вам нужно повторно ввести свои учетные данные!\nИсправление: состояние \"system.this.discovergy.0.alive\" не имеет существующего объекта, это может привести к ошибке в будущих версиях.",
-                "pt": "Mude o porquê da criptografia de senha, você precisa inserir novamente suas credenciais!\nCorreção de bug: o estado \"system.this.discovergy.0.alive\" não tem objeto existente, isso pode levar a um erro em versões futuras",
-                "nl": "Verander waarom van wachtwoordcodering, u moet uw inloggegevens opnieuw invoeren!\nBugfix: Status \"system.this.discovergy.0.alive\" heeft geen bestaand object, dit kan leiden tot een fout in toekomstige versies",
-                "fr": "Changez la raison du cryptage du mot de passe, vous devez saisir à nouveau vos informations d'identification!\nCorrection de bug: l'état \"system.this.discovergy.0.alive\" n'a pas d'objet existant, cela pourrait conduire à une erreur dans les versions futures",
-                "it": "Cambia il motivo della crittografia della password, devi reinserire le tue credenziali!\nBugfix: lo stato \"system.this.discovergy.0.alive\" non ha alcun oggetto esistente, questo potrebbe portare a un errore nelle versioni future",
-                "es": "Cambie el motivo del cifrado de contraseña, ¡es necesario que vuelva a ingresar sus credenciales!\nCorrección de error: el estado \"system.this.discovergy.0.alive\" no tiene ningún objeto existente, esto podría dar lugar a un error en versiones futuras",
-                "pl": "Zmień powód szyfrowania hasła, musisz ponownie wprowadzić swoje dane uwierzytelniające!\nPoprawka: Stan „system.this.discovergy.0.alive” nie ma istniejącego obiektu, może to prowadzić do błędu w przyszłych wersjach",
-                "zh-cn": "更改密码加密的原因，我需要重新输入凭据！\n错误修正：状态“ system.this.discovergy.0.alive”没有现有对象，这可能会导致将来版本中出现错误",
-                "uk": "Змініть причину шифрування пароля, вам потрібно повторно ввести свої облікові дані!\nВиправлення помилки: стан \"system.this.discovergy.0.alive\" не має існуючого об'єкта, це може призвести до помилки в майбутніх версіях"
-            },
-            "0.5.6": {
-                "en": "Bugfix : Voltage unknown",
-                "de": "Bugfix: Spannung unbekannt",
-                "ru": "Исправление: напряжение неизвестно",
-                "pt": "Correção de bug: tensão desconhecida",
-                "nl": "Bugfix: Voltage onbekend",
-                "fr": "Correctif: tension inconnue",
-                "it": "Bugfix: voltaggio sconosciuto",
-                "es": "Corrección de error: voltaje desconocido",
-                "pl": "Poprawka: nieznane napięcie",
-                "zh-cn": "错误修正：电压未知",
-                "uk": "Виправлення помилки: невідома напруга"
-            }
-        },
-        "titleLang": {
-            "en": "Discovergy",
-            "de": "Discovergy",
-            "ru": "Discovergy",
-            "pt": "Discovergy",
-            "nl": "Discovergy",
-            "fr": "Discovergy",
-            "it": "Discovergy",
-            "es": "Discovergy",
-            "pl": "Discovergy",
-            "uk": "Discovergy",
-            "zh-cn": "发现"
-        },
-        "desc": {
-            "en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
-            "de": "Mit diesem Adapter können Discovergy-Benutzer alle ihre Messungen mit dem ioBroker synchronisieren",
-            "ru": "Этот адаптер позволяет пользователям Discovergy синхронизировать все свои измерения с ioBroker",
-            "pt": "Este adaptador permite que os usuários da Discovergy sincronizem todas as suas medições com o ioBroker",
-            "nl": "Met deze adapter kunnen Discovergy-gebruikers al hun metingen synchroniseren met ioBroker",
-            "fr": "Cet adaptateur permet aux utilisateurs de Discovergy de synchroniser toutes leurs mesures avec ioBroker.",
-            "it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
-            "es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
-            "pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker",
-            "uk": "Цей адаптер дозволяє користувачам Discovergy синхронізувати всі свої вимірювання з ioBroker",
-            "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker"
-        },
-        "authors": [
-            "DutchmanNL <rdrozda86@gmail.com>"
-        ],
-        "keywords": [
-            "energy",
-            "meter",
-            "consumption",
-            "messurement"
-        ],
-        "platform": "Javascript/Node.js",
-        "icon": "discovergy.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/DrozmotiX/ioBroker.discovergy/master/admin/discovergy.png",
-        "readme": "https://github.com/DrozmotiX/ioBroker.discovergy/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "energy",
-        "tier": 2,
-        "connectionType": "cloud",
-        "dataSource": "poll",
-        "compact": true,
-        "licenseInformation": {
-            "license": "MIT",
-            "type": "free"
-        },
-        "plugins": {
-            "sentry": {
-                "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
-            }
-        },
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.6.17"
-            }
-        ]
+  "common": {
+    "name": "discovergy",
+    "version": "0.7.0",
+    "news": {
+      "0.7.0": {
+        "en": "release fixes and improvements in 0.7.0, resolved #316 #313",
+        "de": "release fixes und verbesserungen in 0.7.0, behoben #316 #313",
+        "ru": "исправления и улучшения в 0.7.0, решено #316 #313",
+        "pt": "correções de lançamento e melhorias em 0.7.0, resolvido #316 #313",
+        "nl": "release fixes en verbeteringen in 0.7.0, opgelost #316 #313",
+        "fr": "correctifs de libération et améliorations dans 0.7.0, résolu #316 #313",
+        "it": "fix di rilascio e miglioramenti in 0.7.0, risolto #316 #313",
+        "es": "fijaciones de liberación y mejoras en 0.7.0, resuelto #316 #313",
+        "pl": "release poprawki i ulepszenia w 0.7.0, rozwiązane # 316 # 313",
+        "uk": "виправлення випуску та вдосконалення 0.7.0, вирішене #316 #313",
+        "zh-cn": "0.7.0中的释放修正和改进"
+      },
+      "0.6.1": {
+        "en": "Fixed deprecated createDevice/createChannel methods for js-controller 7.1\nAdded missing kWhScalingFactor state definition\nImproved object creation pattern with proper restart handling",
+        "de": "Veraltete createDevice/createChannel-Methoden für js-controller 7.1 behoben\nFehlende kWhScalingFactor-Statusdefinition hinzugefügt\nVerbessertes Objekterstellungsmuster mit ordnungsgemäßer Neustartbehandlung",
+        "ru": "Исправлены устаревшие методы createDevice/createChannel для js-controller 7.1\nДобавлено недостающее определение состояния kWhScalingFactor\nУлучшена схема создания объектов с правильной обработкой перезапуска",
+        "pt": "Corrigidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAdicionada definição de estado kWhScalingFactor ausente\nMelhorado padrão de criação de objetos com tratamento adequado de reinicialização",
+        "nl": "Verouderde createDevice/createChannel-methoden voor js-controller 7.1 opgelost\nOntbrekende kWhScalingFactor-statusdefinitie toegevoegd\nVerbeterd objectaanmaakpatroon met correcte herstart-afhandeling",
+        "fr": "Correction des méthodes obsolètes createDevice/createChannel pour js-controller 7.1\nAjout de la définition d'état kWhScalingFactor manquante\nModèle de création d'objets amélioré avec gestion appropriée du redémarrage",
+        "it": "Corretti metodi obsoleti createDevice/createChannel per js-controller 7.1\nAggiunta definizione dello stato kWhScalingFactor mancante\nMigliorato modello di creazione oggetti con gestione corretta del riavvio",
+        "es": "Corregidos métodos obsoletos createDevice/createChannel para js-controller 7.1\nAgregada definición de estado kWhScalingFactor faltante\nMejorado patrón de creación de objetos con manejo adecuado de reinicio",
+        "pl": "Naprawiono przestarzałe metody createDevice/createChannel dla js-controller 7.1\nDodano brakującą definicję stanu kWhScalingFactor\nUlepszono wzorzec tworzenia obiektów z prawidłową obsługą restartu",
+        "uk": "Виправлено застарілі методи createDevice/createChannel для js-controller 7.1\nДодано відсутнє визначення стану kWhScalingFactor\nПокращено схему створення об'єктів з правильною обробкою перезапуску",
+        "zh-cn": "修复了 js-controller 7.1 的已弃用 createDevice/createChannel 方法\n添加了缺失的 kWhScalingFactor 状态定义\n改进了对象创建模式，正确处理重启"
+      },
+      "0.6.0": {
+        "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
+        "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
+        "ru": "Bugfix: API сменится на Inexogy. Fixes #249\nПереместить настройки администратора на конфигурацию JSON. #211",
+        "pt": "Bugfix: Mudança de API para Inexogy. Correções #249\nMigrar configurações de administrador para JSON config. Correções #211",
+        "nl": "Bugfix: API-wijziging naar Inexogy. Fixes #249\nAdmin instellingen migreren naar JSON configuratie. Fixes #211",
+        "fr": "Bugfix : l'API change pour Inexogy. Corrections #249\nMigrer les paramètres d'administration en configuration JSON. Corrections #211",
+        "it": "Bugfix: API change to Inexogy. Correzioni #249\nMigrare le impostazioni di amministrazione a JSON config. Correzioni #211",
+        "es": "Bugfix: cambio de API a Inexogy. Arreglos #249\nMigrar los ajustes de administración a JSON config. Arreglos #211",
+        "pl": "Bugfix: API zmienić na Inexogy. Fixes # 249\nMigracja ustawień admin do konfiguracji JSON. Fixes # 211",
+        "uk": "Помилки: Зміна API в невибагливий. Виправлення #249\nMigrate настройки адміністратора в налаштування JSON. Виправлення #211",
+        "zh-cn": "Bugfix:API变更为Inexogy. 修理249号\n将管理员设置迁移到 JSON 配置 。 211号"
+      },
+      "0.5.13": {
+        "en": "Support more characters in login credentials fixes #117, #227",
+        "de": "Support mehr Zeichen in Anmeldeinformationen fixes #117, #227",
+        "ru": "Поддержите больше символов в логинах исправлений #117, #227",
+        "pt": "Suporte mais caracteres em credenciais de login corrige #117, #227",
+        "nl": "Steun meer personages in login referenties",
+        "fr": "Supporter plus de caractères dans les corrections de login #117, #227",
+        "it": "Supporta più caratteri nelle credenziali di accesso correzioni #117, #227",
+        "es": "Soporta más caracteres en las credenciales de inicio de sesión fija #117, #227",
+        "pl": "Większa liczba bohaterów w grze loginów wynosi #117, #227",
+        "uk": "Підтримка більше символів в облікових записах #117, #227",
+        "zh-cn": "第117号、第227号"
+      },
+      "0.5.12": {
+        "en": "Ignore meters not providing any data (like removed devices) #215",
+        "de": "Ignorieren von Zählern die keine Daten liefern (zb entfernte Geräte) #215",
+        "ru": "Игнорировать счетчики, не предоставляя никаких данных (например, удаленные устройства) #215",
+        "pt": "Ignorar medidores não fornecendo dados (como dispositivos removidos) #215",
+        "nl": "Negeer meters die geen gegevens geven",
+        "fr": "Ignore les compteurs ne fournissant aucune donnée (comme les périphériques supprimés) #215",
+        "it": "Ignora i contatori non fornendo dati (come dispositivi rimossi) #215",
+        "es": "Ignorar medidores no proporcionando ningún dato (como dispositivos eliminados) #215",
+        "pl": "Ignore m nie dostarczając żadnych danych (np. usuniętych urządzeń)",
+        "uk": "Ignore лічильники не забезпечують ніяких даних (наприклад, видалених пристроїв) #215",
+        "zh-cn": "Ignore满足者没有提供任何数据(例如拆除装置)"
+      },
+      "0.5.11": {
+        "en": "Error handling improved in cases data processing fails\nFixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "de": "Fehlerbehandlung verbessert in Fällen, in denen die Datenverarbeitung ausfällt\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "ru": "Обработка ошибок улучшена в случаях обработки данных не проходит\nФиксы #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "pt": "O tratamento de erros melhorado nos casos em que o processamento de dados falha\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "nl": "Verbetering verbeterd in gevallen data verwerking faalt\nQuality over Quantity (QoQ) Releases Vertaling:",
+        "fr": "Gestion des erreurs améliorées dans les cas où le traitement des données échoue\nFixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "it": "Gestione degli errori migliorata nei casi in cui l'elaborazione dei dati fallisce\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "es": "Manejo de errores mejorado en casos en que el procesamiento de datos falla\n#214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507",
+        "pl": "Poprawa sterowania errorem w przypadkach przetwarzania danych nie powiodła się\n#214 #215 #200 #219 #220 #229 #235 #237 #237 #238",
+        "uk": "Обробка помилок у випадках обробки даних не вдається\nВиправлення #214 #215 #200 #219 #220 #224 #229 #235 #237 #238 #506 #507",
+        "zh-cn": "在数据处理方面改进的处理工作失败\n编号:214 #215"
+      },
+      "0.5.8": {
+        "en": "Minor dependency & configuration updates, stable release candidate",
+        "de": "Kleinere Abhängigkeits- und Konfigurationsupdates, stabiler Release-Kandidat",
+        "ru": "Незначительные обновления зависимостей и конфигурации, стабильный релиз-кандидат",
+        "pt": "Dependência secundária e atualizações de configuração, candidato a lançamento estável",
+        "nl": "Kleine afhankelijkheid en configuratie-updates, stabiele release-kandidaat",
+        "fr": "Mises à jour mineures des dépendances et de la configuration, version candidate stable",
+        "it": "Dipendenze minori e aggiornamenti di configurazione, candidato al rilascio stabile",
+        "es": "Actualizaciones menores de dependencia y configuración, candidata a versión estable",
+        "pl": "Drobne aktualizacje zależności i konfiguracji, stabilny kandydat do wydania",
+        "uk": "Незначні оновлення залежностей і конфігурації, стабільний кандидат на випуск",
+        "zh-cn": "次要依赖和配置更新，稳定的候选版本"
+      }
     },
-    "encryptedNative": [
-        "Password"
-    ],
-    "protectedNative": [
-        "Password"
-    ],
-    "native": {
-        "Username": "",
-        "Password": "",
-        "intervall": 30
+    "titleLang": {
+      "en": "Discovergy",
+      "de": "Discovergy",
+      "ru": "Discovergy",
+      "pt": "Discovergy",
+      "nl": "Discovergy",
+      "fr": "Discovergy",
+      "it": "Discovergy",
+      "es": "Discovergy",
+      "pl": "Discovergy",
+      "uk": "Discovergy",
+      "zh-cn": "发现"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "This adapter allows Discovergy users to synchronize all their measurements to ioBroker",
+      "de": "Mit diesem Adapter können Discovergy-Benutzer alle ihre Messungen mit dem ioBroker synchronisieren",
+      "ru": "Этот адаптер позволяет пользователям Discovergy синхронизировать все свои измерения с ioBroker",
+      "pt": "Este adaptador permite que os usuários da Discovergy sincronizem todas as suas medições com o ioBroker",
+      "nl": "Met deze adapter kunnen Discovergy-gebruikers al hun metingen synchroniseren met ioBroker",
+      "fr": "Cet adaptateur permet aux utilisateurs de Discovergy de synchroniser toutes leurs mesures avec ioBroker.",
+      "it": "Questo adattatore consente agli utenti di Discovergy di sincronizzare tutte le loro misurazioni su ioBroker",
+      "es": "Este adaptador permite a los usuarios de Discovergy sincronizar todas sus mediciones con ioBroker",
+      "pl": "Ten adapter pozwala użytkownikom Discovergy zsynchronizować wszystkie swoje pomiary z ioBroker",
+      "uk": "Цей адаптер дозволяє користувачам Discovergy синхронізувати всі свої вимірювання з ioBroker",
+      "zh-cn": "该适配器使Discovergy用户可以将其所有测量值同步到ioBroker"
+    },
+    "authors": [
+      "DutchmanNL <rdrozda86@gmail.com>"
+    ],
+    "keywords": [
+      "energy",
+      "meter",
+      "consumption",
+      "messurement"
+    ],
+    "platform": "Javascript/Node.js",
+    "icon": "discovergy.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/DrozmotiX/ioBroker.discovergy/master/admin/discovergy.png",
+    "readme": "https://github.com/DrozmotiX/ioBroker.discovergy/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "energy",
+    "tier": 2,
+    "connectionType": "cloud",
+    "dataSource": "poll",
+    "compact": true,
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "plugins": {
+      "sentry": {
+        "dsn": "https://4d2add59a0e74f6cae5b8be0f2bd3eaf@sentry.iobroker.net/21"
+      }
+    },
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
     ]
+  },
+  "encryptedNative": [
+    "Password"
+  ],
+  "protectedNative": [
+    "Password"
+  ],
+  "native": {
+    "Username": "",
+    "Password": "",
+    "intervall": 30
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

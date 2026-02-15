@@ -37,9 +37,8 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
-### __WORK IN PROGRESS__
-* (DutchmanNL) **TESTING**: Added comprehensive tests validating all 50 state definitions from issue #313 for extended Inexogy API support
-* (DutchmanNL) **ENHANCED**: Updated GitHub Copilot instructions to latest template version 0.4.2 with improved integration testing patterns, npm ci guidance, and fetch API best practices
+### 0.7.0 (2026-02-15)
+* (DutchmanNL) release fixes and improvements in 0.7.0, resolved #316 #313
 
 ### 0.6.1 (2026-02-12)
 * (DutchmanNL) **FIXED**: Replaced deprecated `createDevice` and `createChannel` methods with `setObjectNotExistsAsync` to prevent deprecation warnings in js-controller 7.1
@@ -62,13 +61,6 @@ If you like my work, please feel free to provide a personal donation
 
 ### 0.5.12 (2023-10-29)
 * (DutchmanNL) Ignore meters not providing any data (like removed devices) fixes #84
-
-### 0.5.11 (2023-10-27) - Bugfixes
-* (DutchmanNL) Error handling improved in cases data processing fails
-* (DutchmanNL) Fixes #214 #215 #200 #219 #220 #224 #229 #235 #236 #237 #238 #506 #507
-
-### 0.5.8 (2021-08-17)
-* (DutchmanNL) Minor dependency & configuration updates, stable release candidate
 
 ## Contributors
 * AlCalzone
