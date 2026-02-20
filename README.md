@@ -40,6 +40,7 @@ If you like my work, please feel free to provide a personal donation
 ### __WORK IN PROGRESS__
 * (DutchmanNL) **FIXED**: Removed non-existent version 0.6.1 from changelog to comply with ioBroker repository checker requirements (E2004)
 * (DutchmanNL) **ENHANCED**: Cleaned up common.news entries in io-package.json to maintain only published versions
+* (DutchmanNL) **ENHANCED**: Migrated from gulpfile.js to @iobroker/adapter-dev, resolving W5013/S0062 repository checker warnings
 
 ### 0.7.0 (2026-02-15)
 * (DutchmanNL) release fixes and improvements in 0.7.0, resolved #316 #313
