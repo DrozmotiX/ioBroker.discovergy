@@ -30,11 +30,10 @@
     "@alcalzone/release-script-plugin-iobroker": "^5.1.1",
     "@alcalzone/release-script-plugin-license": "^5.1.1",
     "@alcalzone/release-script-plugin-manual-review": "^5.1.1",
+    "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.2.0",
     "@iobroker/testing": "^5.2.2",
-    "@types/gulp": "^4.0.18",
-    "@types/node": "^25.2.3",
-    "gulp": "^5.0.1"
+    "@types/node": "^25.2.3"
   },
   "main": "main.js",
   "scripts": {
