@@ -37,6 +37,9 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### __WORK IN PROGRESS__
 * (DutchmanNL) **FIXED**: Removed non-existent version 0.6.1 from changelog to comply with ioBroker repository checker requirements (E2004)
 * (DutchmanNL) **ENHANCED**: Cleaned up common.news entries in io-package.json to maintain only published versions
