@@ -201,9 +201,9 @@ class Discovergy extends utils.Adapter {
 
         // New data polling at intervall time
         if (timer) {
-            clearTimeout(timer);
+            this.clearTimeout(timer);
         }
-        timer = setTimeout(() => {
+        timer = this.setTimeout(() => {
             this.dataPolling();
         }, settings.intervall);
     }
@@ -455,7 +455,7 @@ class Discovergy extends utils.Adapter {
             this.setState('info.connection', false, true);
             this.log.info('cleaned everything up...');
             if (timer) {
-                clearTimeout(timer);
+                this.clearTimeout(timer);
                 timer = null;
             }
             callback();
