@@ -512,7 +512,6 @@ it("Should connect to API with demo credentials", async () => {
 - `admin/` - Admin UI configuration (JSON Config) and translations
 - `lib/` - Shared libraries and utilities
   - `lib/stateAttr.js` - State attribute definitions for meter readings
-  - `lib/tools.js` - Utility functions including translation tools
   - `lib/adapter-config.d.ts` - TypeScript definitions for adapter config
 - `test/` - Test files (package, integration, unit, mocha setup)
 - `.github/workflows/` - CI/CD configuration (test-and-release.yml)
