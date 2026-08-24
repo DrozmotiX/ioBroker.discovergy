@@ -1,5 +1,6 @@
 {
     "Password": "Password",
+    "Seconds between data polling": "Seconds between data polling",
     "Username": "Username",
     "Your Discovergy Username": "Your Discovergy Username",
     "discovergy adapter settings": "Adapter settings for discovergy",
