@@ -16,7 +16,6 @@
         "uk": "виправлення випуску та вдосконалення 0.7.0, вирішене #316 #313",
         "zh-cn": "0.7.0中的释放修正和改进"
       },
-
       "0.6.0": {
         "en": "Bugfix: API change to Inexogy. Fixes #249\nMigrate admin settings to JSON config. Fixes #211",
         "de": "Bugfix: API-Änderung zu Inexogy. Fixes #249\nRichten Sie die Admin-Einstellungen auf JSON config aus. Feste #211",
@@ -149,7 +148,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.6.20"
+        "admin": ">=7.8.23"
       }
     ]
   },
