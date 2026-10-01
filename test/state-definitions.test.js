@@ -133,4 +133,12 @@ describe('State Definitions', () => {
             });
         });
     });
+
+    // Issue #344 - meter info reported by the API after a meter change
+    it('should have storageNumber and storageNumbers defined', () => {
+        expect(stateAttr).to.have.property('storageNumber');
+        expect(stateAttr.storageNumber).to.have.property('type', 'number');
+        expect(stateAttr).to.have.property('storageNumbers');
+        expect(stateAttr.storageNumbers).to.have.property('type', 'array');
+    });
 });
