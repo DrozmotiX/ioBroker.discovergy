@@ -40,6 +40,9 @@ If you like my work, please feel free to provide a personal donation
     Placeholder for the next version (at the beginning of the line):
     ### __WORK IN PROGRESS__
 -->
+### __WORK IN PROGRESS__
+* (DutchmanNL) Maintenance: admin translations use the short i18n format (`admin/i18n/{lang}.json`), updated @iobroker/testing to 6.3.2, added contact email to the README copyright line ([#397](https://github.com/DrozmotiX/ioBroker.discovergy/issues/397))
+
 ### 0.8.0 (2026-11-14)
 * (DutchmanNL) **BREAKING**: The adapter now requires Node.js 22 and Admin 7.8.23 or newer
 * (tipp88) **FIXED**: Meters reporting `storageNumber`, `storageNumbers` or `gatewayStatus` no longer log "State type : … unknown", the values are stored ([#344](https://github.com/DrozmotiX/ioBroker.discovergy/issues/344), [#345](https://github.com/DrozmotiX/ioBroker.discovergy/pull/345), [#396](https://github.com/DrozmotiX/ioBroker.discovergy/issues/396), [#410](https://github.com/DrozmotiX/ioBroker.discovergy/issues/410))
@@ -71,7 +74,7 @@ If you like my work, please feel free to provide a personal donation
 ## License
 MIT License
 
-Copyright (c) 2025-2026 DutchmanNL
+Copyright (c) 2025-2026 DutchmanNL <rdrozda@hotmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
